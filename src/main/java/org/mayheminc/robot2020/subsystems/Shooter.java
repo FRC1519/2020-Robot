@@ -1,6 +1,8 @@
 package org.mayheminc.robot2020.subsystems;
 
 import com.kauailabs.navx.frc.*;
+
+import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.History;
 
 import edu.wpi.first.wpilibj.*;
@@ -14,6 +16,10 @@ import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.Utils;
 
 public class Shooter extends SubsystemBase {
+    private final MayhemTalonSRX shooterWheelTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL);
+    private final MayhemTalonSRX turretTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_TURRET);
+    private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
+    private final MayhemTalonSRX feederTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_FEEDER);
 
     /**
      * Creates a new Shooter.

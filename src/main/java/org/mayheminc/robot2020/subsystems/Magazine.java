@@ -9,12 +9,16 @@ package org.mayheminc.robot2020.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.mayheminc.robot2020.Constants;
+import org.mayheminc.util.MayhemTalonSRX;
+
 public class Magazine extends SubsystemBase {
+  private final MayhemTalonSRX turntableTalon = new MayhemTalonSRX(Constants.Talon.MAGAZINE_TURNTABLE);
+
   /**
    * Creates a new Magazine.
    */
   public Magazine() {
-
   }
 
   @Override

@@ -7,9 +7,17 @@
 
 package org.mayheminc.robot2020.subsystems;
 
+import org.mayheminc.robot2020.Constants;
+
+import org.mayheminc.util.MayhemTalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
+
+  private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
+  private final MayhemTalonSRX extenderTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_EXTENDER);
+
   /**
    * Creates a new Intake.
    */

@@ -33,6 +33,8 @@ public class RobotContainer {
         // private final ExampleCommand m_autoCommand = new
         // ExampleCommand(m_exampleSubsystem);
 
+        private final Climber m_Climber = new Climber();
+        private final Magazine m_Magazine = new Magazine();
         private final Shooter m_shooter = new Shooter();
         private final Joystick DRIVER_PAD = new Joystick(Constants.Joysticks.DRIVER_GAMEPAD);
 
