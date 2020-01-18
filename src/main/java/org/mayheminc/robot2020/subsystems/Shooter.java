@@ -14,4 +14,16 @@ import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.Utils;
 
 public class Shooter extends SubsystemBase {
+
+    /**
+     * Creates a new Shooter.
+     */
+    public Shooter() {
+
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }
