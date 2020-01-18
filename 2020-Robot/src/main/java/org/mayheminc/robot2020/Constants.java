@@ -20,12 +20,12 @@ package org.mayheminc.robot2020;
 public final class Constants {
 
     public final class Talon {
-        public static final int DRIVE_RIGHT_A = 1;
-        public static final int DRIVE_RIGHT_B = 2;
-        public static final int DRIVE_LEFT_A = 3;
-        public static final int DRIVE_LEFT_B = 4;
+        public static final int DRIVE_RIGHT_A = 1; // high current
+        public static final int DRIVE_RIGHT_B = 2; // high current
+        public static final int DRIVE_LEFT_A = 3; // high current
+        public static final int DRIVE_LEFT_B = 4; // high current
 
-        public static final int SHOOTER_WHEEL = 5;
+        public static final int SHOOTER_WHEEL = 5; // high current
         public static final int SHOOTER_FEEDER = 6;
         public static final int SHOOTER_TURRET = 7;
         public static final int SHOOTER_HOOD = 8;
@@ -35,8 +35,8 @@ public final class Constants {
 
         public static final int MAGAZINE_TURNTABLE = 11;
 
-        public static final int CLIMBER_WINCH_LEFT = 12;
-        public static final int CLIMBER_WINCH_RIGHT = 13;
+        public static final int CLIMBER_WINCH_LEFT = 12; // high current
+        public static final int CLIMBER_WINCH_RIGHT = 13; // high current
 
         public static final int CLIMBER_WALKER_LEFT = 14;
         public static final int CLIMBER_WALKER_RIGHT = 15;
