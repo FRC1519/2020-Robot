@@ -1,10 +1,10 @@
 package org.mayheminc.util;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj2.command.button.*;
 
 public class AndJoystickButton extends Button {
-	GenericHID joystick1;
+    GenericHID joystick1;
     GenericHID joystick2;
     int buttonNumber1;
     int buttonNumber2;

@@ -5,7 +5,7 @@
 package org.mayheminc.util;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj2.command.button.*;
 
 /**
  * @author Team1519
@@ -19,16 +19,16 @@ public class JoystickPOVButton extends Button {
     public static final int SOUTHWEST = 225;
     public static final int WEST = 270;
     public static final int NORTHWEST = 315;
-    
+
     private Joystick joystick;
     private int desiredPOV;
-    
+
     public JoystickPOVButton(Joystick stick, int newDesiredPOV) {
-    	joystick = stick;
+        joystick = stick;
         desiredPOV = newDesiredPOV;
     }
-    
+
     public boolean get() {
-    	return (joystick.getPOV() == desiredPOV);
+        return (joystick.getPOV() == desiredPOV);
     }
 }
