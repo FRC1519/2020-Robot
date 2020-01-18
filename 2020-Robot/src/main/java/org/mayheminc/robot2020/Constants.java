@@ -44,6 +44,13 @@ public final class Constants {
         public static final int CONTROL_PANEL_ROLLER = 16;
     }
 
+    public final class PDP {
+        public static final int DRIVE_RIGHT_A = 1;
+        public static final int DRIVE_RIGHT_B = 2;
+        public static final int DRIVE_LEFT_A = 3;
+        public static final int DRIVE_LEFT_B = 4;
+    }
+
     public final class GAMEPAD_AXIS {
         public static final int GAMEPAD_F310_LEFT_X_AXIS = 0;
         public static final int GAMEPAD_F310_LEFT_Y_AXIS = 1;

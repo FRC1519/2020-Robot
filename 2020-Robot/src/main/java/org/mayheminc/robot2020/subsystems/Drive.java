@@ -1,21 +1,24 @@
 package org.mayheminc.robot2020.subsystems;
 
 import com.kauailabs.navx.frc.*;
+
+import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.History;
 
 import edu.wpi.first.wpilibj.*;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+//import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import org.mayheminc.robot2019.Robot;
-import org.mayheminc.robot2019.RobotMap;
+//import org.mayheminc.robot2020.Robot;
+//import org.mayheminc.robot2019.RobotMap;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.Utils;
 
-public class Drive extends Subsystem {
+public class Drive extends SubsystemBase {
 
 	History headingHistory = new History();
 
@@ -31,10 +34,10 @@ public class Drive extends Subsystem {
 	private static final int LOOPS_GYRO_DELAY = 10;
 
 	// Talons
-	private final MayhemTalonSRX leftFrontTalon = new MayhemTalonSRX(RobotMap.LEFT_FRONT_TALON);
-	private final MayhemTalonSRX leftRearTalon = new MayhemTalonSRX(RobotMap.LEFT_REAR_TALON);
-	private final MayhemTalonSRX rightFrontTalon = new MayhemTalonSRX(RobotMap.RIGHT_FRONT_TALON);
-	private final MayhemTalonSRX rightRearTalon = new MayhemTalonSRX(RobotMap.RIGHT_REAR_TALON);
+	private final MayhemTalonSRX leftFrontTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_LEFT_A);
+	private final MayhemTalonSRX leftRearTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_LEFT_B);
+	private final MayhemTalonSRX rightFrontTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_RIGHT_A);
+	private final MayhemTalonSRX rightRearTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_RIGHT_B);
 
 	// Sensors
 	private AHRS Navx;
@@ -257,9 +260,10 @@ public class Drive extends Subsystem {
 	}
 
 	private void resetAndEnableHeadingPID() {
-		if (Robot.shifter.getGear() == Shifter.HIGH_GEAR) {
-			m_HeadingPid.setP(HEADING_PID_P_FOR_HIGH_GEAR);
-		} else {
+		// if (Robot.shifter.getGear() == Shifter.HIGH_GEAR) {
+		// m_HeadingPid.setP(HEADING_PID_P_FOR_HIGH_GEAR);
+		// } else
+		{
 			// low gear
 			m_HeadingPid.setP(HEADING_PID_P_FOR_LOW_GEAR);
 		}
@@ -364,10 +368,10 @@ public class Drive extends Subsystem {
 		double rb;
 		double fudgeFactor = 0.0;
 
-		lf = pdp.getCurrent(RobotMap.DRIVE_FRONT_LEFT_PDP) - fudgeFactor;
-		rf = pdp.getCurrent(RobotMap.DRIVE_FRONT_RIGHT_PDP) - fudgeFactor;
-		lb = pdp.getCurrent(RobotMap.DRIVE_BACK_LEFT_PDP) - fudgeFactor;
-		rb = pdp.getCurrent(RobotMap.DRIVE_BACK_RIGHT_PDP) - fudgeFactor;
+		lf = pdp.getCurrent(Constants.PDP.DRIVE_LEFT_A) - fudgeFactor;
+		rf = pdp.getCurrent(Constants.PDP.DRIVE_LEFT_B) - fudgeFactor;
+		lb = pdp.getCurrent(Constants.PDP.DRIVE_RIGHT_A) - fudgeFactor;
+		rb = pdp.getCurrent(Constants.PDP.DRIVE_RIGHT_B) - fudgeFactor;
 
 		SmartDashboard.putNumber("Left Front I", lf);
 		SmartDashboard.putNumber("Right Front I", rf);
@@ -401,13 +405,13 @@ public class Drive extends Subsystem {
 		autoAlign = true;
 		// reset the PID controller loop for steering now that we are auto-aligning
 		resetAndEnableHeadingPID();
-		Robot.lights.set(LedPatternFactory.autoAlignTrying);
+		// Robot.lights.set(LedPatternFactory.autoAlignTrying);
 	}
 
 	public void setAutoAlignFalse() {
 		autoAlign = false;
 		resetAndEnableHeadingPID();
-		Robot.lights.set(LedPatternFactory.autoAlignGotIt);
+		// Robot.lights.set(LedPatternFactory.autoAlignGotIt);
 	}
 
 	public void speedRacerDrive(double throttle, double rawSteeringX, boolean quickTurn) {
@@ -427,7 +431,7 @@ public class Drive extends Subsystem {
 			// DriverStation.reportWarning("Auto align was called in drive base", false);
 
 			// Use the targeting code to get the desired heading
-			m_desiredHeading = Robot.targeting.desiredHeading();
+			// m_desiredHeading = Robot.targeting.desiredHeading();
 
 			// Use the heading PID to provide the rotation input
 			rotation = maintainHeading();
@@ -600,8 +604,9 @@ public class Drive extends Subsystem {
 		SmartDashboard.putNumber("Heading Error", m_HeadingError.m_Error);
 		SmartDashboard.putNumber("Heading Correction", -m_HeadingCorrection.HeadingCorrection);
 
-		SmartDashboard.putNumber("Joystick Drive Throttle", Robot.oi.driveThrottle());
-		SmartDashboard.putNumber("Joystick SteeringX", Robot.oi.steeringX());
+		// SmartDashboard.putNumber("Joystick Drive Throttle",
+		// Robot.oi.driveThrottle());
+		// SmartDashboard.putNumber("Joystick SteeringX", Robot.oi.steeringX());
 
 		// determine currentSpeed and display it
 		// double currentSpeed = getLeftSpeed() > getRightSpeed() ? getLeftSpeed() :
