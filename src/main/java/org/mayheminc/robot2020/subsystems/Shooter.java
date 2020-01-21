@@ -44,6 +44,20 @@ public class Shooter extends SubsystemBase {
 
     public void setTurretPosition(double pos) {
         turretTalon.set(ControlMode.Position, pos);
+
     }
 
+    public void setHoodPosition(double pos) {
+        hoodTalon.set(ControlMode.Position, pos);
+
+    }
+
+    public void setFeederPosition(double pos) {
+        feederTalon.set(ControlMode.Position, pos);
+
+    }
+
+    public void setShooterWheelPosition(double pos) {
+        shooterWheelTalon.set(ControlMode.Position, pos);
+    }
 }

@@ -25,4 +25,15 @@ public class Magazine extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public void setTurntableSpeed(boolean b) {
+
+    if (b) {
+      turntableTalon.set(1);
+    } else {
+      turntableTalon.set(0);
+    }
+
+  };
+
 }
