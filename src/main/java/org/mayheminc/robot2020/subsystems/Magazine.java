@@ -9,6 +9,8 @@ package org.mayheminc.robot2020.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
 
@@ -19,6 +21,9 @@ public class Magazine extends SubsystemBase {
    * Creates a new Magazine.
    */
   public Magazine() {
+    turntableTalon.setNeutralMode(NeutralMode.Coast);
+    turntableTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+    turntableTalon.configPeakOutputVoltage(+12.0, -12.0);
   }
 
   @Override
