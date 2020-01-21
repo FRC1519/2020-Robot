@@ -25,11 +25,25 @@ public class Shooter extends SubsystemBase {
      * Creates a new Shooter.
      */
     public Shooter() {
+        configureTurretTalon();
+    }
 
+    void configureTurretTalon() {
+        turretTalon.config_kP(0, 1.0, 0);
+        turretTalon.config_kI(0, 1.0, 0);
+        turretTalon.config_kD(0, 1.0, 0);
+        turretTalon.config_kF(0, 1.0, 0);
+        turretTalon.changeControlMode(ControlMode.Position);
+        turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
     }
+
+    public void setTurretPosition(double pos) {
+        turretTalon.set(ControlMode.Position, pos);
+    }
+
 }
