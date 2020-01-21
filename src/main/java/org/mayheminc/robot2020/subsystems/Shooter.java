@@ -30,9 +30,9 @@ public class Shooter extends SubsystemBase {
 
     void configureTurretTalon() {
         turretTalon.config_kP(0, 1.0, 0);
-        turretTalon.config_kI(0, 1.0, 0);
-        turretTalon.config_kD(0, 1.0, 0);
-        turretTalon.config_kF(0, 1.0, 0);
+        turretTalon.config_kI(0, 0.0, 0);
+        turretTalon.config_kD(0, 0.0, 0);
+        turretTalon.config_kF(0, 0.0, 0);
         turretTalon.changeControlMode(ControlMode.Position);
         turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     }
