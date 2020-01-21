@@ -26,6 +26,16 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter() {
         configureTurretTalon();
+        configureWheelTalon();
+    }
+
+    private void configureWheelTalon() {
+        shooterWheelTalon.config_kP(0, 1.0, 0);
+        shooterWheelTalon.config_kI(0, 0.0, 0);
+        shooterWheelTalon.config_kD(0, 0.0, 0);
+        shooterWheelTalon.config_kF(0, 0.0, 0);
+        shooterWheelTalon.changeControlMode(ControlMode.Velocity);
+        shooterWheelTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     }
 
     void configureTurretTalon() {
@@ -40,24 +50,34 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        UpdateDashboard();
+    }
+
+    private void UpdateDashboard() {
+        SmartDashboard.putNumber("shooter speed", shooterWheelTalon.get());
     }
 
     public void setTurretPosition(double pos) {
         turretTalon.set(ControlMode.Position, pos);
+    }
 
+    public double getTurretPosition() {
+        return turretTalon.get();
     }
 
     public void setHoodPosition(double pos) {
         hoodTalon.set(ControlMode.Position, pos);
-
     }
 
-    public void setFeederPosition(double pos) {
-        feederTalon.set(ControlMode.Position, pos);
-
+    public void setFeederSpeed(double pos) {
+        feederTalon.set(ControlMode.PercentOutput, pos);
     }
 
-    public void setShooterWheelPosition(double pos) {
-        shooterWheelTalon.set(ControlMode.Position, pos);
+    public void setShooterWheelSpeed(double pos) {
+        shooterWheelTalon.set(ControlMode.Velocity, pos);
+    }
+
+    public double getShooterWheelSpeed() {
+        return shooterWheelTalon.get();
     }
 }

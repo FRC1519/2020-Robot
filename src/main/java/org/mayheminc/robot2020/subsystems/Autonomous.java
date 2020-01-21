@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import org.mayheminc.robot2020.autonomousroutines.*;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Autonomous extends SubsystemBase {
 
-	private LinkedList<CommandBase> autonomousPrograms = new LinkedList<CommandBase>();
+	private LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
 	private int programNumber = 0; // 0 = Do nothing
 	private int delay = 0;
@@ -26,11 +26,11 @@ public class Autonomous extends SubsystemBase {
 	public Autonomous() {
 	}
 
-	public void setAutonomousPrograms(LinkedList<CommandBase> programs) {
+	public void setAutonomousPrograms(LinkedList<Command> programs) {
 		autonomousPrograms = programs;
 	}
 
-	public CommandBase getSelectedProgram() {
+	public Command getSelectedProgram() {
 		return autonomousPrograms.get(programNumber);
 	}
 

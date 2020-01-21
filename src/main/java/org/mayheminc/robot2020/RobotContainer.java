@@ -10,12 +10,9 @@ package org.mayheminc.robot2020;
 import org.mayheminc.util.*;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.Button;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.util.LinkedList;
 
@@ -44,8 +41,11 @@ public class RobotContainer {
         private final Autonomous m_autonomous = new Autonomous();
 
         private final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick(Constants.Joysticks.DRIVER_JOYSTICK);
-        private final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad(Constants.Joysticks.OPERATOR_GAMEPAD);
         private final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad(Constants.Joysticks.DRIVER_GAMEPAD);
+
+        private final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad(Constants.Joysticks.OPERATOR_GAMEPAD);
+        private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick(
+                        Constants.Joysticks.OPERATOR_JOYSTICK);
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -57,7 +57,7 @@ public class RobotContainer {
         }
 
         private void configureAutonomousPrograms() {
-                LinkedList<CommandBase> autonomousPrograms = new LinkedList<CommandBase>();
+                LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
                 autonomousPrograms.push(new StayStill(this.m_drive));
                 autonomousPrograms.push(new DriveStraight(this.m_drive));
@@ -107,6 +107,9 @@ public class RobotContainer {
         }
 
         private void confiugreOperatorPadButtons() {
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new ShooterAdjustWheel(m_shooter, 100));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new ShooterAdjustWheel(m_shooter, -100));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterSetWheel(m_shooter, 1000));
         }
 
         /**
