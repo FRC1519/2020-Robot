@@ -37,7 +37,7 @@ public class RobotContainer {
         private final Magazine m_Magazine = new Magazine();
         private final Shooter m_shooter = new Shooter();
         private final Joystick DRIVER_PAD = new Joystick(Constants.Joysticks.DRIVER_GAMEPAD);
-
+        private final Drive m_drive = new Drive();
         @SuppressWarnings("unused")
         private final Button DRIVER_PAD_BUTTON_FIVE = new JoystickButton(DRIVER_PAD, 5); // Left Top Trigger
         @SuppressWarnings("unused")
