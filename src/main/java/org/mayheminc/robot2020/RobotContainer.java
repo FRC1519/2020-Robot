@@ -12,11 +12,15 @@ import org.mayheminc.util.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-// import frc.robot.commands.ExampleCommand;
-// import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import java.util.LinkedList;
+
+import org.mayheminc.robot2020.autonomousroutines.*;
+import org.mayheminc.robot2020.commands.DriveStraightOnHeading;
 import org.mayheminc.robot2020.subsystems.*;
 
 /**
@@ -36,8 +40,12 @@ public class RobotContainer {
         private final Climber m_Climber = new Climber();
         private final Magazine m_Magazine = new Magazine();
         private final Shooter m_shooter = new Shooter();
-        private final Joystick DRIVER_PAD = new Joystick(Constants.Joysticks.DRIVER_GAMEPAD);
         private final Drive m_drive = new Drive();
+        LinkedList<CommandBase> m_autonomousPrograms = new LinkedList<CommandBase>();
+        private final Autonomous m_autonomous = new Autonomous();
+
+        private final Joystick DRIVER_PAD = new Joystick(Constants.Joysticks.DRIVER_GAMEPAD);
+
         @SuppressWarnings("unused")
         private final Button DRIVER_PAD_BUTTON_FIVE = new JoystickButton(DRIVER_PAD, 5); // Left Top Trigger
         @SuppressWarnings("unused")
@@ -157,6 +165,11 @@ public class RobotContainer {
         public RobotContainer() {
                 // Configure the button bindings
                 configureButtonBindings();
+
+                m_autonomousPrograms.push(new StayStill(this.m_drive));
+                m_autonomousPrograms.push(new DriveStraight(this.m_drive));
+
+                m_autonomous.setAutonomousPrograms(this.m_autonomousPrograms);
         }
 
         /**
