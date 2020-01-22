@@ -58,6 +58,7 @@ public class RobotContainer {
 
                 autonomousPrograms.push(new StayStill());
                 autonomousPrograms.push(new DriveStraight());
+                autonomousPrograms.push(new TestTurret());
 
                 autonomous.setAutonomousPrograms(autonomousPrograms);
 
@@ -104,9 +105,15 @@ public class RobotContainer {
         }
 
         private void configureOperatorPadButtons() {
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new ShooterAdjustWheel(100));
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new ShooterAdjustWheel(-100));
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterSetWheel(1000));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new ShooterAdjustWheel(-100));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new ShooterSetWheel(0));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterAdjustWheel(+100));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new ShooterSetWheel(1000));
+
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whileHeld(new ShooterSetFeeder(0.5));
+
+                OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new ShooterSetHood(0.2));
+                OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHood(-0.2));
         }
 
         /**

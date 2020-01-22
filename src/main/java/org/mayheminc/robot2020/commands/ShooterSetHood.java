@@ -9,15 +9,15 @@ package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class ShooterSetWheel extends CommandBase {
+public class ShooterSetHood extends InstantCommand {
   double m_adjust;
 
   /**
-   * Creates a new ShooterSetWheel.
+   * Creates a new ShooterSetHood.
    */
-  public ShooterSetWheel(double adjust) {
+  public ShooterSetHood(double adjust) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
 
@@ -27,12 +27,7 @@ public class ShooterSetWheel extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.setShooterWheelSpeed(m_adjust);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
+    double pos = RobotContainer.shooter.getHoodPosition();
+    RobotContainer.shooter.setHoodPosition(pos + m_adjust);
   }
 }
