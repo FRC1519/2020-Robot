@@ -34,6 +34,7 @@ public class RobotContainer {
         public static final Magazine magazine = new Magazine();
         public static final Shooter shooter = new Shooter();
         public static final Drive drive = new Drive();
+        public static final Intake intake = new Intake();
         public static final Autonomous autonomous = new Autonomous();
 
         private static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick(Joysticks.DRIVER_JOYSTICK);
@@ -107,11 +108,14 @@ public class RobotContainer {
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new ShooterSetWheel(0));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterAdjustWheel(+100));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new ShooterSetWheel(1000));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new MagazineSetTurntable(true));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new ShooterSetFeeder(0.5));
 
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whileHeld(new ShooterSetFeeder(0.5));
-
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(0.5));
                 OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new ShooterSetHood(0.2));
                 OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHood(-0.2));
+                OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whenPressed(new ShooterSetHood(-0.2));
+                OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whenPressed(new ShooterSetHood(-0.2));
         }
 
         /**
