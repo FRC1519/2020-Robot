@@ -7,6 +7,7 @@
 
 package org.mayheminc.robot2020.autonomousroutines;
 
+import org.mayheminc.robot2020.RobotContainer;
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading;
 import org.mayheminc.robot2020.commands.DriveZeroGyro;
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading.DistanceUnits;
@@ -18,9 +19,9 @@ public class DriveStraight extends SequentialCommandGroup {
   /**
    * Add your docs here.
    */
-  public DriveStraight(Drive drive) {
+  public DriveStraight() {
 
-    addCommands(new DriveZeroGyro(drive));
-    addCommands(new DriveStraightOnHeading(drive, 0.5, DistanceUnits.ENCODER_TICKS, 1000, 0));
+    addCommands(new DriveZeroGyro());
+    addCommands(new DriveStraightOnHeading(0.5, DistanceUnits.ENCODER_TICKS, 1000, 0));
   }
 }

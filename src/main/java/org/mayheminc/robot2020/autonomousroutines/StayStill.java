@@ -15,7 +15,7 @@ import org.mayheminc.robot2020.subsystems.Drive;
  */
 public class StayStill extends SequentialCommandGroup {
 
-    public StayStill(Drive drive) {
+    public StayStill() {
 
         // Perform needed initialization
         addCommands(new DriveZeroGyro(drive));

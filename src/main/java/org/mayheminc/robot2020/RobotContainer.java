@@ -30,14 +30,15 @@ import org.mayheminc.robot2020.subsystems.*;
 public class RobotContainer {
         // The robot's subsystems and commands are defined here...
 
-        public final Climber m_climber = new Climber();
-        public final Magazine m_magazine = new Magazine();
-        public final Shooter m_shooter = new Shooter();
-        public final Drive m_drive = new Drive();
-        public final Autonomous m_autonomous = new Autonomous();
+        public static final Climber climber = new Climber();
+        public static final Magazine magazine = new Magazine();
+        public static final Shooter shooter = new Shooter();
+        public static final Drive drive = new Drive();
+        public static final Autonomous autonomous = new Autonomous();
 
-        private final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick(Constants.Joysticks.DRIVER_JOYSTICK);
-        private final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad(Constants.Joysticks.DRIVER_GAMEPAD);
+        private static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick(
+                        Constants.Joysticks.DRIVER_JOYSTICK);
+        private static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad(Constants.Joysticks.DRIVER_GAMEPAD);
 
         private final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad(Constants.Joysticks.OPERATOR_GAMEPAD);
         private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick(
@@ -55,8 +56,8 @@ public class RobotContainer {
         private void configureAutonomousPrograms() {
                 LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-                autonomousPrograms.push(new StayStill(this.m_drive));
-                autonomousPrograms.push(new DriveStraight(this.m_drive));
+                autonomousPrograms.push(new StayStill());
+                autonomousPrograms.push(new DriveStraight());
 
                 m_autonomous.setAutonomousPrograms(autonomousPrograms);
 
