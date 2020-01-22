@@ -8,28 +8,26 @@
 package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
-import org.mayheminc.robot2020.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ShooterAdjustWheel extends CommandBase {
-
-  double m_adjust;
+public class ShooterSetTurretAbs extends CommandBase {
+  double m_setPoint;
 
   /**
-   * Creates a new ShooterAdjustWheel.
+   * Creates a new ShooterSetTurret.
    */
-  public ShooterAdjustWheel(double adjust) {
+  public ShooterSetTurretAbs(double setPoint) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
 
-    m_adjust = adjust;
+    m_setPoint = setPoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.setShooterWheelSpeed(RobotContainer.shooter.getShooterWheelSpeed() + m_adjust);
+    RobotContainer.shooter.setTurretPositionAbs(m_setPoint);
   }
 
   // Returns true when the command should end.

@@ -75,10 +75,27 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("feeder speed", feederTalon.get());
     }
 
-    public void setTurretPosition(double pos) {
+    /**
+     * Set the absolute turret position.
+     */
+    public void setTurretPositionAbs(double pos) {
         turretTalon.set(ControlMode.Position, pos);
     }
 
+    /**
+     * Set the relative turret position
+     * 
+     * @param pos number of encoder ticks to adjust.
+     */
+    public void setTurretPositionRel(double pos) {
+        turretTalon.set(ControlMode.Position, getTurretPosition() + pos);
+    }
+
+    /**
+     * Get the current position of the turret.
+     * 
+     * @return
+     */
     public double getTurretPosition() {
         return turretTalon.get();
     }

@@ -59,7 +59,7 @@ public class RobotContainer {
                 autonomousPrograms.push(new StayStill());
                 autonomousPrograms.push(new DriveStraight());
 
-                m_autonomous.setAutonomousPrograms(autonomousPrograms);
+                autonomous.setAutonomousPrograms(autonomousPrograms);
 
         }
 
@@ -83,10 +83,10 @@ public class RobotContainer {
                 // DRIVER_STICK_BUTTON_ONE_ENABLED.whenPressed(new SystemZeroWithoutGyro());
 
                 // // adjust auto parameters
-                DRIVER_STICK.DRIVER_STICK_BUTTON_THREE.whenPressed(new SelectAutonomousProgram(m_autonomous, 1));
-                DRIVER_STICK.DRIVER_STICK_BUTTON_TWO.whenPressed(new SelectAutonomousProgram(m_autonomous, -1));
-                DRIVER_STICK.DRIVER_STICK_BUTTON_FOUR.whenPressed(new SelectAutonomousDelay(m_autonomous, -1));
-                DRIVER_STICK.DRIVER_STICK_BUTTON_FIVE.whenPressed(new SelectAutonomousDelay(m_autonomous, 1));
+                DRIVER_STICK.DRIVER_STICK_BUTTON_THREE.whenPressed(new SelectAutonomousProgram(autonomous, 1));
+                DRIVER_STICK.DRIVER_STICK_BUTTON_TWO.whenPressed(new SelectAutonomousProgram(autonomous, -1));
+                DRIVER_STICK.DRIVER_STICK_BUTTON_FOUR.whenPressed(new SelectAutonomousDelay(autonomous, -1));
+                DRIVER_STICK.DRIVER_STICK_BUTTON_FIVE.whenPressed(new SelectAutonomousDelay(autonomous, 1));
 
                 // // NOTE: buttons SIX, SEVEN, TEN, ELEVEN are reserved for PidTuner
                 // DRIVER_STICK_BUTTON_SEVEN.whenPressed(new TestSound());
@@ -104,9 +104,9 @@ public class RobotContainer {
         }
 
         private void configureOperatorPadButtons() {
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new ShooterAdjustWheel(m_shooter, 100));
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new ShooterAdjustWheel(m_shooter, -100));
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterSetWheel(m_shooter, 1000));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new ShooterAdjustWheel(100));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new ShooterAdjustWheel(-100));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterSetWheel(1000));
         }
 
         /**
@@ -116,6 +116,6 @@ public class RobotContainer {
          */
         public Command getAutonomousCommand() {
                 // An ExampleCommand will run in autonomous
-                return m_autonomous.getCurrentCommand();
+                return autonomous.getCurrentCommand();
         }
 }
