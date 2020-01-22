@@ -29,16 +29,12 @@ import org.mayheminc.robot2020.subsystems.*;
  */
 public class RobotContainer {
         // The robot's subsystems and commands are defined here...
-        // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-        // private final ExampleCommand m_autoCommand = new
-        // ExampleCommand(m_exampleSubsystem);
-
-        private final Climber m_Climber = new Climber();
-        private final Magazine m_Magazine = new Magazine();
-        private final Shooter m_shooter = new Shooter();
-        private final Drive m_drive = new Drive();
-        private final Autonomous m_autonomous = new Autonomous();
+        public final Climber m_climber = new Climber();
+        public final Magazine m_magazine = new Magazine();
+        public final Shooter m_shooter = new Shooter();
+        public final Drive m_drive = new Drive();
+        public final Autonomous m_autonomous = new Autonomous();
 
         private final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick(Constants.Joysticks.DRIVER_JOYSTICK);
         private final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad(Constants.Joysticks.DRIVER_GAMEPAD);
@@ -73,14 +69,14 @@ public class RobotContainer {
          * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
          */
         private void configureButtonBindings() {
-                confiugreDriverStickButtons();
-                confiugreDriverPadButtons();
-                confiugreOperatorStickButtons();
-                confiugreOperatorPadButtons();
+                configureDriverStickButtons();
+                configureDriverPadButtons();
+                configureOperatorStickButtons();
+                configureOperatorPadButtons();
 
         }
 
-        private void confiugreDriverStickButtons() {
+        private void configureDriverStickButtons() {
 
                 // DRIVER_STICK_BUTTON_ONE_DISABLED.whenPressed(new SystemZeroIncludingGyro());
                 // DRIVER_STICK_BUTTON_ONE_ENABLED.whenPressed(new SystemZeroWithoutGyro());
@@ -100,13 +96,13 @@ public class RobotContainer {
 
         }
 
-        private void confiugreDriverPadButtons() {
+        private void configureDriverPadButtons() {
         }
 
-        private void confiugreOperatorStickButtons() {
+        private void configureOperatorStickButtons() {
         }
 
-        private void confiugreOperatorPadButtons() {
+        private void configureOperatorPadButtons() {
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new ShooterAdjustWheel(m_shooter, 100));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new ShooterAdjustWheel(m_shooter, -100));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterSetWheel(m_shooter, 1000));

@@ -27,6 +27,21 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         configureTurretTalon();
         configureWheelTalon();
+        configureHoodTalon();
+        configureFeederTalon();
+    }
+
+    private void configureFeederTalon() {
+        hoodTalon.changeControlMode(ControlMode.PercentOutput);
+    }
+
+    private void configureHoodTalon() {
+        hoodTalon.config_kP(0, 1.0, 0);
+        hoodTalon.config_kI(0, 0.0, 0);
+        hoodTalon.config_kD(0, 0.0, 0);
+        hoodTalon.config_kF(0, 0.0, 0);
+        hoodTalon.changeControlMode(ControlMode.Position);
+        hoodTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     }
 
     private void configureWheelTalon() {
@@ -55,6 +70,8 @@ public class Shooter extends SubsystemBase {
 
     private void UpdateDashboard() {
         SmartDashboard.putNumber("shooter speed", shooterWheelTalon.get());
+        SmartDashboard.putNumber("turet pos", turretTalon.get());
+        SmartDashboard.putNumber("hood pos", hoodTalon.get());
     }
 
     public void setTurretPosition(double pos) {
