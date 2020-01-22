@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
     }
 
     private void configureFeederTalon() {
-        hoodTalon.changeControlMode(ControlMode.PercentOutput);
+        feederTalon.changeControlMode(ControlMode.PercentOutput);
     }
 
     private void configureHoodTalon() {
@@ -72,6 +72,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("shooter speed", shooterWheelTalon.get());
         SmartDashboard.putNumber("turet pos", turretTalon.get());
         SmartDashboard.putNumber("hood pos", hoodTalon.get());
+        SmartDashboard.putNumber("feeder speed", feederTalon.get());
     }
 
     public void setTurretPosition(double pos) {
