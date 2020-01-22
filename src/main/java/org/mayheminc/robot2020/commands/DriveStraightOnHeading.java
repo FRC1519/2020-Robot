@@ -45,21 +45,21 @@ public class DriveStraightOnHeading extends CommandBase {
 	// Called just before this Command runs the first time
 	@Override
 	public void initialize() {
-		m_drive.saveInitialWheelDistance();
-		m_drive.setDesiredHeading(m_desiredHeading);
+		RobotContainer.drive.saveInitialWheelDistance();
+		RobotContainer.drive.setDesiredHeading(m_desiredHeading);
 		// System.out.println("Starting Routine: Drive Straight On Heading");
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	public void execute() {
-		m_drive.speedRacerDrive(m_targetPower, 0, false);
+		RobotContainer.drive.speedRacerDrive(m_targetPower, 0, false);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	public boolean isFinished() {
-		int displacement = (int) m_drive.getWheelDistance();
+		int displacement = (int) RobotContainer.drive.getWheelDistance();
 
 		displacement = Math.abs(displacement);
 		// System.out.println("displacement" + displacement);
@@ -70,7 +70,7 @@ public class DriveStraightOnHeading extends CommandBase {
 	// Called once after isFinished returns true
 	@Override
 	public void end(boolean interrupted) {
-		m_drive.stop();
+		RobotContainer.drive.stop();
 	}
 
 }
