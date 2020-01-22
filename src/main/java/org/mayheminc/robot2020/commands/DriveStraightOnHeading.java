@@ -1,5 +1,6 @@
 package org.mayheminc.robot2020.commands;
 
+import org.mayheminc.robot2020.RobotContainer;
 import org.mayheminc.robot2020.subsystems.Drive;
 
 // import org.mayheminc.robot2019.Robot;
@@ -16,14 +17,13 @@ public class DriveStraightOnHeading extends CommandBase {
 	double m_targetPower;
 	double m_desiredDisplacement;
 	double m_desiredHeading;
-	Drive m_drive;
 
 	public enum DistanceUnits {
 		ENCODER_TICKS, INCHES
 	};
 
-	public DriveStraightOnHeading(Drive drive, double arg_targetSpeed, double arg_distance, double heading) {
-		this(drive, arg_targetSpeed, DistanceUnits.INCHES, arg_distance, heading);
+	public DriveStraightOnHeading(double arg_targetSpeed, double arg_distance, double heading) {
+		this(arg_targetSpeed, DistanceUnits.INCHES, arg_distance, heading);
 	}
 
 	/**
@@ -31,14 +31,12 @@ public class DriveStraightOnHeading extends CommandBase {
 	 * @param arg_targetPower +/- motor power [-1.0, +1.0]
 	 * @param arg_distance    Distance in encoder counts
 	 */
-	public DriveStraightOnHeading(Drive drive, double arg_targetSpeed, DistanceUnits units, double arg_distance,
-			double heading) {
-		addRequirements(drive);
+	public DriveStraightOnHeading(double arg_targetSpeed, DistanceUnits units, double arg_distance, double heading) {
+		addRequirements(RobotContainer.drive);
 
 		if (units == DistanceUnits.INCHES) {
 			arg_distance = arg_distance / Drive.DISTANCE_PER_PULSE;
 		}
-		m_drive = drive;
 		m_targetPower = arg_targetSpeed;
 		m_desiredDisplacement = Math.abs(arg_distance);
 		m_desiredHeading = heading;
