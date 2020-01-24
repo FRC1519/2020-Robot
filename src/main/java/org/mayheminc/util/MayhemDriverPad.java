@@ -79,4 +79,43 @@ public class MayhemDriverPad {
 
         public MayhemDriverPad() {
         }
+
+        private static final double THROTTLE_DEAD_ZONE_PERCENT = 0.05;
+        private static final double STEERING_DEAD_ZONE_PERCENT = 0.05;
+
+        public double driveThrottle() {
+                // the driveThrottle is the "Y" axis of the Driver Gamepad.
+                // However, the joysticks give -1.0 on the Y axis when pushed forward
+                // This method reverses that, so that positive numbers are forward
+                double throttleVal = -DRIVER_PAD.getY();
+
+                if (Math.abs(throttleVal) < THROTTLE_DEAD_ZONE_PERCENT) {
+                        throttleVal = 0.0;
+                }
+
+                // if the slow button is pressed, cut the throttle value in third.
+                // if (DRIVER_PAD_RIGHT_LOWER_TRIGGER_BUTTON.get()) {
+                // throttleVal = throttleVal / 3.0;
+                // }
+
+                return (throttleVal);
+        }
+
+        public double steeringX() {
+                // SteeringX is the "X" axis of the right stick on the Driver Gamepad.
+                double value = DRIVER_PAD.getRawAxis(GAMEPAD_AXIS.GAMEPAD_F310_RIGHT_X_AXIS);
+                if (Math.abs(value) < STEERING_DEAD_ZONE_PERCENT) {
+                        value = 0.0;
+                }
+
+                // if the slow button is pressed, cut the steering value in half.
+                // if (DRIVER_PAD_RIGHT_LOWER_TRIGGER_BUTTON.get()) {
+                // value = value / 2.0;
+                // }
+                return value;
+        }
+
+        public boolean quickTurn() {
+                return (DRIVER_PAD.getRawButton(GAMEPAD_BUTTION.GAMEPAD_F310_RIGHT_BUTTON));
+        }
 }

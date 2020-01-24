@@ -38,7 +38,7 @@ public class RobotContainer {
         public static final Autonomous autonomous = new Autonomous();
 
         private static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
-        private static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
+        public static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
 
         private final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad();
         private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick();
@@ -50,6 +50,11 @@ public class RobotContainer {
                 // Configure the button bindings
                 configureButtonBindings();
                 configureAutonomousPrograms();
+                configureDefaultCommands();
+        }
+
+        private void configureDefaultCommands() {
+                drive.setDefaultCommand(new DriveDefault());
         }
 
         private void configureAutonomousPrograms() {

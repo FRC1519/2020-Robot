@@ -20,10 +20,10 @@ package org.mayheminc.robot2020;
 public final class Constants {
 
     public final class Talon {
-        public static final int DRIVE_RIGHT_A = 1; // high current
-        public static final int DRIVE_RIGHT_B = 2; // high current
-        public static final int DRIVE_LEFT_A = 3; // high current
-        public static final int DRIVE_LEFT_B = 4; // high current
+        public static final int DRIVE_RIGHT_A = 3; // high current
+        public static final int DRIVE_RIGHT_B = 4; // high current
+        public static final int DRIVE_LEFT_A = 1; // high current
+        public static final int DRIVE_LEFT_B = 2; // high current
 
         public static final int SHOOTER_WHEEL = 5; // high current
         public static final int SHOOTER_FEEDER = 6;
