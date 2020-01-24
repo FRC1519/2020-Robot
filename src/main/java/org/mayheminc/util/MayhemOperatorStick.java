@@ -4,9 +4,8 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class MayhemOperatorStick {
 
-    public Joystick OPERATOR_STICK;
+    public final Joystick OPERATOR_STICK = new Joystick(Joysticks.OPERATOR_JOYSTICK);
 
-    public MayhemOperatorStick(int port) {
-        OPERATOR_STICK = new Joystick(port);
+    public MayhemOperatorStick() {
     }
 }

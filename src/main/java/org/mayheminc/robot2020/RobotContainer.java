@@ -37,11 +37,11 @@ public class RobotContainer {
         public static final Intake intake = new Intake();
         public static final Autonomous autonomous = new Autonomous();
 
-        private static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick(Joysticks.DRIVER_JOYSTICK);
-        private static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad(Joysticks.DRIVER_GAMEPAD);
+        private static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
+        private static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
 
-        private final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad(Joysticks.OPERATOR_GAMEPAD);
-        private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick(Joysticks.OPERATOR_JOYSTICK);
+        private final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad();
+        private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick();
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
