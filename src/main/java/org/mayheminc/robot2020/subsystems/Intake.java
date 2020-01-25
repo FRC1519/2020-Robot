@@ -11,15 +11,16 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
-
+import org.mayheminc.util.MayhemFakeTalonSRX;
 import org.mayheminc.util.MayhemTalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-  private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
-  private final MayhemTalonSRX extenderTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_EXTENDER);
+  private final MayhemFakeTalonSRX rollerTalon = new MayhemFakeTalonSRX(Constants.Talon.INTAKE_ROLLERS);
+  private final MayhemFakeTalonSRX extenderTalon = new MayhemFakeTalonSRX(Constants.Talon.INTAKE_EXTENDER);
 
   /**
    * Creates a new Intake.
@@ -48,5 +49,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Intake Position", extenderTalon.get());
+    SmartDashboard.putNumber("Intake Rollers", rollerTalon.get());
   }
 }

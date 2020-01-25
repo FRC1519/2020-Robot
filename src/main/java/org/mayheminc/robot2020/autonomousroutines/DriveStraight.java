@@ -7,11 +7,8 @@
 
 package org.mayheminc.robot2020.autonomousroutines;
 
-import org.mayheminc.robot2020.RobotContainer;
-import org.mayheminc.robot2020.commands.DriveStraightOnHeading;
-import org.mayheminc.robot2020.commands.DriveZeroGyro;
+import org.mayheminc.robot2020.commands.*;
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading.DistanceUnits;
-import org.mayheminc.robot2020.subsystems.Drive;
 
 import edu.wpi.first.wpilibj2.command.*;
 
@@ -22,6 +19,11 @@ public class DriveStraight extends SequentialCommandGroup {
   public DriveStraight() {
 
     addCommands(new DriveZeroGyro());
-    addCommands(new DriveStraightOnHeading(0.5, DistanceUnits.ENCODER_TICKS, 1000, 0));
+    addCommands(new DriveStraightOnHeading(0.2, DistanceUnits.INCHES, 100, 0));
+    addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 100, 10));
+    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 100, 20));
+
+    // addCommands(new ParallelCommandGroup(new IntakeSetPosition(true), new
+    // MagazineSetTurntable(0.0)));
   }
 }

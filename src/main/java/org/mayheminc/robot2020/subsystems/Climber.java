@@ -11,16 +11,17 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
-
+import org.mayheminc.util.MayhemFakeTalonSRX;
 import org.mayheminc.util.MayhemTalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
-  private final MayhemTalonSRX winchLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_LEFT);
-  private final MayhemTalonSRX winchRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_RIGHT);
-  private final MayhemTalonSRX walkerLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
-  private final MayhemTalonSRX walkerRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_RIGHT);
+  private final MayhemFakeTalonSRX winchLeft = new MayhemFakeTalonSRX(Constants.Talon.CLIMBER_WINCH_LEFT);
+  private final MayhemFakeTalonSRX winchRight = new MayhemFakeTalonSRX(Constants.Talon.CLIMBER_WINCH_RIGHT);
+  private final MayhemFakeTalonSRX walkerLeft = new MayhemFakeTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
+  private final MayhemFakeTalonSRX walkerRight = new MayhemFakeTalonSRX(Constants.Talon.CLIMBER_WALKER_RIGHT);
 
   /**
    * Creates a new Climber.
@@ -47,6 +48,10 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Climber Winch Left", winchLeft.get());
+    SmartDashboard.putNumber("Climber Winch Right", winchRight.get());
+    SmartDashboard.putNumber("Climber Walker Left", walkerLeft.get());
+    SmartDashboard.putNumber("Climber Walker Right", walkerRight.get());
   }
 
   public void setWinchLeftSpeed(double power) {

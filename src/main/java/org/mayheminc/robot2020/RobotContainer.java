@@ -10,9 +10,7 @@ package org.mayheminc.robot2020;
 import org.mayheminc.util.*;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import java.util.LinkedList;
 
@@ -60,9 +58,9 @@ public class RobotContainer {
         private void configureAutonomousPrograms() {
                 LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-                autonomousPrograms.push(new StayStill());
+                // autonomousPrograms.push(new StayStill());
                 autonomousPrograms.push(new DriveStraight());
-                autonomousPrograms.push(new TestTurret());
+                // autonomousPrograms.push(new TestTurret());
 
                 autonomous.setAutonomousPrograms(autonomousPrograms);
 
@@ -113,7 +111,7 @@ public class RobotContainer {
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new ShooterSetWheel(0));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterAdjustWheel(+100));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new ShooterSetWheel(1000));
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new MagazineSetTurntable(true));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new MagazineSetTurntable(0.3));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new ShooterSetFeeder(0.5));
 
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(0.5));
@@ -129,7 +127,6 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                // An ExampleCommand will run in autonomous
-                return autonomous.getCurrentCommand();
+                return new RunAutonomous();
         }
 }

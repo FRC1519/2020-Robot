@@ -4,11 +4,8 @@
  */
 package org.mayheminc.robot2020.subsystems;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-
-import org.mayheminc.robot2020.autonomousroutines.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,6 +23,11 @@ public class Autonomous extends SubsystemBase {
 	public Autonomous() {
 	}
 
+	/**
+	 * Give the autonomous subsystem the list of possible programs to run
+	 * 
+	 * @param programs
+	 */
 	public void setAutonomousPrograms(LinkedList<Command> programs) {
 		autonomousPrograms = programs;
 	}
@@ -34,6 +36,9 @@ public class Autonomous extends SubsystemBase {
 		return autonomousPrograms.get(programNumber);
 	}
 
+	/**
+	 * Returns the delay (0-9).
+	 */
 	public int getDelay() {
 		return delay;
 	}
@@ -60,14 +65,19 @@ public class Autonomous extends SubsystemBase {
 		updateSmartDashboard();
 	}
 
+	// keep a string buffer in the object so it is not created each iteration.
 	private StringBuffer sb = new StringBuffer();
 
+	/**
+	 * Update the smart dashboard with the auto program and delay.
+	 */
 	public void updateSmartDashboard() {
 		sb.setLength(0);
 		sb.append(programNumber + " " + autonomousPrograms.get(programNumber).getName());
 		sb.append("         ");
-		// SmartDashboard.putString("Auto Prog", sb.toString());
-		// SmartDashboard.putNumber("Auto Delay", delay);
+
+		SmartDashboard.putString("Auto Prog", sb.toString());
+		SmartDashboard.putNumber("Auto Delay", delay);
 	}
 
 	public String toString() {

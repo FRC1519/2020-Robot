@@ -1,25 +1,21 @@
 package org.mayheminc.robot2020.subsystems;
 
-import com.kauailabs.navx.frc.*;
-
 import org.mayheminc.robot2020.Constants;
-import org.mayheminc.util.History;
 
-import edu.wpi.first.wpilibj.*;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.mayheminc.util.MayhemFakeTalonSRX;
 import org.mayheminc.util.MayhemTalonSRX;
-import org.mayheminc.util.Utils;
 
 public class Shooter extends SubsystemBase {
-    private final MayhemTalonSRX shooterWheelTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL);
-    private final MayhemTalonSRX turretTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_TURRET);
-    private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
-    private final MayhemTalonSRX feederTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_FEEDER);
+    private final MayhemFakeTalonSRX shooterWheelTalon = new MayhemFakeTalonSRX(Constants.Talon.SHOOTER_WHEEL);
+    private final MayhemFakeTalonSRX turretTalon = new MayhemFakeTalonSRX(Constants.Talon.SHOOTER_TURRET);
+    private final MayhemFakeTalonSRX hoodTalon = new MayhemFakeTalonSRX(Constants.Talon.SHOOTER_HOOD);
+    private final MayhemFakeTalonSRX feederTalon = new MayhemFakeTalonSRX(Constants.Talon.SHOOTER_FEEDER);
 
     /**
      * Creates a new Shooter.
@@ -69,10 +65,10 @@ public class Shooter extends SubsystemBase {
     }
 
     private void UpdateDashboard() {
-        SmartDashboard.putNumber("shooter speed", shooterWheelTalon.get());
-        SmartDashboard.putNumber("turet pos", turretTalon.get());
-        SmartDashboard.putNumber("hood pos", hoodTalon.get());
-        SmartDashboard.putNumber("feeder speed", feederTalon.get());
+        SmartDashboard.putNumber("Shooter Wheel speed", shooterWheelTalon.get());
+        SmartDashboard.putNumber("Shooter turet pos", turretTalon.get());
+        SmartDashboard.putNumber("Shooter hood pos", hoodTalon.get());
+        SmartDashboard.putNumber("Shooter feeder speed", feederTalon.get());
     }
 
     public void zeroTurretPosition(int pos) {

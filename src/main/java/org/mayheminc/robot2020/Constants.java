@@ -34,14 +34,14 @@ public final class Constants {
         public static final int INTAKE_EXTENDER = 10;
 
         public static final int MAGAZINE_TURNTABLE = 11;
+        public static final int MAGAZINE_CHIMNEY = 12;
 
-        public static final int CLIMBER_WINCH_LEFT = 12; // high current
-        public static final int CLIMBER_WINCH_RIGHT = 13; // high current
+        public static final int CLIMBER_WINCH_LEFT = 13; // high current
+        public static final int CLIMBER_WINCH_RIGHT = 14; // high current
+        public static final int CLIMBER_WALKER_LEFT = 15;
+        public static final int CLIMBER_WALKER_RIGHT = 16;
 
-        public static final int CLIMBER_WALKER_LEFT = 14;
-        public static final int CLIMBER_WALKER_RIGHT = 15;
-
-        public static final int CONTROL_PANEL_ROLLER = 16;
+        public static final int CONTROL_PANEL_ROLLER = 17; // WON"T FIT!!!
     }
 
     public final class PDP {
@@ -51,10 +51,4 @@ public final class Constants {
         public static final int DRIVE_LEFT_B = 4;
     }
 
-    // public final class Joysticks {
-    // public static final int DRIVER_GAMEPAD = 0;
-    // public static final int DRIVER_JOYSTICK = 1;
-    // public static final int OPERATOR_GAMEPAD = 2;
-    // public static final int OPERATOR_JOYSTICK = 3;
-    // }
 }

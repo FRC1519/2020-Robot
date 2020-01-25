@@ -9,7 +9,6 @@ package org.mayheminc.robot2020.autonomousroutines;
 
 import org.mayheminc.robot2020.RobotContainer;
 import org.mayheminc.robot2020.commands.ShooterSetTurretAbs;
-import org.mayheminc.robot2020.commands.ShooterSetTurretRel;
 import org.mayheminc.robot2020.commands.Wait;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;

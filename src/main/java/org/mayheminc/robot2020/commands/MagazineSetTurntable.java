@@ -12,15 +12,15 @@ import org.mayheminc.robot2020.RobotContainer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class MagazineSetTurntable extends CommandBase {
-  boolean m_speed;
+  double m_speed;
 
   /**
    * Creates a new MagazineSetTurntable.
    */
-  public MagazineSetTurntable(boolean b) {
+  public MagazineSetTurntable(double d) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.magazine);
-    m_speed = b;
+    m_speed = d;
   }
 
   // Called when the command is initially scheduled.
@@ -32,7 +32,7 @@ public class MagazineSetTurntable extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.magazine.setTurntableSpeed(false);
+    RobotContainer.magazine.setTurntableSpeed(0.0);
   }
 
   // Returns true when the command should end.
