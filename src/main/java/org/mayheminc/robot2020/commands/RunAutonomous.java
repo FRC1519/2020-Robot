@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class RunAutonomous extends CommandBase {
   private long startTime;
   Command command;
+  boolean commandIsRunning;
 
   /**
    * Creates a new RunAutonomous.
@@ -37,12 +38,13 @@ public class RunAutonomous extends CommandBase {
   public void execute() {
     if (System.currentTimeMillis() >= startTime) {
       CommandScheduler.getInstance().schedule(command);
+      commandIsRunning = true;
     }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   public boolean isFinished() {
-    return System.currentTimeMillis() >= startTime;
+    return commandIsRunning;
   }
 
 }
