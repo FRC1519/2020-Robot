@@ -34,6 +34,7 @@ public class RobotContainer {
         public static final Drive drive = new Drive();
         public static final Intake intake = new Intake();
         public static final Autonomous autonomous = new Autonomous();
+        public static final Targeting targeting = new Targeting();
 
         private static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
         public static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
