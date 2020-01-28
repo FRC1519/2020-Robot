@@ -8,6 +8,7 @@
 package org.mayheminc.robot2020.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
@@ -20,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
 
   private final MayhemFakeTalonSRX rollerTalon = new MayhemFakeTalonSRX(Constants.Talon.INTAKE_ROLLERS);
-  private final MayhemFakeTalonSRX extenderTalon = new MayhemFakeTalonSRX(Constants.Talon.INTAKE_EXTENDER);
+  private final MayhemTalonSRX extenderTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_EXTENDER);
 
   /**
    * Creates a new Intake.
@@ -30,6 +31,12 @@ public class Intake extends SubsystemBase {
     rollerTalon.configNominalOutputVoltage(+0.0f, -0.0f);
     rollerTalon.configPeakOutputVoltage(+12.0, -12.0);
 
+    extenderTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+    extenderTalon.configPeakOutputVoltage(+12.0, -12.0);
+    extenderTalon.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+    extenderTalon.config_kP(0, 1.0, 0);
+    extenderTalon.config_kI(0, 0.0, 0);
+    extenderTalon.config_kD(0, 0.0, 0);
   }
 
   public void setRollers(double power) {
