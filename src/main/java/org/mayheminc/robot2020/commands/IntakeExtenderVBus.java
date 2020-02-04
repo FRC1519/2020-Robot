@@ -11,38 +11,20 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeSetPosition extends CommandBase {
-  double m_position;
-
+public class IntakeExtenderVBus extends CommandBase {
   /**
-   * Creates a new IntakeSetPosition.
+   * Creates a new IntakeExtenderVBus.
    */
-  public IntakeSetPosition(Double position) {
+  public IntakeExtenderVBus() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.intake);
-    m_position = position;
-
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    RobotContainer.intake.setExtender(m_position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double power = RobotContainer.OPERATOR_PAD.getLeftYAxis();
+    RobotContainer.intake.setExtenderVBus(power);
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 }

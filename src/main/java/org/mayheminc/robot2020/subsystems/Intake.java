@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-  private final MayhemFakeTalonSRX rollerTalon = new MayhemFakeTalonSRX(Constants.Talon.INTAKE_ROLLERS);
+  private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
   private final MayhemTalonSRX extenderTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_EXTENDER);
 
   /**
@@ -39,24 +39,32 @@ public class Intake extends SubsystemBase {
     extenderTalon.config_kD(0, 0.0, 0);
   }
 
+  /**
+   * Negative for intake. Positive for spit.
+   * 
+   * @param power
+   */
   public void setRollers(double power) {
     rollerTalon.set(ControlMode.PercentOutput, power);
 
   }
 
-  public void setExtender(boolean b) {
-    if (b) {
-      extenderTalon.set(ControlMode.Position, 90);
-
-    } else {
-      extenderTalon.set(ControlMode.Position, 10);
-    }
+  public void setExtender(Double b) {
+    extenderTalon.set(ControlMode.Position, b);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    updateSmartDashBoard();
+  }
+
+  public void updateSmartDashBoard() {
     SmartDashboard.putNumber("Intake Position", extenderTalon.get());
     SmartDashboard.putNumber("Intake Rollers", rollerTalon.get());
+  }
+
+  public void setExtenderVBus(double VBus) {
+    extenderTalon.set(ControlMode.PercentOutput, VBus);
   }
 }

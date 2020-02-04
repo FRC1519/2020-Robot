@@ -39,7 +39,7 @@ public class RobotContainer {
         private static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
         public static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
 
-        private final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad();
+        public static final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad();
         private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick();
 
         /**
@@ -54,6 +54,7 @@ public class RobotContainer {
 
         private void configureDefaultCommands() {
                 drive.setDefaultCommand(new DriveDefault());
+                intake.setDefaultCommand(new IntakeExtenderVBus());
         }
 
         private void configureAutonomousPrograms() {
@@ -115,11 +116,16 @@ public class RobotContainer {
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new MagazineSetTurntable(0.3));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new ShooterSetFeeder(0.5));
 
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(0.5));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(-0.5));
                 OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new ShooterSetHood(0.2));
                 OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHood(-0.2));
                 OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whenPressed(new ShooterSetHood(-0.2));
                 OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whenPressed(new ShooterSetHood(-0.2));
+
+                // OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whenPressed(new
+                // IntakeSetPosition(0.0));
+                // OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whenPressed(new
+                // IntakeSetPosition(90.0));
         }
 
         /**

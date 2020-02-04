@@ -43,4 +43,24 @@ public class MayhemOperatorPad {
         public final JoystickAxisButton OPERATOR_PAD_RIGHT_Y_AXIS_DOWN = new JoystickAxisButton(OPERATOR_PAD,
                         OPERATOR_PAD_AXIS.OPERATOR_PAD_RIGHT_Y_AXIS, JoystickAxisButton.POSITIVE_ONLY);
 
+        public static final int OPERATOR_PAD_LEFT_X_AXIS = 0;
+        public static final int OPERATOR_PAD_LEFT_Y_AXIS = 1;
+        public static final int OPERATOR_PAD_RIGHT_X_AXIS = 2;
+        public static final int OPERATOR_PAD_RIGHT_Y_AXIS = 3;
+
+        private static final double Y_AXIS_DEAD_ZONE_PERCENT = 0.15;
+
+        public double getLeftYAxis() {
+                // SteeringX is the "X" axis of the right stick on the Driver Gamepad.
+                double value = OPERATOR_PAD.getRawAxis(OPERATOR_PAD_LEFT_Y_AXIS);
+                if (Math.abs(value) < Y_AXIS_DEAD_ZONE_PERCENT) {
+                        value = 0.0;
+                }
+
+                // if the slow button is pressed, cut the steering value in half.
+                // if (DRIVER_PAD_RIGHT_LOWER_TRIGGER_BUTTON.get()) {
+                // value = value / 2.0;
+                // }
+                return value;
+        }
 }
