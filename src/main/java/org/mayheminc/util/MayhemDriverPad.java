@@ -94,9 +94,9 @@ public class MayhemDriverPad {
                 }
 
                 // if the slow button is pressed, cut the throttle value in third.
-                // if (DRIVER_PAD_RIGHT_LOWER_TRIGGER_BUTTON.get()) {
-                // throttleVal = throttleVal / 3.0;
-                // }
+                if (DRIVER_PAD_RIGHT_LOWER_TRIGGER_BUTTON.get()) {
+                        throttleVal = throttleVal / 3.0;
+                }
 
                 return (throttleVal);
         }
@@ -109,9 +109,9 @@ public class MayhemDriverPad {
                 }
 
                 // if the slow button is pressed, cut the steering value in half.
-                // if (DRIVER_PAD_RIGHT_LOWER_TRIGGER_BUTTON.get()) {
-                // value = value / 2.0;
-                // }
+                if (DRIVER_PAD_RIGHT_LOWER_TRIGGER_BUTTON.get()) {
+                        value = value / 2.0;
+                }
                 return value;
         }
 

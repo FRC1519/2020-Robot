@@ -114,10 +114,10 @@ public class Drive extends SubsystemBase {
 
 		// the left motors move the robot forwards with positive power
 		// but the right motors are backwards.
-		leftFrontTalon.setInverted(true);
-		leftRearTalon.setInverted(true);
-		rightFrontTalon.setInverted(false);
-		rightRearTalon.setInverted(false);
+		leftFrontTalon.setInverted(false);
+		leftRearTalon.setInverted(false);
+		rightFrontTalon.setInverted(true);
+		rightRearTalon.setInverted(true);
 
 		// sensor phase is reversed, since there are 3 reduction stages in the gearbox
 		leftFrontTalon.setSensorPhase(true);
@@ -440,7 +440,10 @@ public class Drive extends SubsystemBase {
 			// not using camera targeting right now
 
 			// check for if steering input is essentially zero
-			if ((-0.01 < rawSteeringX) && (rawSteeringX < 0.01)) {
+			if (false /*
+						 * turn off heading correction for now (-0.01 < rawSteeringX) && (rawSteeringX <
+						 * 0.01)
+						 */) {
 				// no turn being commanded, drive straight or stay still
 				m_iterationsSinceRotationCommanded++;
 				if ((-0.01 < throttle) && (throttle < 0.01)) {
