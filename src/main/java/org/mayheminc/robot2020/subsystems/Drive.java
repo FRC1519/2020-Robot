@@ -569,6 +569,11 @@ public class Drive extends SubsystemBase {
 
 	// **********************************************DISPLAY****************************************************
 
+	@Override
+	public void periodic(){
+		updateSmartDashboard();
+	}
+
 	public void updateSmartDashboard() {
 		displayGyroInfo();
 

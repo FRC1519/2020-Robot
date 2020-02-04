@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
-import org.mayheminc.util.MayhemFakeTalonSRX;
 import org.mayheminc.util.MayhemTalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,8 +19,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
+  private final int PIVOT_CLOSE_ENOUGH = 100;
   private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
   private final MayhemTalonSRX extenderTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_EXTENDER);
+
+  enum PivotMode {
+    MANUAL_MODE, PID_MODE,
+  };
+
+  PivotMode mode;
 
   /**
    * Creates a new Intake.
@@ -51,11 +57,24 @@ public class Intake extends SubsystemBase {
 
   public void setExtender(Double b) {
     extenderTalon.set(ControlMode.Position, b);
+    mode = PivotMode.PID_MODE;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    switch (mode) {
+    case PID_MODE:
+      // if the pivot is close enough, turn off the motor
+      if (Math.abs(extenderTalon.getSetpoint() - extenderTalon.get()) < PIVOT_CLOSE_ENOUGH) {
+        extenderTalon.set(ControlMode.PercentOutput, 0);
+      }
+      break;
+    default:
+      break;
+    }
+
     updateSmartDashBoard();
   }
 
@@ -66,5 +85,6 @@ public class Intake extends SubsystemBase {
 
   public void setExtenderVBus(double VBus) {
     extenderTalon.set(ControlMode.PercentOutput, VBus);
+    mode = PivotMode.MANUAL_MODE;
   }
 }
