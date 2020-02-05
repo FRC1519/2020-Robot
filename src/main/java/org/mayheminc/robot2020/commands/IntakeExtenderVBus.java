@@ -24,6 +24,8 @@ public class IntakeExtenderVBus extends CommandBase {
   @Override
   public void execute() {
     double power = RobotContainer.OPERATOR_PAD.getLeftYAxis();
+    double sign = (power >= 0) ? -1.0 : 1.0;// invert the sign
+    power = sign * power * power;
     RobotContainer.intake.setExtenderVBus(power);
   }
 

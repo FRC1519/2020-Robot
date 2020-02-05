@@ -114,11 +114,12 @@ public class RobotContainer {
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new ShooterAdjustWheel(+100));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new ShooterSetWheel(1000));
                 OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new MagazineSetTurntable(0.3));
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new IntakeSetRollers(-0.7));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new IntakeSetRollers(-1.0));
 
-                OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(0.7));
-                OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new ShooterSetHood(0.2));
-                OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHood(-0.2));
+                OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(1.0));
+                OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
+                OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN
+                                .whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
                 OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whenPressed(new ShooterSetHood(-0.2));
                 OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whenPressed(new ShooterSetHood(-0.2));
 

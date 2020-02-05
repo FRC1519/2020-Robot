@@ -22,12 +22,15 @@ public class Intake extends SubsystemBase {
   private final int PIVOT_CLOSE_ENOUGH = 100;
   private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
   private final MayhemTalonSRX extenderTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_EXTENDER);
+  private final int PIVOT_ZERO_POSITION = 0;
+  public final double PIVOT_UP = 0.0;
+  public final double PIVOT_DOWN = 900.0;
 
   enum PivotMode {
     MANUAL_MODE, PID_MODE,
   };
 
-  PivotMode mode;
+  PivotMode mode = PivotMode.MANUAL_MODE;
 
   /**
    * Creates a new Intake.
@@ -40,9 +43,44 @@ public class Intake extends SubsystemBase {
     extenderTalon.configNominalOutputVoltage(+0.0f, -0.0f);
     extenderTalon.configPeakOutputVoltage(+12.0, -12.0);
     extenderTalon.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-    extenderTalon.config_kP(0, 1.0, 0);
+    extenderTalon.config_kP(0, 10.0, 0);
     extenderTalon.config_kI(0, 0.0, 0);
     extenderTalon.config_kD(0, 0.0, 0);
+  }
+
+  void configMotor(MayhemTalonSRX motor) {
+    // initial calcs for computing kP...
+    // If we want 100% power when at the full extreme,
+    // Full extreme is 900 ticks
+    // kP = (1.0 * 1023) / 900 =
+    motor.config_kP(0, 1.15, 0); // based upon Ken's initial calcs, above
+
+    // typical value of about 1/100 of kP for starting tuning
+    motor.config_kI(0, 0.0, 0);
+
+    // typical value of about 10x to 100x of kP for starting tuning
+    motor.config_kD(0, 0.0, 0);
+    // motor.config_kD(0, 0.575, 0);
+
+    // practically always set kF to 0 for position control
+    // for things like gravity compensation, use the "arbitrary feed forward" that
+    // can be specified with the "4-parameter" TalonSRX.set() method
+    motor.config_kF(0, 0.0, 0);
+
+    motor.setNeutralMode(NeutralMode.Coast);
+    motor.setInverted(false);
+    motor.setSensorPhase(false);
+    motor.configNominalOutputVoltage(+0.0f, -0.0f);
+    motor.configPeakOutputVoltage(+12.0, -12.0);
+    motor.configClosedloopRamp(0.05); // limit neutral to full to 0.05 seconds
+    motor.configMotionCruiseVelocity(300); // estimate 300 ticks max
+    motor.configMotionAcceleration(600); // acceleration of 2x velocity allows cruise to be attained in 1/2
+                                         // second
+    motor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+  }
+
+  public void zero() {
+    extenderTalon.setEncPosition(PIVOT_ZERO_POSITION);
   }
 
   /**
@@ -68,7 +106,7 @@ public class Intake extends SubsystemBase {
     case PID_MODE:
       // if the pivot is close enough, turn off the motor
       if (Math.abs(extenderTalon.getSetpoint() - extenderTalon.get()) < PIVOT_CLOSE_ENOUGH) {
-        extenderTalon.set(ControlMode.PercentOutput, 0);
+        setExtenderVBus(0);
       }
       break;
     default:
@@ -79,7 +117,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void updateSmartDashBoard() {
-    SmartDashboard.putNumber("Intake Position", extenderTalon.get());
+    SmartDashboard.putNumber("Intake Position", extenderTalon.getPosition());
     SmartDashboard.putNumber("Intake Rollers", rollerTalon.get());
   }
 

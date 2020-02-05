@@ -418,8 +418,9 @@ public class Drive extends SubsystemBase {
 		double leftPower, rightPower;
 		double rotation = 0;
 		double adjustedSteeringX = rawSteeringX * throttle;
-		final double QUICK_TURN_GAIN = 0.75; // culver drive used 1.5
-		final double STD_TURN_GAIN = 1.5; // the driver wants the non-quick turn turning a little more responsive.
+		final double QUICK_TURN_GAIN = 0.55; // 2019: .75. 2020: .75 was too fast.
+		final double STD_TURN_GAIN = 1.0; // 2019: 1.5. 2020: 1.5 was too fast// the driver wants the non-quick turn
+											// turning a little more responsive.
 
 		int throttleSign;
 		if (throttle >= 0.0) {
@@ -570,7 +571,7 @@ public class Drive extends SubsystemBase {
 	// **********************************************DISPLAY****************************************************
 
 	@Override
-	public void periodic(){
+	public void periodic() {
 		updateSmartDashboard();
 	}
 

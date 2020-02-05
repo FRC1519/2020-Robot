@@ -9,30 +9,21 @@ package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class IntakeSetPosition extends CommandBase {
-  double m_position;
-
+public class IntakeZero extends InstantCommand {
   /**
-   * Creates a new IntakeSetPosition.
+   * Creates a new IntakeZero.
    */
-  public IntakeSetPosition(Double position) {
+  public IntakeZero() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.intake);
-    m_position = position;
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake.setExtender(m_position);
+    RobotContainer.intake.zero();
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
-  }
 }
