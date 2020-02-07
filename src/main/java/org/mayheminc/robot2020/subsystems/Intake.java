@@ -19,18 +19,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-  private final int PIVOT_CLOSE_ENOUGH = 100;
+  private final int PIVOT_CLOSE_ENOUGH = 20;
   private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
   private final MayhemTalonSRX extenderTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_EXTENDER);
-  private final int PIVOT_ZERO_POSITION = 0;
-  public final double PIVOT_UP = 0.0;
-  public final double PIVOT_DOWN = 900.0;
+  private final int PIVOT_ZERO_POSITION = 900;
+  public final double PIVOT_UP = 900.0;
+  public final double PIVOT_DOWN = 0.0;
 
   enum PivotMode {
     MANUAL_MODE, PID_MODE,
   };
 
   PivotMode mode = PivotMode.MANUAL_MODE;
+  boolean isMoving;
+  double m_targetPosition;
 
   /**
    * Creates a new Intake.
@@ -40,26 +42,21 @@ public class Intake extends SubsystemBase {
     rollerTalon.configNominalOutputVoltage(+0.0f, -0.0f);
     rollerTalon.configPeakOutputVoltage(+12.0, -12.0);
 
-    extenderTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-    extenderTalon.configPeakOutputVoltage(+12.0, -12.0);
-    extenderTalon.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-    extenderTalon.config_kP(0, 10.0, 0);
-    extenderTalon.config_kI(0, 0.0, 0);
-    extenderTalon.config_kD(0, 0.0, 0);
+    configMotor(extenderTalon);
   }
 
   void configMotor(MayhemTalonSRX motor) {
     // initial calcs for computing kP...
-    // If we want 100% power when at the full extreme,
+    // If we want 50% power when at the full extreme,
     // Full extreme is 900 ticks
-    // kP = (1.0 * 1023) / 900 =
-    motor.config_kP(0, 1.15, 0); // based upon Ken's initial calcs, above
+    // kP = (0.5 * 1023) / 900 = 0.568
+    motor.config_kP(0, 0.5, 0); // based upon Ken's initial calcs, above
 
     // typical value of about 1/100 of kP for starting tuning
     motor.config_kI(0, 0.0, 0);
 
     // typical value of about 10x to 100x of kP for starting tuning
-    motor.config_kD(0, 0.0, 0);
+    motor.config_kD(0, 150.0, 0);
     // motor.config_kD(0, 0.575, 0);
 
     // practically always set kF to 0 for position control
@@ -69,13 +66,13 @@ public class Intake extends SubsystemBase {
 
     motor.setNeutralMode(NeutralMode.Coast);
     motor.setInverted(false);
-    motor.setSensorPhase(false);
+    motor.setSensorPhase(true);
     motor.configNominalOutputVoltage(+0.0f, -0.0f);
     motor.configPeakOutputVoltage(+12.0, -12.0);
     motor.configClosedloopRamp(0.05); // limit neutral to full to 0.05 seconds
-    motor.configMotionCruiseVelocity(300); // estimate 300 ticks max
-    motor.configMotionAcceleration(600); // acceleration of 2x velocity allows cruise to be attained in 1/2
-                                         // second
+    motor.configMotionCruiseVelocity(30); // estimate 30 ticks max
+    motor.configMotionAcceleration(60); // acceleration of 2x velocity allows cruise to be attained in 1/2
+                                        // second
     motor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
   }
 
@@ -94,23 +91,28 @@ public class Intake extends SubsystemBase {
   }
 
   public void setExtender(Double b) {
+    m_targetPosition = b;
     extenderTalon.set(ControlMode.Position, b);
     mode = PivotMode.PID_MODE;
+    isMoving = true;
+  }
+
+  public boolean isExtenderAtPosition() {
+    return !isMoving;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    switch (mode) {
-    case PID_MODE:
+    if (mode == PivotMode.PID_MODE) {
+
       // if the pivot is close enough, turn off the motor
-      if (Math.abs(extenderTalon.getSetpoint() - extenderTalon.get()) < PIVOT_CLOSE_ENOUGH) {
+      if (Math.abs(extenderTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH) {
+        isMoving = false;
         setExtenderVBus(0);
       }
-      break;
-    default:
-      break;
+    } else {
     }
 
     updateSmartDashBoard();
@@ -118,6 +120,10 @@ public class Intake extends SubsystemBase {
 
   public void updateSmartDashBoard() {
     SmartDashboard.putNumber("Intake Position", extenderTalon.getPosition());
+    SmartDashboard.putNumber("Intake Target", m_targetPosition);
+
+    SmartDashboard.putBoolean("Intake Is Moving", isMoving);
+    SmartDashboard.putBoolean("Intake PID Mode", (mode == PivotMode.PID_MODE));
     SmartDashboard.putNumber("Intake Rollers", rollerTalon.get());
   }
 

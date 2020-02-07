@@ -17,6 +17,8 @@ public class MayhemTalonSRX extends TalonSRX {
 	public MayhemTalonSRX(int deviceNumber) {
 		super(deviceNumber);
 
+		this.configFactoryDefault();
+
 		this.configNominalOutputForward(0.0, 0);
 		this.configNominalOutputReverse(0.0, 0);
 		this.configPeakOutputForward(1.0, 0);
@@ -86,7 +88,7 @@ public class MayhemTalonSRX extends TalonSRX {
 	}
 
 	public void setFeedbackDevice(FeedbackDevice feedback) {
-		this.configSelectedFeedbackSensor(feedback, 0, 1000);
+		this.configSelectedFeedbackSensor(feedback, 0, 0);
 	}
 
 	public void reverseSensor(boolean b) {
