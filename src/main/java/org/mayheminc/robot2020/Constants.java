@@ -44,6 +44,13 @@ public final class Constants {
         public static final int CONTROL_PANEL_ROLLER = 17; // WON"T FIT!!!
     }
 
+    public final class Solenoid {
+        public static final int SPARE_0 = 0;
+        public static final int SPARE_1 = 1;
+        public static final int SPARE_2 = 2;
+        public static final int CLIMBER_PISTONS = 3;
+    }
+
     public final class PDP {
         public static final int DRIVE_RIGHT_A = 1;
         public static final int DRIVE_RIGHT_B = 2;
