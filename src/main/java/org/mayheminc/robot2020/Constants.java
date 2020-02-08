@@ -31,7 +31,7 @@ public final class Constants {
         public static final int SHOOTER_HOOD = 8;
 
         public static final int INTAKE_ROLLERS = 9;
-        public static final int INTAKE_EXTENDER = 10;
+        public static final int INTAKE_PIVOT = 10;
 
         public static final int MAGAZINE_TURNTABLE = 11;
         public static final int MAGAZINE_CHIMNEY = 12;

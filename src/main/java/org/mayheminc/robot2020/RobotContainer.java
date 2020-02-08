@@ -11,6 +11,7 @@ import org.mayheminc.util.*;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
 import java.util.LinkedList;
 
@@ -35,10 +36,11 @@ public class RobotContainer {
     public static final Intake intake = new Intake();
     public static final Autonomous autonomous = new Autonomous();
     public static final Targeting targeting = new Targeting();
+    public static PidTuner pidtuner;
 
-    private static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
+    // Operator Inputs
+    public static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
     public static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
-
     public static final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad();
     private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick();
 
@@ -50,6 +52,15 @@ public class RobotContainer {
         configureButtonBindings();
         configureAutonomousPrograms();
         configureDefaultCommands();
+
+        pidtuner = new PidTuner(RobotContainer.DRIVER_STICK.DRIVER_STICK_BUTTON_SIX,
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_BUTTON_SEVEN,
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_BUTTON_ELEVEN,
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_BUTTON_TEN, shooter);
+    }
+
+    public static void init() {
+        shooter.init();
     }
 
     private void configureDefaultCommands() {
@@ -104,10 +115,18 @@ public class RobotContainer {
 
     private void configureDriverPadButtons() {
 
-        // Debug shooter
-        DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterAdjustWheelVBus(0.1));
-        DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterAdjustWheelVBus(-0.1));
-        DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterAdjustWheelVBus(0.0));
+        // Debug shooter vbus
+        // DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new
+        // ShooterAdjustWheelVBus(0.1));
+        // DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new
+        // ShooterAdjustWheelVBus(-0.1));
+        // DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheelVBus(0.0));
+
+        // Debug shooter pid velocity
+        DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterAdjustWheel(25.0));
+        DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterAdjustWheel(-25.0));
+        DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheel(0.0));
+
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterSetFeeder(0.5));
 
         // debug climber pistons
@@ -137,10 +156,8 @@ public class RobotContainer {
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whenPressed(new ShooterSetHood(-0.2));
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whenPressed(new ShooterSetHood(-0.2));
 
-        // OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whenPressed(new
-        // IntakeSetPosition(0.0));
-        // OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whenPressed(new
-        // IntakeSetPosition(90.0));
+        OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whenPressed(new ClimberSetWinchesPower(0.5));
+        OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whenPressed(new ClimberSetWinchesPower(-0.5));
     }
 
     /**

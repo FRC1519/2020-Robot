@@ -8,6 +8,7 @@
 package org.mayheminc.robot2020.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -21,10 +22,12 @@ public class Intake extends SubsystemBase {
 
   private final int PIVOT_CLOSE_ENOUGH = 20;
   private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
-  private final MayhemTalonSRX extenderTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_EXTENDER);
+  private final MayhemTalonSRX pivotTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_PIVOT);
   private final int PIVOT_ZERO_POSITION = 900;
   public final double PIVOT_UP = 900.0;
   public final double PIVOT_DOWN = 0.0;
+
+  private static final double HORIZONTAL_HOLD_OUTPUT = 0.08;
 
   enum PivotMode {
     MANUAL_MODE, PID_MODE,
@@ -33,6 +36,7 @@ public class Intake extends SubsystemBase {
   PivotMode mode = PivotMode.MANUAL_MODE;
   boolean isMoving;
   double m_targetPosition;
+  double m_feedForward;
 
   /**
    * Creates a new Intake.
@@ -42,7 +46,7 @@ public class Intake extends SubsystemBase {
     rollerTalon.configNominalOutputVoltage(+0.0f, -0.0f);
     rollerTalon.configPeakOutputVoltage(+12.0, -12.0);
 
-    configMotor(extenderTalon);
+    configMotor(pivotTalon);
   }
 
   void configMotor(MayhemTalonSRX motor) {
@@ -77,7 +81,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void zero() {
-    extenderTalon.setEncPosition(PIVOT_ZERO_POSITION);
+    pivotTalon.setEncPosition(PIVOT_ZERO_POSITION);
   }
 
   /**
@@ -90,14 +94,15 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void setExtender(Double b) {
+  public void setPivot(Double b) {
     m_targetPosition = b;
-    extenderTalon.set(ControlMode.Position, b);
+    // pivotTalon.set(ControlMode.Position, b);
+
     mode = PivotMode.PID_MODE;
     isMoving = true;
   }
 
-  public boolean isExtenderAtPosition() {
+  public boolean isPivotAtPosition() {
     return !isMoving;
   }
 
@@ -105,21 +110,48 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
+    updateSmartDashBoard();
+    updateSensorPosition();
+    updatePivotPower();
+  }
+
+  private void updatePivotPower() {
+
     if (mode == PivotMode.PID_MODE) {
 
       // if the pivot is close enough, turn off the motor
-      if (Math.abs(extenderTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH) {
+      if (Math.abs(pivotTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH) {
         isMoving = false;
-        setExtenderVBus(0);
+        setPivotVBus(0);
+      } else {
+        pivotTalon.set(ControlMode.MotionMagic, m_targetPosition, DemandType.ArbitraryFeedForward, m_feedForward);
       }
-    } else {
     }
+  }
 
-    updateSmartDashBoard();
+  void updateSensorPosition() {
+    int m_currentPosition = pivotTalon.getPosition();
+    double m_angleInDegrees = positionToDegrees(m_currentPosition);
+    double m_angleInRadians = Math.toRadians(m_angleInDegrees);
+
+    // get a range of -1 to 1 to multiply by feedforward.
+    // when in horizontal forward position, value should be 1
+    // when in vertical up or down position, value should be 0
+    // when in horizontal backward position, value should be -1
+    double m_gravityCompensation = Math.cos(m_angleInRadians);
+
+    // HORIZONTAL_HOLD_OUTPUT is the minimum power required to hold the arm up when
+    // horizontal
+    // this is a range of -1.0 to 1.0 (%vbus), determined empirically
+    m_feedForward = m_gravityCompensation * HORIZONTAL_HOLD_OUTPUT;
+  }
+
+  private double positionToDegrees(int pos) {
+    return pos / 10; // 900 encoder ticks per 90 degrees
   }
 
   public void updateSmartDashBoard() {
-    SmartDashboard.putNumber("Intake Position", extenderTalon.getPosition());
+    SmartDashboard.putNumber("Intake Position", pivotTalon.getPosition());
     SmartDashboard.putNumber("Intake Target", m_targetPosition);
 
     SmartDashboard.putBoolean("Intake Is Moving", isMoving);
@@ -127,8 +159,8 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake Rollers", rollerTalon.getOutputVoltage());
   }
 
-  public void setExtenderVBus(double VBus) {
-    extenderTalon.set(ControlMode.PercentOutput, VBus);
+  public void setPivotVBus(double VBus) {
+    pivotTalon.set(ControlMode.PercentOutput, VBus);
     mode = PivotMode.MANUAL_MODE;
   }
 }

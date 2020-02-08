@@ -29,19 +29,19 @@ public class Climber extends SubsystemBase {
    * Creates a new Climber.
    */
   public Climber() {
-    winchLeft.setNeutralMode(NeutralMode.Brake);
+    winchLeft.setNeutralMode(NeutralMode.Coast);
     winchLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     winchLeft.configPeakOutputVoltage(+12.0, -12.0);
 
-    winchRight.setNeutralMode(NeutralMode.Brake);
+    winchRight.setNeutralMode(NeutralMode.Coast);
     winchRight.configNominalOutputVoltage(+0.0f, -0.0f);
     winchRight.configPeakOutputVoltage(+12.0, -12.0);
 
-    walkerRight.setNeutralMode(NeutralMode.Brake);
+    walkerRight.setNeutralMode(NeutralMode.Coast);
     walkerRight.configNominalOutputVoltage(+0.0f, -0.0f);
     walkerRight.configPeakOutputVoltage(+12.0, -12.0);
 
-    walkerLeft.setNeutralMode(NeutralMode.Brake);
+    walkerLeft.setNeutralMode(NeutralMode.Coast);
     walkerLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     walkerLeft.configPeakOutputVoltage(+12.0, -12.0);
 
@@ -58,11 +58,11 @@ public class Climber extends SubsystemBase {
   }
 
   public void setWinchLeftSpeed(double power) {
-    winchLeft.set(ControlMode.Velocity, power);
+    winchLeft.set(ControlMode.PercentOutput, power);
   }
 
   public void setWinchRightSpeed(double power) {
-    winchRight.set(ControlMode.Velocity, power);
+    winchRight.set(ControlMode.PercentOutput, power);
   }
 
   public void setWalkerLeftSpeed(double power) {

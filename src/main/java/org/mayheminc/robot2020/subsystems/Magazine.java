@@ -14,12 +14,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
-import org.mayheminc.util.MayhemFakeTalonSRX;
 import org.mayheminc.util.MayhemTalonSRX;
 
 public class Magazine extends SubsystemBase {
-  private final MayhemFakeTalonSRX turntableTalon = new MayhemFakeTalonSRX(Constants.Talon.MAGAZINE_TURNTABLE);
-  private final MayhemFakeTalonSRX chimneyTalen = new MayhemFakeTalonSRX(Constants.Talon.MAGAZINE_CHIMNEY);
+  private final MayhemTalonSRX turntableTalon = new MayhemTalonSRX(Constants.Talon.MAGAZINE_TURNTABLE);
+  private final MayhemTalonSRX chimneyTalen = new MayhemTalonSRX(Constants.Talon.MAGAZINE_CHIMNEY);
 
   /**
    * Creates a new Magazine.
@@ -29,7 +28,7 @@ public class Magazine extends SubsystemBase {
     ConfigureTalon(chimneyTalen);
   }
 
-  private void ConfigureTalon(MayhemFakeTalonSRX talon) {
+  private void ConfigureTalon(MayhemTalonSRX talon) {
     talon.setNeutralMode(NeutralMode.Coast);
     talon.configNominalOutputVoltage(+0.0f, -0.0f);
     talon.configPeakOutputVoltage(+12.0, -12.0);
@@ -38,7 +37,7 @@ public class Magazine extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Magazine Turntable", turntableTalon.get());
+    SmartDashboard.putNumber("Magazine Turntable", turntableTalon.getSpeed());
   }
 
   public void setTurntableSpeed(double speed) {

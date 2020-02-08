@@ -8,15 +8,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * This is a class to help tune a PID. Another class that extends
  * IPidTunerObject is passed in. This interface defines methods that are used to
  * set the P-I-D values. This class gets joystick buttons that define the
- * different options. - Button 1: cycle through P-I-D values - Button 2:
+ * different options. - Button 1: cycle through P-I-D-F values - Button 2:
  * increase the value. - Button 3: decrease the value. - Button 4: cycle through
  * the amount the value changes: 10, 1, .1, .01, .001, .0001 This class needs to
- * be called for updateSmartDashboard().
+ * be called from updateSmartDashboard().
  * 
  * @author User
  *
  */
-public class PidTuner extends InstantCommand {
+public class PidTuner extends InstantCommand implements Subsystem {
 	Button m_PidCycle;
 	Button m_Inc;
 	Button m_Dec;
@@ -33,6 +33,8 @@ public class PidTuner extends InstantCommand {
 	// Remember the buttons and call this object when they are pressed.
 	// remember the PID Object so we can get/set the PID values.
 	public PidTuner(final Button b1, final Button b2, final Button b3, final Button b4, final PidTunerObject obj) {
+
+		CommandScheduler.getInstance().registerSubsystem(this);
 
 		b1.whenPressed(this);
 		b2.whenPressed(this);
@@ -67,7 +69,7 @@ public class PidTuner extends InstantCommand {
 		}
 	}
 
-	// set the P, I, or D that we are changing
+	// set the P, I, or D or F that we are changing
 	public void RunCycle() {
 		// System.out.println("PID Tuner: RunCycle");
 		m_cycle++;
@@ -112,7 +114,7 @@ public class PidTuner extends InstantCommand {
 		return 0.0;
 	}
 
-	// based on the cycle, set the P, I, or D.
+	// based on the cycle, set the P, I, or D or F.
 	void setValue(final double d) {
 		switch (m_cycle) {
 		case 0:
@@ -151,7 +153,12 @@ public class PidTuner extends InstantCommand {
 		}
 	}
 
-	public void updateSmartDashboard() {
+	@Override
+	public void periodic() {
+		updateSmartDashboard();
+	}
+
+	private void updateSmartDashboard() {
 		SmartDashboard.putNumber("PID Tuner P", m_pidObj.getP());
 		SmartDashboard.putNumber("PID Tuner I", m_pidObj.getI());
 		SmartDashboard.putNumber("PID Tuner D", m_pidObj.getD());
