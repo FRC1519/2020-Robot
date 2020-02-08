@@ -161,7 +161,7 @@ public class Drive extends SubsystemBase {
 
 		talon.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 
-		talon.reverseSensor(false);
+		// talon.reverseSensor(false);
 		talon.configNominalOutputVoltage(+0.0f, -0.0f);
 		talon.configPeakOutputVoltage(+12.0, -12.0);
 

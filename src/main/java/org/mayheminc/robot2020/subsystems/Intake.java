@@ -124,7 +124,7 @@ public class Intake extends SubsystemBase {
 
     SmartDashboard.putBoolean("Intake Is Moving", isMoving);
     SmartDashboard.putBoolean("Intake PID Mode", (mode == PivotMode.PID_MODE));
-    SmartDashboard.putNumber("Intake Rollers", rollerTalon.get());
+    SmartDashboard.putNumber("Intake Rollers", rollerTalon.getOutputVoltage());
   }
 
   public void setExtenderVBus(double VBus) {
