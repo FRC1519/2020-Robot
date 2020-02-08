@@ -8,14 +8,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import org.mayheminc.util.MayhemFakeTalonSRX;
 import org.mayheminc.util.MayhemTalonSRX;
 
 public class Shooter extends SubsystemBase {
-    private final MayhemFakeTalonSRX shooterWheelTalon = new MayhemFakeTalonSRX(Constants.Talon.SHOOTER_WHEEL);
-    private final MayhemFakeTalonSRX turretTalon = new MayhemFakeTalonSRX(Constants.Talon.SHOOTER_TURRET);
-    private final MayhemFakeTalonSRX hoodTalon = new MayhemFakeTalonSRX(Constants.Talon.SHOOTER_HOOD);
-    private final MayhemFakeTalonSRX feederTalon = new MayhemFakeTalonSRX(Constants.Talon.SHOOTER_FEEDER);
+    private final MayhemTalonSRX shooterWheelTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL);
+    private final MayhemTalonSRX turretTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_TURRET);
+    private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
+    private final MayhemTalonSRX feederTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_FEEDER);
 
     /**
      * Creates a new Shooter.
@@ -41,7 +40,7 @@ public class Shooter extends SubsystemBase {
     }
 
     private void configureWheelTalon() {
-        shooterWheelTalon.config_kP(0, 1.0, 0);
+        shooterWheelTalon.config_kP(0, 60.0, 0);
         shooterWheelTalon.config_kI(0, 0.0, 0);
         shooterWheelTalon.config_kD(0, 0.0, 0);
         shooterWheelTalon.config_kF(0, 0.0, 0);
@@ -65,10 +64,10 @@ public class Shooter extends SubsystemBase {
     }
 
     private void UpdateDashboard() {
-        SmartDashboard.putNumber("Shooter Wheel speed", shooterWheelTalon.get());
-        SmartDashboard.putNumber("Shooter turet pos", turretTalon.get());
-        SmartDashboard.putNumber("Shooter hood pos", hoodTalon.get());
-        SmartDashboard.putNumber("Shooter feeder speed", feederTalon.get());
+        SmartDashboard.putNumber("Shooter Wheel speed", shooterWheelTalon.getSpeed());
+        SmartDashboard.putNumber("Shooter turet pos", turretTalon.getPosition());
+        SmartDashboard.putNumber("Shooter hood pos", hoodTalon.getPosition());
+        SmartDashboard.putNumber("Shooter feeder speed", feederTalon.getPosition());
     }
 
     public void zeroTurretPosition(int pos) {
@@ -97,7 +96,7 @@ public class Shooter extends SubsystemBase {
      * @return
      */
     public double getTurretPosition() {
-        return turretTalon.get();
+        return turretTalon.getPosition();
     }
 
     public void setHoodPosition(double pos) {
@@ -105,7 +104,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getHoodPosition() {
-        return hoodTalon.get();
+        return hoodTalon.getPosition();
     }
 
     public void setFeederSpeed(double pos) {
@@ -114,9 +113,17 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterWheelSpeed(double pos) {
         shooterWheelTalon.set(ControlMode.Velocity, pos);
+    }   
+    public void setShooterWheelSpeedVBus(double pos) {
+        shooterWheelTalon.set(ControlMode.PercentOutput, pos);
     }
 
     public double getShooterWheelSpeed() {
-        return shooterWheelTalon.get();
+        return shooterWheelTalon.getSpeed();
+    }   
+    
+     public double getShooterWheelSpeedVBus() {
+        return shooterWheelTalon.getOutputVoltage();
     }
+
 }
