@@ -7,33 +7,25 @@
 
 package org.mayheminc.robot2020.commands;
 
-import org.mayheminc.robot2020.RobotContainer;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-
-public class ShooterAdjustWheel extends CommandBase {
-
-  double m_adjust;
-
+public class SystemZeroIncludingGyro extends SequentialCommandGroup {
   /**
-   * Creates a new ShooterAdjustWheel.
+   * Creates a new SystemZeroIncludingGyro.
    */
-  public ShooterAdjustWheel(double adjust) {
+  public SystemZeroIncludingGyro() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.shooter);
 
-    m_adjust = adjust;
+    addCommands(new IntakeZero());
+    addCommands(new ClimberZero());
+    addCommands(new ShooterZero());
+    addCommands(new DriveZeroGyro());
   }
 
-  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    RobotContainer.shooter.setShooterWheelSpeed(RobotContainer.shooter.getShooterWheelTargetSpeed() + m_adjust);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
+  public boolean runsWhenDisabled() {
+    // TODO Auto-generated method stub
     return true;
   }
+
 }

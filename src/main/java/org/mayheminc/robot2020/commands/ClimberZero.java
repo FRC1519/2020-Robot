@@ -9,31 +9,20 @@ package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class ShooterAdjustWheel extends CommandBase {
-
-  double m_adjust;
-
-  /**
-   * Creates a new ShooterAdjustWheel.
-   */
-  public ShooterAdjustWheel(double adjust) {
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+public class ClimberZero extends InstantCommand {
+  public ClimberZero() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.shooter);
-
-    m_adjust = adjust;
+    addRequirements(RobotContainer.climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.setShooterWheelSpeed(RobotContainer.shooter.getShooterWheelTargetSpeed() + m_adjust);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
+    RobotContainer.climber.zero();
   }
 }

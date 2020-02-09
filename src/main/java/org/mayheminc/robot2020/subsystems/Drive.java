@@ -159,7 +159,7 @@ public class Drive extends SubsystemBase {
 		double wheelD = 0.0;
 		double wheelF = 1.0;
 
-		talon.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		talon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
 
 		// talon.reverseSensor(false);
 		talon.configNominalOutputVoltage(+0.0f, -0.0f);
@@ -587,20 +587,17 @@ public class Drive extends SubsystemBase {
 		SmartDashboard.putNumber("Right Rear Encoder Counts", rightRearTalon.getSelectedSensorPosition(0));
 
 		// Note: getSpeed() returns ticks per 0.1 seconds
-		// SmartDashboard.putNumber("Left Encoder Speed",
-		// leftFrontTalon.getSelectedSensorVelocity(0));
-		// SmartDashboard.putNumber("Right Encoder Speed",
-		// rightFrontTalon.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Left Encoder Speed", leftFrontTalon.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Right Encoder Speed", rightFrontTalon.getSelectedSensorVelocity(0));
 
 		// To convert ticks per 0.1 seconds into feet per second
 		// a - multiply be 10 (tenths of second per second)
 		// b - divide by 12 (1 foot per 12 inches)
 		// c - multiply by distance (in inches) per pulse
-		// SmartDashboard.putNumber("Left Speed (fps)",
-		// leftFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 * DISTANCE_PER_PULSE);
-		// SmartDashboard.putNumber("Right Speed (fps)",
-		// rightFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 *
-		// DISTANCE_PER_PULSE);
+		SmartDashboard.putNumber("Left Speed (fps)",
+				leftFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 * DISTANCE_PER_PULSE);
+		SmartDashboard.putNumber("Right Speed (fps)",
+				rightFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 * DISTANCE_PER_PULSE);
 
 		SmartDashboard.putNumber("Left Talon Output Voltage", leftFrontTalon.getOutputVoltage());
 		SmartDashboard.putNumber("Right Talon Output Voltage", rightFrontTalon.getOutputVoltage());

@@ -27,7 +27,7 @@ public class Intake extends SubsystemBase {
   public final double PIVOT_UP = 900.0;
   public final double PIVOT_DOWN = 0.0;
 
-  private static final double HORIZONTAL_HOLD_OUTPUT = 0.08;
+  private static final double HORIZONTAL_HOLD_OUTPUT = 0.00;
 
   enum PivotMode {
     MANUAL_MODE, PID_MODE,
@@ -54,7 +54,7 @@ public class Intake extends SubsystemBase {
     // If we want 50% power when at the full extreme,
     // Full extreme is 900 ticks
     // kP = (0.5 * 1023) / 900 = 0.568
-    motor.config_kP(0, 0.5, 0); // based upon Ken's initial calcs, above
+    motor.config_kP(0, 0.5, 0); // based upon Robert's initial calcs, above
 
     // typical value of about 1/100 of kP for starting tuning
     motor.config_kI(0, 0.0, 0);
@@ -124,7 +124,7 @@ public class Intake extends SubsystemBase {
         isMoving = false;
         setPivotVBus(0);
       } else {
-        pivotTalon.set(ControlMode.MotionMagic, m_targetPosition, DemandType.ArbitraryFeedForward, m_feedForward);
+        pivotTalon.set(ControlMode.Position, m_targetPosition, DemandType.ArbitraryFeedForward, m_feedForward);
       }
     }
   }

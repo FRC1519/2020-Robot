@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    RobotContainer.shooter.init();
+    // RobotContainer.compressor.start();
   }
 
   /**
