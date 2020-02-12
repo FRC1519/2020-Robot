@@ -7,31 +7,25 @@
 
 package org.mayheminc.robot2020.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
 
-public class Magazine extends SubsystemBase {
-  private final MayhemTalonSRX turntableTalon = new MayhemTalonSRX(Constants.Talon.MAGAZINE_TURNTABLE);
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class Chimney extends SubsystemBase {
+  private final MayhemTalonSRX chimneyTalon = new MayhemTalonSRX(Constants.Talon.MAGAZINE_CHIMNEY);
 
   /**
-   * Creates a new Magazine.
+   * Creates a new Chimney.
    */
-  public Magazine() {
-    ConfigureTalon(turntableTalon);
-    turntableTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-  }
-
-  private void ConfigureTalon(MayhemTalonSRX talon) {
-    talon.setNeutralMode(NeutralMode.Coast);
-    talon.configNominalOutputVoltage(+0.0f, -0.0f);
-    talon.configPeakOutputVoltage(+12.0, -12.0);
+  public Chimney() {
+    chimneyTalon.setNeutralMode(NeutralMode.Coast);
+    chimneyTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+    chimneyTalon.configPeakOutputVoltage(+12.0, -12.0);
   }
 
   @Override
@@ -42,15 +36,14 @@ public class Magazine extends SubsystemBase {
   }
 
   void updateSmartDashboard() {
-    SmartDashboard.putNumber("Magazine Turntable", turntableTalon.getSpeed());
+    SmartDashboard.putNumber("Magazine Turntable", chimneyTalon.getSpeed());
   }
 
   void monitorTurntableMovement() {
 
   }
 
-  public void setTurntableSpeed(double speed) {
-    turntableTalon.set(ControlMode.PercentOutput, speed);
+  public void setChimneySpeed(double speed) {
+    chimneyTalon.set(ControlMode.PercentOutput, speed);
   }
-
 }

@@ -26,7 +26,7 @@ public class MagazineSetChimney extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.magazine.setChimneySpeed(m_speed);
+    RobotContainer.chimney.setChimneySpeed(m_speed);
   }
 
   // Called once the command ends or is interrupted.

@@ -39,6 +39,7 @@ public class RobotContainer {
     public static final Targeting targeting = new Targeting();
     // public static final Compressor compressor = new Compressor();
     public static PidTuner pidtuner;
+    public static final Chimney chimney = new Chimney();
 
     // Operator Inputs
     public static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
