@@ -111,6 +111,8 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
                 convertTicksPer100msToRPM(shooterWheelTalon.getSelectedSensorVelocity(0)));
 
         SmartDashboard.putNumber("Shooter Wheel target RPM", m_targetSpeedRPM);
+        SmartDashboard.putNumber("Shooter Wheel Error",
+                m_targetSpeedRPM - convertTicksPer100msToRPM(shooterWheelTalon.getSelectedSensorVelocity(0)));
 
         SmartDashboard.putNumber("Shooter turet pos", turretTalon.getPosition());
         SmartDashboard.putNumber("Shooter hood pos", hoodTalon.getPosition());
