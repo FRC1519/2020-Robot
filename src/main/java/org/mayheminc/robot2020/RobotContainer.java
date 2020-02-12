@@ -67,7 +67,8 @@ public class RobotContainer {
 
     private void configureDefaultCommands() {
         drive.setDefaultCommand(new DriveDefault());
-        intake.setDefaultCommand(new IntakeExtenderVBus());
+        // intake.setDefaultCommand(new IntakeExtenderVBus());
+        magazine.setDefaultCommand(new MagazineDefault());
     }
 
     private void configureAutonomousPrograms() {
