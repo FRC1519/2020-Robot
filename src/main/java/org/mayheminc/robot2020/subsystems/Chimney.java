@@ -26,6 +26,7 @@ public class Chimney extends SubsystemBase {
     chimneyTalon.setNeutralMode(NeutralMode.Coast);
     chimneyTalon.configNominalOutputVoltage(+0.0f, -0.0f);
     chimneyTalon.configPeakOutputVoltage(+12.0, -12.0);
+    chimneyTalon.setInverted(true);
   }
 
   @Override
