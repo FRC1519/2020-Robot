@@ -37,7 +37,7 @@ public class RobotContainer {
     public static final Intake intake = new Intake();
     public static final Autonomous autonomous = new Autonomous();
     public static final Targeting targeting = new Targeting();
-    // public static final Compressor compressor = new Compressor();
+    public static final AirCompressor compressor = new AirCompressor();
     public static PidTuner pidtuner;
     public static final Chimney chimney = new Chimney();
 
@@ -153,7 +153,7 @@ public class RobotContainer {
         // new ShooterAdjustWheel(+100));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
         // new ShooterSetWheel(1000));
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new MagazineSetChimney(1.0));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new ChimneySetChimney(1.0));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new IntakeSetRollers(-1.0));
 
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(1.0));

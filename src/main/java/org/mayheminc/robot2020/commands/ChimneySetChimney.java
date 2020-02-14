@@ -11,13 +11,13 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class MagazineSetChimney extends CommandBase {
+public class ChimneySetChimney extends CommandBase {
   double m_speed;
 
   /**
    * Creates a new MagazineSetChimney.
    */
-  public MagazineSetChimney(double d) {
+  public ChimneySetChimney(double d) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.chimney);
     m_speed = d;

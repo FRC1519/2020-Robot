@@ -42,7 +42,6 @@ public class Chimney extends SubsystemBase {
   }
 
   void monitorTurntableMovement() {
-
   }
 
   public void setChimneySpeed(double speed) {
