@@ -7,14 +7,24 @@
 
 package org.mayheminc.robot2020.subsystems;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class compressor extends SubsystemBase {
+public class AirCompressor extends SubsystemBase {
+  Compressor compressor = new Compressor();
+
   /**
    * Creates a new compressor.
    */
-  public compressor() {
+  public AirCompressor() {
+  }
 
+  public void setCompresor(boolean b) {
+    if (b) {
+      compressor.start();
+    } else {
+      compressor.stop();
+    }
   }
 
   @Override
