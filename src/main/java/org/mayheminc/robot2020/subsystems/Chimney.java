@@ -37,7 +37,8 @@ public class Chimney extends SubsystemBase {
   }
 
   void updateSmartDashboard() {
-    SmartDashboard.putNumber("Magazine Turntable", chimneyTalon.getSpeed());
+    SmartDashboard.putNumber("Chimney Speed", chimneyTalon.getSpeed());
+    SmartDashboard.putNumber("Chimney Current", chimneyTalon.getStatorCurrent());
   }
 
   void monitorTurntableMovement() {

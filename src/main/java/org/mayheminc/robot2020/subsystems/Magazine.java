@@ -42,7 +42,8 @@ public class Magazine extends SubsystemBase {
   }
 
   void updateSmartDashboard() {
-    SmartDashboard.putNumber("Magazine Turntable", turntableTalon.getSpeed());
+    SmartDashboard.putNumber("Magazine Speed", turntableTalon.getSpeed());
+    // SmartDashboard.putNumber("Magazine Speed", turntableTalon.getSpeed());
   }
 
   void monitorTurntableMovement() {

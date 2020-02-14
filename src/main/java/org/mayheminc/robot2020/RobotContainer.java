@@ -56,10 +56,10 @@ public class RobotContainer {
         configureAutonomousPrograms();
         configureDefaultCommands();
 
-        pidtuner = new PidTuner(RobotContainer.DRIVER_STICK.DRIVER_STICK_BUTTON_SIX,
-                RobotContainer.DRIVER_STICK.DRIVER_STICK_BUTTON_SEVEN,
-                RobotContainer.DRIVER_STICK.DRIVER_STICK_BUTTON_ELEVEN,
-                RobotContainer.DRIVER_STICK.DRIVER_STICK_BUTTON_TEN, shooter);
+        pidtuner = new PidTuner(RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SIX,
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SEVEN,
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_ELEVEN,
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, shooter);
     }
 
     public static void init() {
@@ -130,6 +130,7 @@ public class RobotContainer {
         DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterAdjustWheel(100.0));
         DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterAdjustWheel(-100.0));
         DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheel(0.0));
+        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterSetWheel(4600));
 
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterSetFeeder(0.5));
 

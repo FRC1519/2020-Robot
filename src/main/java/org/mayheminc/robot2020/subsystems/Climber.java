@@ -30,19 +30,20 @@ public class Climber extends SubsystemBase {
    * Creates a new Climber.
    */
   public Climber() {
-    winchLeft.setNeutralMode(NeutralMode.Coast);
+    winchLeft.setNeutralMode(NeutralMode.Brake);
     winchLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     winchLeft.configPeakOutputVoltage(+12.0, -12.0);
 
     winchRight.setNeutralMode(NeutralMode.Coast);
+    winchRight.setNeutralMode(NeutralMode.Brake);
     winchRight.configNominalOutputVoltage(+0.0f, -0.0f);
     winchRight.configPeakOutputVoltage(+12.0, -12.0);
 
-    walkerRight.setNeutralMode(NeutralMode.Coast);
+    walkerRight.setNeutralMode(NeutralMode.Brake);
     walkerRight.configNominalOutputVoltage(+0.0f, -0.0f);
     walkerRight.configPeakOutputVoltage(+12.0, -12.0);
 
-    walkerLeft.setNeutralMode(NeutralMode.Coast);
+    walkerLeft.setNeutralMode(NeutralMode.Brake);
     walkerLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     walkerLeft.configPeakOutputVoltage(+12.0, -12.0);
 
@@ -56,8 +57,8 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // SmartDashboard.putNumber("Climber Winch Left", winchLeft.getPosition());
-    // SmartDashboard.putNumber("Climber Winch Right", winchRight.getPosition());
+    SmartDashboard.putNumber("Climber Winch Left", winchLeft.getPosition());
+    SmartDashboard.putNumber("Climber Winch Right", winchRight.getPosition());
     // SmartDashboard.putNumber("Climber Walker Left", walkerLeft.getPosition());
     // SmartDashboard.putNumber("Climber Walker Right", walkerRight.getPosition());
     // SmartDashboard.putBoolean("Climber Pistons", pistons.get());

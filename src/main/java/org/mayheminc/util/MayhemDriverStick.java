@@ -21,6 +21,11 @@ public class MayhemDriverStick {
     public final Button DRIVER_STICK_BUTTON_TEN = new DisabledOnlyJoystickButton(Joystick, 10);
     public final Button DRIVER_STICK_BUTTON_ELEVEN = new DisabledOnlyJoystickButton(Joystick, 11);
 
+    public final Button DRIVER_STICK_ENA_BUTTON_SIX = new EnabledOnlyJoystickButton(Joystick, 6);
+    public final Button DRIVER_STICK_ENA_BUTTON_SEVEN = new EnabledOnlyJoystickButton(Joystick, 7);
+    public final Button DRIVER_STICK_ENA_BUTTON_TEN = new EnabledOnlyJoystickButton(Joystick, 10);
+    public final Button DRIVER_STICK_ENA_BUTTON_ELEVEN = new EnabledOnlyJoystickButton(Joystick, 11);
+
     public final int DRIVER_STICK_X_AXIS = 0;
     public final int DRIVER_STICK_Y_AXIS = 1;
 

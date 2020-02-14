@@ -40,6 +40,11 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         configureWheelTalon();
         configureHoodTalon();
         configureFeederTalon();
+
+        shooterWheelTalon.config_kP(0, 3.0, 0);
+        shooterWheelTalon.config_kI(0, 0.0, 0);
+        shooterWheelTalon.config_kD(0, 0.0, 0);
+        shooterWheelTalon.config_kF(0, 0.048);// 1023.0 / convertRpmToTicksPer100ms(5760), 0);
     }
 
     public void init() {
@@ -72,10 +77,6 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     }
 
     private void configureWheelTalon() {
-        shooterWheelTalon.config_kP(0, 0.0, 0);
-        shooterWheelTalon.config_kI(0, 0.0, 0);
-        shooterWheelTalon.config_kD(0, 0.0, 0);
-        shooterWheelTalon.config_kF(0, 1023.0 / convertRpmToTicksPer100ms(5760), 0);
 
         shooterWheelTalon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
 
@@ -163,6 +164,11 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         feederTalon.set(ControlMode.PercentOutput, pos);
     }
 
+    /**
+     * Set shooter to rpm speed.
+     * 
+     * @param rpm
+     */
     public void setShooterWheelSpeed(double rpm) {
         double ticks = convertRpmToTicksPer100ms(rpm);
         m_targetSpeedRPM = rpm;
