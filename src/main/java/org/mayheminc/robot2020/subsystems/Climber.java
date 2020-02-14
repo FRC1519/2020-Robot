@@ -34,7 +34,6 @@ public class Climber extends SubsystemBase {
     winchLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     winchLeft.configPeakOutputVoltage(+12.0, -12.0);
 
-    winchRight.setNeutralMode(NeutralMode.Coast);
     winchRight.setNeutralMode(NeutralMode.Brake);
     winchRight.configNominalOutputVoltage(+0.0f, -0.0f);
     winchRight.configPeakOutputVoltage(+12.0, -12.0);
