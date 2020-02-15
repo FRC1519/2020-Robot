@@ -11,7 +11,7 @@ import org.mayheminc.robot2020.RobotContainer;
 
 // import org.mayheminc.robot2019.Robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,51 +25,12 @@ public class Targeting extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  // COMPETITION ROBOT NEEDS THE ONE BELOW!
-  // private double Y_WHEN_TARGET_AT_WALL = 0.65; // Worked fine and 0.70
-
-  // PRACTICE ROBOT NEEDS THE ONE BELOW!
-  // private double m_YWhenTargetAtWall= 0.75; // Worked fine and 0.70
-
-  // Y when hatch panel is at wall when the arm is low
-  private static final double Y_AT_WALL_SAFETY_MARGIN = 0.05;
-
-  private static final double Y_WHEN_HATCH_LOW_AT_WALL = 0.75 + Y_AT_WALL_SAFETY_MARGIN;
-  // Y when hatch panel is at wall when the arm is high
-  private static final double Y_WHEN_HATCH_MID_AT_WALL = 0.50 + Y_AT_WALL_SAFETY_MARGIN;
-  // Y when hatch panel is at wall when the arm is high
-  private static final double Y_WHEN_HATCH_HIGH_AT_WALL = 0.60 + Y_AT_WALL_SAFETY_MARGIN;
-
   private static final double SPEED_EQ_M = -4.115;
   private static final double SPEED_EQ_B = 2.244;
 
-  // Below values are for centered arm
-  // private static final double CENTER_EQ_M = -0.1925;
-  // private static final double CENTER_EQ_B = 0.5719;
-
-  // Below values are for arm off 2 inches to left on the practice robot
-  // private static final double CENTER_EQ_M_HP = -0.2964;
-  // private static final double CENTER_EQ_B_HP = 0.5871;
-  // private static final double CENTER_EQ_M_CARGO = -0.6102;
-  // private static final double CENTER_EQ_B_CARGO = 0.6334;
-
-  // Below values are for competition robot based upon PineTree data
-  private static final double CENTER_EQ_M_HP = -0.2762;
-  private static final double CENTER_EQ_B_HP = 0.5563;
-
-  // below values are guesses for competition robot; same as on practice robot
-  private static final double CENTER_EQ_M_CARGO = -0.6102;
-  private static final double CENTER_EQ_B_CARGO = 0.6334;
-
-  // After computing a desired heading, add a "fudge" offset to correct
-  // empirically measured error. Found to be approx -1 degree (to shift aim 1" to
-  // the left) during NECMP Thursday AM practice field session, for competition
-  // robot.
-
-  // heading correction offset had been 0.0 for PineTree
-  // changed to -1.0 for first 6 matches of NECMP
-  // changed to 0.0 at lunch time on Friday
-  private static final double HEADING_CORRECTION_OFFSET = 0.0; // was -2.0 at CMP
+  // After computing a desired azimuth, add a "fudge" offset to correct
+  // empirically measured error. Offset should be in azimuth "ticks."
+  private static final double AZIMUTH_CORRECTION_OFFSET = 0.0; // was -2.0 at CMP
 
   private double m_desiredAzimuth;
   private double[] m_target_array;
@@ -176,7 +137,7 @@ public class Targeting extends SubsystemBase {
   }
 
   public double getDesiredAzimuth() {
-    return m_desiredAzimuth + HEADING_CORRECTION_OFFSET;
+    return m_desiredAzimuth + AZIMUTH_CORRECTION_OFFSET;
   }
 
   public double getRecommendedSpeed() {

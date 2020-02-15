@@ -1,7 +1,7 @@
 package org.mayheminc.robot2020.subsystems;
 
 import org.mayheminc.robot2020.Constants;
-import org.mayheminc.robot2020.RobotContainer;
+// import org.mayheminc.robot2020.RobotContainer;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import org.mayheminc.util.History;
 import org.mayheminc.util.MayhemTalonSRX;
-import org.mayheminc.util.PidTuner;
+// import org.mayheminc.util.PidTuner;
 import org.mayheminc.util.PidTunerObject;
 
 public class Shooter extends SubsystemBase implements PidTunerObject {

@@ -9,7 +9,6 @@ package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
 
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class MagazineSetTurntable extends CommandBase {
