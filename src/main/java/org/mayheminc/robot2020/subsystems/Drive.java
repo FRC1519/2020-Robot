@@ -53,8 +53,9 @@ public class Drive extends SubsystemBase {
 	private static final double kToleranceDegreesPIDControl = 0.2;
 
 	// Drive parameters
-	public static final double DISTANCE_PER_PULSE = 3.14 * 8.0 * 36 / 42 / (250 * 4); // pi * diameter * (gear ratio) /
-																						// (counts per rev)
+	// pi * diameter * (pulley ratios) / (counts per rev * gearbox reduction)
+	public static final double DISTANCE_PER_PULSE = 3.14 * 5.75 * 36.0 / 42.0 / (2048.0 * 7.56);
+
 	private boolean m_closedLoopMode = false;
 	private double m_maxWheelSpeed = 1.0; // set to 1.0 as default for "open loop" percentVBus drive
 	private double m_voltageRampRate = 48.0;

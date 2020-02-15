@@ -81,7 +81,7 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-        // autonomousPrograms.push(new StayStill());
+        autonomousPrograms.push(new StayStill());
         autonomousPrograms.push(new DriveStraight());
         // autonomousPrograms.push(new TestTurret());
 

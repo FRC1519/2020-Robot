@@ -19,9 +19,9 @@ public class DriveStraight extends SequentialCommandGroup {
   public DriveStraight() {
 
     addCommands(new DriveZeroGyro());
-    addCommands(new DriveStraightOnHeading(0.2, DistanceUnits.INCHES, 100, 0));
+    // addCommands(new DriveStraightOnHeading(0.2, DistanceUnits.INCHES, 100, 0));
     addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 100, 0));
-    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 100, 0));
+    // addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 100, 0));
 
     // addCommands(new ParallelCommandGroup(new IntakeSetPosition(true), new
     // MagazineSetTurntable(0.0)));
