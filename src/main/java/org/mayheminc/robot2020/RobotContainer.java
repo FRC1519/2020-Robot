@@ -9,11 +9,11 @@ package org.mayheminc.robot2020;
 
 import org.mayheminc.util.*;
 
-import edu.wpi.first.wpilibj.Compressor;
+// import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Button;
+// import edu.wpi.first.wpilibj2.command.button.Button;
 
 import java.util.LinkedList;
 
@@ -48,7 +48,7 @@ public class RobotContainer {
     public static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
     public static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
     public static final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad();
-    private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick();
+    // private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.

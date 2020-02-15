@@ -21,20 +21,22 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
     private final MayhemTalonSRX feederTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_FEEDER);
 
-    private final double MAX_SPEED_RPM = 5760.0;
+    // private final double MAX_SPEED_RPM = 5760.0;
     private final double TALON_TICKS_PER_REV = 2048.0;
     private final double TURRET_MIN_POS = -5500.0;
     private final double TURRET_MAX_POS = +5500.0;
+    private final double SECONDS_PER_MINUTE = 60.0;
+    private final double HUNDRED_MS_PER_SECOND = 10.0;
 
     double m_targetSpeedRPM;
     History headingHistory = new History();
 
     double convertRpmToTicksPer100ms(double rpm) {
-        return rpm / 60 * 2048 / 10;
+        return rpm / SECONDS_PER_MINUTE * TALON_TICKS_PER_REV / HUNDRED_MS_PER_SECOND;
     }
 
     double convertTicksPer100msToRPM(double ticks) {
-        return ticks * 10 / 2048 * 60;
+        return ticks * HUNDRED_MS_PER_SECOND / TALON_TICKS_PER_REV * SECONDS_PER_MINUTE;
     }
 
     /**
@@ -49,7 +51,7 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         shooterWheelTalon.config_kP(0, 3.0, 0);
         shooterWheelTalon.config_kI(0, 0.0, 0);
         shooterWheelTalon.config_kD(0, 0.0, 0);
-        shooterWheelTalon.config_kF(0, 0.048);// 1023.0 / convertRpmToTicksPer100ms(5760), 0);
+        shooterWheelTalon.config_kF(0, 0.048); // 1023.0 / convertRpmToTicksPer100ms(5760), 0);
     }
 
     public void init() {

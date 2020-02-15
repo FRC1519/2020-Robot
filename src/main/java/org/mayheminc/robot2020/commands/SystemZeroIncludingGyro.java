@@ -24,7 +24,6 @@ public class SystemZeroIncludingGyro extends SequentialCommandGroup {
 
   @Override
   public boolean runsWhenDisabled() {
-    // TODO Auto-generated method stub
     return true;
   }
 

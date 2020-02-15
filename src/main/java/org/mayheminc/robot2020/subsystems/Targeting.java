@@ -40,8 +40,8 @@ public class Targeting extends SubsystemBase {
   private final static double FOV_CAMERA_IN_DEGREES = 78.0;
   private double m_bestY = 0.0;
   private double m_bestX = 0.0;
-  private double tilt = 0.0;
-  private double area = 0.0;
+  private double m_tilt = 0.0;
+  private double m_area = 0.0;
 
   public enum TargetPosition {
     LEFT_MOST, CENTER_MOST, RIGHT_MOST, CENTER_OF_RIGHT_CARGO_SHIP, CENTER_OF_LEFT_CARGO_SHIP
@@ -51,17 +51,12 @@ public class Targeting extends SubsystemBase {
     CARGO, HATCH
   };
 
-  private TargetPosition m_mode = TargetPosition.CENTER_MOST;
-  // Mode for target height
-  private TargetHeight m_TargetHeightMode = TargetHeight.HATCH;
-
   @Override
   public void periodic() {
     update();
   }
 
   // TODO: make an updateSmartDashboard() method in Targeting for optimization
-  // TODO: clean up the content in Targeting.update() -- just too long!
   public void update() {
     // perform periodic update functions for the targeting capability
     int latestFrameCount = (int) SmartDashboard.getNumber("frameCount", -1.0 /* default to -1 */);
@@ -86,14 +81,11 @@ public class Targeting extends SubsystemBase {
       SmartDashboard.putString("visionOkDebug", "Good Data");
     }
 
-    double[] centerMostTargetArray;
     // Update all of the targeting information, as follows:
     // 1 - Determine if we have any valid data in the array.
     // If not, set the "error" to zero, so that the robot thinks
     // it is on target.
-    // 2 - Look through the valid data in the array to find the
-    // target closest to the "trueCenter"
-    // 3 - Use the selected target to compute the needed information
+    // 2 - Use the target to compute the needed information
 
     // get the latest output from the targeting camera
     m_target_array = SmartDashboard.getNumberArray("target", ARRAY_OF_NEG_ONE);
@@ -102,15 +94,15 @@ public class Targeting extends SubsystemBase {
       // this means the key is found, but is empty
       m_bestX = 0.0;
       m_bestY = 0.0;
-      tilt = 0.0;
-      area = 0.0;
+      m_tilt = 0.0;
+      m_area = 0.0;
       m_desiredAzimuth = RobotContainer.shooter.getAzimuthForCapturedImage();
     } else if (m_target_array[0] < 0.0) {
       // this means the array has no valid data. Set m_xError = 0.0
       m_bestX = 0.0;
       m_bestY = 0.0;
-      tilt = 0.0;
-      area = 0.0;
+      m_tilt = 0.0;
+      m_area = 0.0;
       m_desiredAzimuth = RobotContainer.shooter.getAzimuthForCapturedImage();
     } else {
       // We have a valid data array.
@@ -123,17 +115,17 @@ public class Targeting extends SubsystemBase {
       // we need the results in "bestXError" and "bestY"
       m_bestX = m_target_array[0]; // get the x-value
       m_bestY = m_target_array[1]; // get the y-value
-      tilt = m_target_array[2];
-      area = m_target_array[3];
+      m_tilt = m_target_array[2];
+      m_area = m_target_array[3];
 
-      m_desiredAzimuth = findDesiredAzimuth(m_bestX, m_bestY, tilt, area);
+      m_desiredAzimuth = findDesiredAzimuth(m_bestX, m_bestY, m_tilt, m_area);
     }
 
     // at this point in the code, the "selected" target should be in the "best"
     SmartDashboard.putNumber("m_bestX", m_bestX);
     SmartDashboard.putNumber("m_bestY", m_bestY);
-    SmartDashboard.putNumber("tilt", tilt);
-    SmartDashboard.putNumber("area", area);
+    SmartDashboard.putNumber("m_tilt", m_tilt);
+    SmartDashboard.putNumber("m_area", m_area);
   }
 
   public double getDesiredAzimuth() {
@@ -163,30 +155,8 @@ public class Targeting extends SubsystemBase {
     return speed;
   }
 
-  // public boolean atWall(Autonomous.RocketHeight desiredHeight) {
-  // // we are at the wall when the target is lower in the field of view (bigger
-  // Y)
-  // // than the "at the wall" threshold
-  // switch (desiredHeight) {
-  // case HIGH:
-  // return (m_bestY >= Y_WHEN_HATCH_HIGH_AT_WALL);
-  // case MID:
-  // return (m_bestY >= Y_WHEN_HATCH_MID_AT_WALL);
-  // case LOW:
-  // return (m_bestY >= Y_WHEN_HATCH_LOW_AT_WALL);
-  // default:
-  // return (m_bestY >= Y_WHEN_HATCH_LOW_AT_WALL);
-  // }
-  // }
-
-  public void setMode(TargetPosition modeToSet) {
-    // Set the mode e.g. LEFT_MOST, CENTER_MOST, RIGHT_MOST,
-    // CENTER_OF_RIGHT_CARGO_SHIP, CENTER_OF_LEFT_CARGO_SHIP
-    m_mode = modeToSet;
-  }
-
-  private final double CenterOfTarget_X = 0.5;
-  private final double TICK_PER_DEGREE = (6300.0 / 45.0);
+  private final double CENTER_OF_TARGET_X = 0.5;
+  private final double TICKS_PER_DEGREE = (6300.0 / 45.0);
 
   /**
    * Return the desired turrent encoder ticks in the turret for the center of the
@@ -200,28 +170,24 @@ public class Targeting extends SubsystemBase {
    */
   public double findDesiredAzimuth(double X, double Y, double tilt, double area) {
     // Calulate angle error based on an X,Y
-    double AngleError;
+    double angleError;
     double ticksError;
-    // double TrueCenter;
-    double XError;
+    double xError;
     double desiredAzimuth;
 
-    // compute the "x error" based upon the trueCenter
-    XError = X - CenterOfTarget_X;
+    // compute the "x error" based upon the center for shooting
+    xError = X - CENTER_OF_TARGET_X;
     // Find the angle error
-    AngleError = FOV_CAMERA_IN_DEGREES * XError;
-    ticksError = AngleError * TICK_PER_DEGREE;
+    angleError = FOV_CAMERA_IN_DEGREES * xError;
+    // convert the angle error into ticks
+    ticksError = angleError * TICKS_PER_DEGREE;
 
-    // Convert angleError into a desired heading, using the heading history
+    // Convert angleError into a desired azimuth, using the azimuth history
     desiredAzimuth = ticksError + RobotContainer.shooter.getAzimuthForCapturedImage();
     // Update SmartDashboard
-    SmartDashboard.putNumber("True Angle Error", AngleError);
+    SmartDashboard.putNumber("Vision Angle Error", angleError);
     SmartDashboard.putNumber("Vision Desired Azimuth", desiredAzimuth);
     return desiredAzimuth;
-  }
-
-  public void setTargetHeight(TargetHeight target) {
-    m_TargetHeightMode = target;
   }
 
 }
