@@ -23,8 +23,7 @@ public class Climber extends SubsystemBase {
   private final MayhemTalonSRX walkerLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
   private final MayhemTalonSRX walkerRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_RIGHT);
 
-  // private final Solenoid pistons = new
-  // Solenoid(Constants.Solenoid.CLIMBER_PISTONS);
+  private final Solenoid pistons = new Solenoid(Constants.Solenoid.CLIMBER_PISTONS);
 
   /**
    * Creates a new Climber.
@@ -80,7 +79,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void setPistons(boolean b) {
-    // pistons.set(b);
+    pistons.set(b);
   }
 
 }

@@ -441,10 +441,7 @@ public class Drive extends SubsystemBase {
 			// not using camera targeting right now
 
 			// check for if steering input is essentially zero
-			if (false /*
-						 * turn off heading correction for now (-0.01 < rawSteeringX) && (rawSteeringX <
-						 * 0.01)
-						 */) {
+			if ((-0.01 < rawSteeringX) && (rawSteeringX < 0.01)) {
 				// no turn being commanded, drive straight or stay still
 				m_iterationsSinceRotationCommanded++;
 				if ((-0.01 < throttle) && (throttle < 0.01)) {
@@ -578,6 +575,9 @@ public class Drive extends SubsystemBase {
 	public void updateSmartDashboard() {
 		displayGyroInfo();
 
+		SmartDashboard.putBoolean("In Autonomous", DriverStation.getInstance().isAutonomous());
+		SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+
 		// ***** KBS: Uncommenting below, as it takes a LONG time to get PDP values
 		// updateSdbPdp();
 
@@ -599,8 +599,8 @@ public class Drive extends SubsystemBase {
 		SmartDashboard.putNumber("Right Speed (fps)",
 				rightFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 * DISTANCE_PER_PULSE);
 
-		SmartDashboard.putNumber("Left Talon Output Voltage", leftFrontTalon.getOutputVoltage());
-		SmartDashboard.putNumber("Right Talon Output Voltage", rightFrontTalon.getOutputVoltage());
+		SmartDashboard.putNumber("Left Talon Output Voltage", leftFrontTalon.getMotorOutputVoltage());
+		SmartDashboard.putNumber("Right Talon Output Voltage", rightFrontTalon.getMotorOutputVoltage());
 
 		SmartDashboard.putBoolean("Closed Loop Mode", m_closedLoopMode);
 		SmartDashboard.putBoolean("Speed Racer Drive Mode", m_speedRacerDriveMode);

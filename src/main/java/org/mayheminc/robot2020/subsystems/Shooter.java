@@ -6,9 +6,11 @@ import org.mayheminc.robot2020.RobotContainer;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.mayheminc.util.History;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTuner;
 import org.mayheminc.util.PidTunerObject;
@@ -21,8 +23,11 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
 
     private final double MAX_SPEED_RPM = 5760.0;
     private final double TALON_TICKS_PER_REV = 2048.0;
+    private final double TURRET_MIN_POS = -5500.0;
+    private final double TURRET_MAX_POS = +5500.0;
 
     double m_targetSpeedRPM;
+    History headingHistory = new History();
 
     double convertRpmToTicksPer100ms(double rpm) {
         return rpm / 60 * 2048 / 10;
@@ -74,6 +79,13 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
 
         hoodTalon.configNominalOutputVoltage(+0.0f, -0.0f);
         hoodTalon.configPeakOutputVoltage(+6.0, -6.0);
+        hoodTalon.setInverted(true);
+        hoodTalon.setSensorPhase(true);
+
+        hoodTalon.configForwardSoftLimitThreshold(85000);
+        hoodTalon.configForwardSoftLimitEnable(true);
+        hoodTalon.configReverseSoftLimitThreshold(0);
+        hoodTalon.configReverseSoftLimitEnable(true);
     }
 
     private void configureWheelTalon() {
@@ -93,7 +105,14 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
         turretTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-        turretTalon.configPeakOutputVoltage(+6.0, -6.0);
+        turretTalon.configPeakOutputVoltage(+2.0, -2.0);
+
+        turretTalon.configForwardSoftLimitThreshold(6000);
+        turretTalon.configForwardSoftLimitEnable(true);
+        turretTalon.configReverseSoftLimitThreshold(-6000);
+        turretTalon.configReverseSoftLimitEnable(true);
+
+        this.setTurretVBus(0.0);
     }
 
     @Override
@@ -101,9 +120,21 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         // This method will be called once per scheduler run
 
         UpdateDashboard();
+        updateHistory();
     }
 
-    int debugShooter;
+    private static final double CAMERA_LAG = 0.150; // was .200; changing to .150 at CMP
+
+    private void updateHistory() {
+        double now = Timer.getFPGATimestamp();
+        headingHistory.add(now, getTurretPosition());
+    }
+
+    public double getAzimuthForCapturedImage() {
+        double now = Timer.getFPGATimestamp();
+        double indexTime = now - CAMERA_LAG;
+        return headingHistory.getAzForTime(indexTime);
+    }
 
     private void UpdateDashboard() {
         SmartDashboard.putNumber("Shooter Wheel pos", shooterWheelTalon.getSelectedSensorPosition(0));
@@ -114,12 +145,15 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         SmartDashboard.putNumber("Shooter Wheel target RPM", m_targetSpeedRPM);
         SmartDashboard.putNumber("Shooter Wheel Error",
                 m_targetSpeedRPM - convertTicksPer100msToRPM(shooterWheelTalon.getSelectedSensorVelocity(0)));
+        SmartDashboard.putNumber("Shooter Wheel Voltage", shooterWheelTalon.getMotorOutputVoltage());
 
         SmartDashboard.putNumber("Shooter turet pos", turretTalon.getPosition());
+        SmartDashboard.putNumber("Shooter turet vbus", turretTalon.getMotorOutputVoltage());
+
         SmartDashboard.putNumber("Shooter hood pos", hoodTalon.getPosition());
         SmartDashboard.putNumber("Shooter feeder speed", feederTalon.getPosition());
 
-        SmartDashboard.putNumber("Shooter Debug", debugShooter++);
+        // SmartDashboard.putNumber("Shooter Debug", debugShooter++);
     }
 
     public void zero() {
@@ -131,6 +165,13 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
      * Set the absolute turret position.
      */
     public void setTurretPositionAbs(double pos) {
+        if (pos < TURRET_MIN_POS) {
+            pos = TURRET_MIN_POS;
+        }
+        if (pos > TURRET_MAX_POS) {
+            pos = TURRET_MAX_POS;
+        }
+
         turretTalon.set(ControlMode.Position, pos);
     }
 
@@ -140,7 +181,11 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
      * @param pos number of encoder ticks to adjust.
      */
     public void setTurretPositionRel(double pos) {
-        turretTalon.set(ControlMode.Position, getTurretPosition() + pos);
+        setTurretPositionAbs(getTurretPosition() + pos);
+    }
+
+    public void setTurretVBus(double power) {
+        turretTalon.set(ControlMode.PercentOutput, power);
     }
 
     /**
@@ -158,6 +203,10 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
 
     public double getHoodPosition() {
         return hoodTalon.getPosition();
+    }
+
+    public void setHoodVBus(double d) {
+        hoodTalon.set(ControlMode.PercentOutput, d);
     }
 
     public void setFeederSpeed(double pos) {
@@ -188,51 +237,51 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     }
 
     public double getShooterWheelSpeedVBus() {
-        return shooterWheelTalon.getOutputVoltage();
+        return shooterWheelTalon.getMotorOutputVoltage();
     }
 
     ////////////////////////////////////////////////////
     // PidTunerObject
     @Override
     public double getP() {
-        return shooterWheelTalon.getP();
+        return turretTalon.getP();
     }
 
     @Override
     public double getI() {
-        return shooterWheelTalon.getI();
+        return turretTalon.getI();
     }
 
     @Override
     public double getD() {
-        return shooterWheelTalon.getD();
+        return turretTalon.getD();
     }
 
     @Override
     public double getF() {
-        return shooterWheelTalon.getF();
+        return turretTalon.getF();
 
     }
 
     @Override
     public void setP(double d) {
-        shooterWheelTalon.config_kP(0, d, 0);
+        turretTalon.config_kP(0, d, 0);
     }
 
     @Override
     public void setI(double d) {
-        shooterWheelTalon.config_kI(0, d, 0);
+        turretTalon.config_kI(0, d, 0);
     }
 
     @Override
     public void setD(double d) {
-        shooterWheelTalon.config_kD(0, d, 0);
+        turretTalon.config_kD(0, d, 0);
 
     }
 
     @Override
     public void setF(double d) {
-        shooterWheelTalon.config_kF(0, d, 0);
+        turretTalon.config_kF(0, d, 0);
     }
 
 }

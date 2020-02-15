@@ -11,30 +11,33 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class MagazineDefault extends CommandBase {
+public class ShooterSetHoodVBus extends CommandBase {
+  double m_power;
+
   /**
-   * Creates a new MagazineDefault.
+   * Creates a new ShooterSetHoodVBus.
    */
-  public MagazineDefault() {
+  public ShooterSetHoodVBus(double power) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.magazine);
+    addRequirements(RobotContainer.shooter);
+    m_power = power;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.shooter.setHoodVBus(m_power);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.magazine.setTurntableSpeed(-RobotContainer.OPERATOR_PAD.getLeftYAxis());
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.shooter.setHoodVBus(0.0);
   }
 
   // Returns true when the command should end.

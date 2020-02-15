@@ -28,11 +28,12 @@ public class TargetingIsOnTarget extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double bearingToTarget = RobotContainer.targeting.getBearingToTarget();
-    double rangeToTarget = RobotContainer.targeting.getRangeToTarget();
+    // double bearingToTarget = RobotContainer.targeting.getBearingToTarget();
+    // double rangeToTarget = RobotContainer.targeting.getRangeToTarget();
 
-    RobotContainer.shooter.setTurretPositionRel(RobotContainer.shooter.getTurretPosition() + bearingToTarget);
-    RobotContainer.shooter.setShooterWheelSpeed(Targeting.convertRangeToWheelSpeed(rangeToTarget));
+    // RobotContainer.shooter.setTurretPositionRel(RobotContainer.shooter.getTurretPosition()
+    // + bearingToTarget);
+    // RobotContainer.shooter.setShooterWheelSpeed(Targeting.convertRangeToWheelSpeed(rangeToTarget));
   }
 
   // Called once the command ends or is interrupted.
@@ -43,9 +44,12 @@ public class TargetingIsOnTarget extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean bearingGood = Math.abs(RobotContainer.targeting.getBearingToTarget()) < 2;
-    boolean wheelsGood = Math.abs(Targeting.convertRangeToWheelSpeed(RobotContainer.targeting.getRangeToTarget())
-        - RobotContainer.shooter.getShooterWheelSpeed()) < 100;
-    return bearingGood && wheelsGood;
+    // boolean bearingGood = Math.abs(RobotContainer.targeting.getBearingToTarget())
+    // < 2;
+    // boolean wheelsGood =
+    // Math.abs(Targeting.convertRangeToWheelSpeed(RobotContainer.targeting.getRangeToTarget())
+    // - RobotContainer.shooter.getShooterWheelSpeed()) < 100;
+    // return bearingGood && wheelsGood;
+    return true;
   }
 }

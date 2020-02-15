@@ -49,6 +49,8 @@ public final class Constants {
         public static final int SPARE_1 = 1;
         public static final int SPARE_2 = 2;
         public static final int CLIMBER_PISTONS = 3;
+
+        public static final int CAMERA_LIGHTS = 7;
     }
 
     public final class PDP {

@@ -12,22 +12,22 @@ import org.mayheminc.robot2020.RobotContainer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterSetWheel extends CommandBase {
-  double m_adjust;
+  double m_rpm;
 
   /**
    * Creates a new ShooterSetWheel.
    */
-  public ShooterSetWheel(double adjust) {
+  public ShooterSetWheel(double rpm) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
 
-    m_adjust = adjust;
+    m_rpm = rpm;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.setShooterWheelSpeed(m_adjust);
+    RobotContainer.shooter.setShooterWheelSpeed(m_rpm);
   }
 
   // Returns true when the command should end.

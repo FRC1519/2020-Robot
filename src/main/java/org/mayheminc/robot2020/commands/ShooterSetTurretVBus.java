@@ -9,25 +9,40 @@ package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ShooterSetHood extends InstantCommand {
-  double m_adjust;
+public class ShooterSetTurretVBus extends CommandBase {
+  double m_power;
 
   /**
-   * Creates a new ShooterSetHood.
+   * Creates a new ShooterSetTurretVBus.
    */
-  public ShooterSetHood(double adjust) {
+  public ShooterSetTurretVBus(double power) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
-
-    m_adjust = adjust;
+    m_power = power;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double pos = RobotContainer.shooter.getHoodPosition();
-    RobotContainer.shooter.setHoodPosition(pos + m_adjust);
+    RobotContainer.shooter.setTurretVBus(m_power);
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    RobotContainer.shooter.setTurretVBus(0.0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
   }
 }

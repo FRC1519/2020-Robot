@@ -11,6 +11,7 @@ import org.mayheminc.util.*;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
@@ -41,6 +42,8 @@ public class RobotContainer {
     public static PidTuner pidtuner;
     public static final Chimney chimney = new Chimney();
 
+    public static final Solenoid cameraLights = new Solenoid(Constants.Solenoid.CAMERA_LIGHTS);
+
     // Operator Inputs
     public static final MayhemDriverStick DRIVER_STICK = new MayhemDriverStick();
     public static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
@@ -59,7 +62,9 @@ public class RobotContainer {
         pidtuner = new PidTuner(RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SIX,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SEVEN,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_ELEVEN,
-                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, shooter);
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, intake);
+
+        cameraLights.set(true);
     }
 
     public static void init() {
@@ -70,6 +75,7 @@ public class RobotContainer {
         drive.setDefaultCommand(new DriveDefault());
         // intake.setDefaultCommand(new IntakeExtenderVBus());
         magazine.setDefaultCommand(new MagazineDefault());
+        compressor.setDefaultCommand(new AirCompressorDefault());
     }
 
     private void configureAutonomousPrograms() {
@@ -126,11 +132,25 @@ public class RobotContainer {
         // ShooterAdjustWheelVBus(-0.1));
         // DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheelVBus(0.0));
 
+        // Debug Turret
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new
+        // ShooterSetTurretAbs(-5500));// about -30 degrees
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whenPressed(new
+        // ShooterSetTurretAbs(+5500));// about +30 degrees
+        DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whileHeld(new ShooterSetTurretVBus(-0.2));// about -30 degrees
+        DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whileHeld(new ShooterSetTurretVBus(+0.2));// about +30 degrees
+
+        // Debug Hood
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetHoodRel(+1000));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHoodRel(-1000));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whileHeld(new ShooterSetHoodVBus(+1.0));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whileHeld(new ShooterSetHoodVBus(-1.0));
+
         // Debug shooter pid velocity
         DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterAdjustWheel(100.0));
         DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterAdjustWheel(-100.0));
         DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheel(0.0));
-        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterSetWheel(4600));
+        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterSetWheel(2700));
 
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterSetFeeder(0.5));
 
@@ -144,28 +164,37 @@ public class RobotContainer {
     }
 
     private void configureOperatorPadButtons() {
-        // OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new IntakeZero());
-        // new ShooterAdjustWheel(-100));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new MagazineSetTurntable(0.2));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
-        // new ShooterSetWheel(0));
-        // OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new
-        // IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
-        // new ShooterAdjustWheel(+100));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new MagazineSetTurntable(1.0));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
+
         // new ShooterSetWheel(1000));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new ChimneySetChimney(1.0));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new IntakeSetRollers(-1.0));
 
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_SEVEN.whileHeld(new TurretAimToTarget());
+
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_NINE.whenPressed(new ClimberSetPistons(true));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_TEN.whenPressed(new ClimberSetPistons(false));
+
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(1.0));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whenPressed(new ShooterSetHood(-0.2));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whenPressed(new ShooterSetHood(-0.2));
+        // OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new
+        // IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
+        // OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whenPressed(new
+        // IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whileHeld(new ShooterSetTurretVBus(-0.2));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whileHeld(new ShooterSetTurretVBus(+0.2));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new ShooterSetHoodVBus(+1.0));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new ShooterSetHoodVBus(-1.0));
 
         OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new ClimberSetWinchesPower(0.7));
         OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whileHeld(new ClimberSetWinchesPower(-0.7));
-        OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_UP.whenPressed(new ClimberSetPistons(true));
-        OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_DOWN.whenPressed(new ClimberSetPistons(false));
+
+        // OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_UP.whenPressed(new
+        // MagazineSetTurntable());
+        // OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_DOWN.whenPressed(new
+        // ClimberSetPistons(false));
     }
 
     /**

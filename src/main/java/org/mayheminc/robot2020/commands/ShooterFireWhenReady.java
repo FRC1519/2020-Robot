@@ -29,10 +29,11 @@ public class ShooterFireWhenReady extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    boolean wheelsGood = Math.abs(Targeting.convertRangeToWheelSpeed(RobotContainer.targeting.getRangeToTarget())
-        - RobotContainer.shooter.getShooterWheelSpeed()) < 100;
+    // boolean wheelsGood =
+    // Math.abs(Targeting.convertRangeToWheelSpeed(RobotContainer.targeting.getRangeToTarget())
+    // - RobotContainer.shooter.getShooterWheelSpeed()) < 100;
 
-    RobotContainer.shooter.setFeederSpeed((wheelsGood) ? 0.5 : 0.0);
+    // RobotContainer.shooter.setFeederSpeed((wheelsGood) ? 0.5 : 0.0);
   }
 
   // Called once the command ends or is interrupted.

@@ -115,16 +115,16 @@ public class MayhemTalonSRX extends TalonSRX {
 	}
 
 	// public double getSetpoint() {
-	// 	return 0;
+	// return 0;
 	// }
 
 	public double getError() {
 		return this.getClosedLoopError(0);
 	}
 
-	public float getOutputVoltage() {
-		return (float) this.getMotorOutputVoltage();
-	}
+	// public float getOutputVoltage() {
+	// return (float) this.getMotorOutputVoltage();
+	// }
 
 	int pidProfile;
 
@@ -162,6 +162,6 @@ public class MayhemTalonSRX extends TalonSRX {
 	}
 
 	// public double get() {
-	// 	return this.getOutputCurrent();
+	// return this.getOutputCurrent();
 	// }
 }

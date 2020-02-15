@@ -17,6 +17,7 @@ public class AirCompressorDefault extends CommandBase {
    */
   public AirCompressorDefault() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.compressor);
   }
 
   // Called when the command is initially scheduled.

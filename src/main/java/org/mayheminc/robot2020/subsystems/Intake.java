@@ -14,13 +14,14 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
+import org.mayheminc.util.PidTunerObject;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase implements PidTunerObject {
 
-  private final int PIVOT_CLOSE_ENOUGH = 20;
+  private final int PIVOT_CLOSE_ENOUGH = 50;
   private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
   private final MayhemTalonSRX pivotTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_PIVOT);
   private final int PIVOT_ZERO_POSITION = 900;
@@ -54,7 +55,7 @@ public class Intake extends SubsystemBase {
     // If we want 50% power when at the full extreme,
     // Full extreme is 900 ticks
     // kP = (0.5 * 1023) / 900 = 0.568
-    motor.config_kP(0, 0.5, 0); // based upon Robert's initial calcs, above
+    motor.config_kP(0, 1.2, 0); // based upon Robert's initial calcs, above
 
     // typical value of about 1/100 of kP for starting tuning
     motor.config_kI(0, 0.0, 0);
@@ -153,14 +154,55 @@ public class Intake extends SubsystemBase {
   public void updateSmartDashBoard() {
     SmartDashboard.putNumber("Intake Position", pivotTalon.getPosition());
     SmartDashboard.putNumber("Intake Target", m_targetPosition);
+    SmartDashboard.putNumber("Intake FeedForward", m_feedForward);
 
     SmartDashboard.putBoolean("Intake Is Moving", isMoving);
     SmartDashboard.putBoolean("Intake PID Mode", (mode == PivotMode.PID_MODE));
-    SmartDashboard.putNumber("Intake Rollers", rollerTalon.getOutputVoltage());
+    SmartDashboard.putNumber("Intake Rollers", rollerTalon.getMotorOutputVoltage());
   }
 
   public void setPivotVBus(double VBus) {
     pivotTalon.set(ControlMode.PercentOutput, VBus);
     mode = PivotMode.MANUAL_MODE;
+  }
+
+  @Override
+  public double getP() {
+    return this.pivotTalon.getP();
+  }
+
+  @Override
+  public double getI() {
+    return this.pivotTalon.getI();
+  }
+
+  @Override
+  public double getD() {
+    return this.pivotTalon.getD();
+  }
+
+  @Override
+  public double getF() {
+    return this.pivotTalon.getF();
+  }
+
+  @Override
+  public void setP(double d) {
+    this.pivotTalon.config_kP(0, d, 0);
+  }
+
+  @Override
+  public void setI(double d) {
+    this.pivotTalon.config_kI(0, d, 0);
+  }
+
+  @Override
+  public void setD(double d) {
+    this.pivotTalon.config_kD(0, d, 0);
+  }
+
+  @Override
+  public void setF(double d) {
+    this.pivotTalon.config_kF(0, d, 0);
   }
 }

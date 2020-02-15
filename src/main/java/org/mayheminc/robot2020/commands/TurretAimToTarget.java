@@ -11,13 +11,13 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class MagazineDefault extends CommandBase {
+public class TurretAimToTarget extends CommandBase {
   /**
-   * Creates a new MagazineDefault.
+   * Creates a new TurretAimToTarget.
    */
-  public MagazineDefault() {
+  public TurretAimToTarget() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.magazine);
+    addRequirements(RobotContainer.shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -28,8 +28,8 @@ public class MagazineDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.magazine.setTurntableSpeed(-RobotContainer.OPERATOR_PAD.getLeftYAxis());
-
+    double pos = RobotContainer.targeting.getDesiredAzimuth();
+    RobotContainer.shooter.setTurretPositionAbs(pos);
   }
 
   // Called once the command ends or is interrupted.
