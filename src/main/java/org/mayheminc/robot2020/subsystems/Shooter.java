@@ -28,6 +28,9 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     private final double SECONDS_PER_MINUTE = 60.0;
     private final double HUNDRED_MS_PER_SECOND = 10.0;
 
+    public final static double HOOD_INITIATION_LINE_POSITION = 44000;
+    public final static double HOOD_TARGET_ZONE_POSITION = 5000;
+
     double m_targetSpeedRPM;
     History headingHistory = new History();
 

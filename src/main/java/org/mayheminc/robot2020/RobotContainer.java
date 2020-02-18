@@ -106,6 +106,8 @@ public class RobotContainer {
     private void configureDriverStickButtons() {
 
         DRIVER_STICK.DRIVER_STICK_BUTTON_ONE_DISABLED.whenPressed(new SystemZeroIncludingGyro());
+        // DRIVER_STICK.DRIVER_STICK_BUTTON_ONE_ENABLED.whenPressed(new
+        // SystemZeroIncludingGyro());
         // DRIVER_STICK_BUTTON_ONE_ENABLED.whenPressed(new SystemZeroWithoutGyro());
 
         // // adjust auto parameters
@@ -139,6 +141,8 @@ public class RobotContainer {
         // ShooterSetTurretAbs(+5500));// about +30 degrees
         DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whileHeld(new ShooterSetTurretVBus(-0.2));// about -30 degrees
         DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whileHeld(new ShooterSetTurretVBus(+0.2));// about +30 degrees
+        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetHoodAbs(Shooter.HOOD_INITIATION_LINE_POSITION));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));
 
         // Debug Hood
         // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetHoodRel(+1000));
@@ -152,7 +156,7 @@ public class RobotContainer {
         DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheel(0.0));
         DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterSetWheel(2700));
 
-        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterSetFeeder(0.5));
+        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterSetFeeder(1.0));
 
         // debug climber pistons
         // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ClimberSetPistons(true));
@@ -164,9 +168,9 @@ public class RobotContainer {
     }
 
     private void configureOperatorPadButtons() {
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whenPressed(new MagazineSetTurntable(0.2));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whileHeld(new MagazineSetTurntable(0.2));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whenPressed(new MagazineSetTurntable(1.0));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whileHeld(new MagazineSetTurntable(0.5));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
 
         // new ShooterSetWheel(1000));
@@ -188,13 +192,13 @@ public class RobotContainer {
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new ShooterSetHoodVBus(+1.0));
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new ShooterSetHoodVBus(-1.0));
 
-        OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new ClimberSetWinchesPower(0.7));
+        // OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new
+        // ClimberSetWinchesPower(0.7));
         OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whileHeld(new ClimberSetWinchesPower(-0.7));
 
         // OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_UP.whenPressed(new
         // MagazineSetTurntable());
-        // OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_DOWN.whenPressed(new
-        // ClimberSetPistons(false));
+        OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_DOWN.whileHeld(new ChimneySetChimney(-1.0));
     }
 
     /**
