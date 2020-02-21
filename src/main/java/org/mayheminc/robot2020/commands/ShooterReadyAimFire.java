@@ -22,9 +22,13 @@ public class ShooterReadyAimFire extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super();
     addCommands(new TargetingIsOnTarget());
+    addCommands(new ShooterFireWhenReady());
+    addCommands(new ShooterSetFeeder(1.0));
+    addCommands(new ChimneySetChimney(0.5));
     addCommands(new MagazineSetTurntable(0.3));
-    addCommands(new ChimneySetChimney(0.3));
-    addCommands(new ParallelRaceGroup(new ShooterFireWhenReady(), new Wait(5.0)));
+
+    addCommands(new Wait(4.0));
+
     addCommands(new MagazineSetTurntable(0.0));
     addCommands(new ChimneySetChimney(0.0));
   }

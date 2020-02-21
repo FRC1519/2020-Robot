@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
 
     private void configureFeederTalon() {
         feederTalon.changeControlMode(ControlMode.PercentOutput);
-
+        feederTalon.setNeutralMode(NeutralMode.Brake);
         feederTalon.configNominalOutputVoltage(+0.0f, -0.0f);
         feederTalon.configPeakOutputVoltage(+6.0, -6.0);
     }
@@ -80,6 +80,7 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         hoodTalon.config_kF(0, 0.0, 0);
 
         hoodTalon.changeControlMode(ControlMode.Position);
+        feederTalon.setNeutralMode(NeutralMode.Coast);
         hoodTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
         hoodTalon.configNominalOutputVoltage(+0.0f, -0.0f);
@@ -91,14 +92,6 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         hoodTalon.configForwardSoftLimitEnable(true);
         hoodTalon.configReverseSoftLimitThreshold(0);
         hoodTalon.configReverseSoftLimitEnable(true);
-    }
-
-    private void configureWheelTalon() {
-
-        shooterWheelTalon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
-
-        shooterWheelTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-        shooterWheelTalon.configPeakOutputVoltage(+12.0, 0.0);
     }
 
     void configureTurretTalon() {
@@ -118,6 +111,13 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         turretTalon.configReverseSoftLimitEnable(true);
 
         this.setTurretVBus(0.0);
+    }
+
+    private void configureWheelTalon() {
+        shooterWheelTalon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
+        shooterWheelTalon.setNeutralMode(NeutralMode.Coast);
+        shooterWheelTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+        shooterWheelTalon.configPeakOutputVoltage(+12.0, 0.0);
     }
 
     @Override

@@ -23,6 +23,8 @@ public class MayhemTalonSRX extends TalonSRX {
 		this.configNominalOutputReverse(0.0, 0);
 		this.configPeakOutputForward(1.0, 0);
 		this.configPeakOutputReverse(-1.0, 0);
+		this.configVoltageCompSaturation(12.0); // "full output" scaled to 12.0V for all modes when enabled.
+		this.enableVoltageCompensation(true); // turn on voltage compensation
 
 		this.setNeutralMode(NeutralMode.Coast);
 
@@ -91,10 +93,6 @@ public class MayhemTalonSRX extends TalonSRX {
 		this.configSelectedFeedbackSensor(feedback, 0, 0);
 	}
 
-	// public void reverseSensor(boolean b) {
-
-	// }
-
 	public void configNominalOutputVoltage(float f, float g) {
 		this.configNominalOutputForward(f / 12.0, 1000);
 		this.configNominalOutputReverse(g / 12.0, 1000);
@@ -114,17 +112,9 @@ public class MayhemTalonSRX extends TalonSRX {
 		this.config_kF(pidProfile, wheelF, 1000);
 	}
 
-	// public double getSetpoint() {
-	// return 0;
-	// }
-
 	public double getError() {
 		return this.getClosedLoopError(0);
 	}
-
-	// public float getOutputVoltage() {
-	// return (float) this.getMotorOutputVoltage();
-	// }
 
 	int pidProfile;
 
@@ -141,10 +131,6 @@ public class MayhemTalonSRX extends TalonSRX {
 		this.configClosedloopRamp(0, 0);
 	}
 
-	// public void enableControl() {
-
-	// }
-
 	public void setPosition(int zeroPositionCount) {
 		this.setSelectedSensorPosition(zeroPositionCount, 0, 1000);
 	}
@@ -160,8 +146,4 @@ public class MayhemTalonSRX extends TalonSRX {
 	public void setEncPosition(int i) {
 		setPosition(i);
 	}
-
-	// public double get() {
-	// return this.getOutputCurrent();
-	// }
 }

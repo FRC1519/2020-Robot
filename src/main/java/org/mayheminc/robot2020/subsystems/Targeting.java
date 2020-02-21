@@ -22,8 +22,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 
 public class Targeting extends SubsystemBase {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+
+  // Logitech C920 Field of View Information:
+  // Diagonal FOV = 78.0
+  // Horizontal FOV = 70.42
+  // Vertical FOV = 43.3
+  private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 78.0;
+
+  // Define the "target location" to be halfway from left to right
+  private final double CENTER_OF_TARGET_X = 0.5;
+
+  // Calculate ticks per degree.
+  // encoder ticks * turret pulley teeth / drive pulley teeth / 360 degrees
+  private final double TICKS_PER_DEGREE = (4096.0 * 225.0 / 18.0 / 360.0); // was 6300 / 45
 
   private static final double SPEED_EQ_M = -4.115;
   private static final double SPEED_EQ_B = 2.244;
@@ -37,7 +48,7 @@ public class Targeting extends SubsystemBase {
   private int m_priorFrameCount;
   private double m_priorFrameTime;
   private double[] ARRAY_OF_NEG_ONE = { -1.0 };
-  private final static double FOV_CAMERA_IN_DEGREES = 78.0;
+
   private double m_bestY = 0.0;
   private double m_bestX = 0.0;
   private double m_tilt = 0.0;
@@ -155,9 +166,6 @@ public class Targeting extends SubsystemBase {
     return speed;
   }
 
-  private final double CENTER_OF_TARGET_X = 0.5;
-  private final double TICKS_PER_DEGREE = (6300.0 / 45.0);
-
   /**
    * Return the desired turrent encoder ticks in the turret for the center of the
    * target.
@@ -178,7 +186,7 @@ public class Targeting extends SubsystemBase {
     // compute the "x error" based upon the center for shooting
     xError = X - CENTER_OF_TARGET_X;
     // Find the angle error
-    angleError = FOV_CAMERA_IN_DEGREES * xError;
+    angleError = FOV_HORIZ_CAMERA_IN_DEGREES * xError;
     // convert the angle error into ticks
     ticksError = angleError * TICKS_PER_DEGREE;
 
