@@ -11,41 +11,28 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ShooterSetWheel extends CommandBase {
-  double m_rpm;
-  boolean m_waitForSpeed;
-
-  public ShooterSetWheel(double rpm) {
-    this(rpm, false);
-  }
+public class IntakeSetPositionWithoutWaiting extends CommandBase {
+  double m_position;
 
   /**
-   * Creates a new ShooterSetWheel.
+   * Creates a new IntakeSetPositionWithoutWaiting.
    */
-  public ShooterSetWheel(double rpm, boolean wait) {
+  public IntakeSetPositionWithoutWaiting(Double position) {
     // Use addRequirements() here to declare subsystem dependencies.
-    // addRequirements(RobotContainer.shooter);
+    addRequirements(RobotContainer.intake);
+    m_position = position;
 
-    m_rpm = rpm;
-    m_waitForSpeed = wait;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.setShooterWheelSpeed(m_rpm);
+    RobotContainer.intake.setPivot(m_position);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if( m_waitForSpeed)
-    {
-      return  (Math.abs( m_rpm - RobotContainer.shooter.getShooterWheelSpeed() ) < 100);
-    }
-    else
-    {
-      return true;
-    }
+    return true;
   }
 }

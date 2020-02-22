@@ -22,10 +22,8 @@ public class DriveStraight extends SequentialCommandGroup {
     addCommands(new DriveZeroGyro());
     // addCommands(new DriveStraightOnHeading(0.2, DistanceUnits.INCHES, 100, 0));
     addCommands(new DriveStraightOnHeading(-0.3, DistanceUnits.INCHES, 50, 0));
-    addCommands(new ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));
+    addCommands(new ShooterSetHoodAbs(Shooter.HOOD_INITIATION_LINE_POSITION));
     // addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 100, 0));
 
-    // addCommands(new ParallelCommandGroup(new IntakeSetPosition(true), new
-    // MagazineSetTurntable(0.0)));
   }
 }

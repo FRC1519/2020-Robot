@@ -24,7 +24,7 @@ public class AirCompressorDefault extends CommandBase {
   @Override
   public void initialize() {
     // robot.is
-    RobotContainer.compressor.setCompresor(true);
+    RobotContainer.compressor.setCompressor(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -19,7 +19,7 @@ public class AirCompressor extends SubsystemBase {
   public AirCompressor() {
   }
 
-  public void setCompresor(boolean b) {
+  public void setCompressor(boolean b) {
     // b = false;
     if (b) {
       compressor.start();

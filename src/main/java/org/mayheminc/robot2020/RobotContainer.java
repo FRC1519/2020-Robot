@@ -80,9 +80,12 @@ public class RobotContainer {
 
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
-
-        autonomousPrograms.push(new StayStill());
-        autonomousPrograms.push(new DriveStraight());
+        // TODO:  fix "wierdness" with auto program selection - sometimes doesn't seem to work
+        // TODO:  fix so that auto program is shown not just when changed (as shows old setting sometimes)
+        
+        // autonomousPrograms.push(/* 01 */ new StayStill());
+        autonomousPrograms.push(/* 00 */ new TrenchAuto());
+        // autonomousPrograms.push( new ShooterReadyAimFire());
         // autonomousPrograms.push(new TestTurret());
 
         autonomous.setAutonomousPrograms(autonomousPrograms);
@@ -139,10 +142,20 @@ public class RobotContainer {
         // ShooterSetTurretAbs(-5500));// about -30 degrees
         // DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whenPressed(new
         // ShooterSetTurretAbs(+5500));// about +30 degrees
-        DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whileHeld(new ShooterSetTurretVBus(-0.2));// about -30 degrees
-        DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whileHeld(new ShooterSetTurretVBus(+0.2));// about +30 degrees
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whileHeld(new ShooterSetTurretVBus(-0.2));//
+        // about -30 degrees
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whileHeld(new
+        // ShooterSetTurretVBus(+0.2));// about +30 degrees
         DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetHoodAbs(Shooter.HOOD_INITIATION_LINE_POSITION));
         DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));
+
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new
+        // ShooterSetTurretRel(-200.0));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whenPressed(new
+        // ShooterSetTurretRel(+200.0));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetTurretAbs(+0.0));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new
+        // ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));
 
         // Debug Hood
         // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetHoodRel(+1000));
@@ -154,7 +167,8 @@ public class RobotContainer {
         DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterAdjustWheel(100.0));
         DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterAdjustWheel(-100.0));
         DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheel(0.0));
-        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterSetWheel(2700));
+        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterSetWheel(3000));
+        // TODO:  above hard-coded constant (3000) should be a named constant from Shooter.java
 
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterSetFeeder(1.0));
 

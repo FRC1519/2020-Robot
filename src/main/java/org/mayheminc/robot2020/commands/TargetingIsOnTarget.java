@@ -7,6 +7,8 @@
 
 package org.mayheminc.robot2020.commands;
 
+import org.mayheminc.robot2020.RobotContainer;
+
 // import org.mayheminc.robot2020.RobotContainer;
 // import org.mayheminc.robot2020.subsystems.Targeting;
 
@@ -50,6 +52,10 @@ public class TargetingIsOnTarget extends CommandBase {
     // Math.abs(Targeting.convertRangeToWheelSpeed(RobotContainer.targeting.getRangeToTarget())
     // - RobotContainer.shooter.getShooterWheelSpeed()) < 100;
     // return bearingGood && wheelsGood;
-    return true;
+
+    double targetPos = RobotContainer.targeting.getDesiredAzimuth();
+    double turretPos = RobotContainer.shooter.getTurretPosition();
+
+    return ( Math.abs( targetPos - turretPos) < 50);
   }
 }

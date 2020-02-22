@@ -27,7 +27,8 @@ public class Targeting extends SubsystemBase {
   // Diagonal FOV = 78.0
   // Horizontal FOV = 70.42
   // Vertical FOV = 43.3
-  private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 78.0;
+  // NOTE:  76.5 horizontal FOV determined empirically by Ken on 2/22/2020
+  private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 76.5;
 
   // Define the "target location" to be halfway from left to right
   private final double CENTER_OF_TARGET_X = 0.5;

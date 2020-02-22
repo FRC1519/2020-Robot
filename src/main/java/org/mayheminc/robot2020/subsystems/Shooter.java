@@ -28,8 +28,9 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     private final double SECONDS_PER_MINUTE = 60.0;
     private final double HUNDRED_MS_PER_SECOND = 10.0;
 
-    public final static double HOOD_INITIATION_LINE_POSITION = 44000;
     public final static double HOOD_TARGET_ZONE_POSITION = 5000;
+    public final static double HOOD_INITIATION_LINE_POSITION = 65000;
+    public final static double HOOD_TRENCH_MID_POSITION = 80000;
 
     double m_targetSpeedRPM;
     History headingHistory = new History();
@@ -84,11 +85,11 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         hoodTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
         hoodTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-        hoodTalon.configPeakOutputVoltage(+6.0, -6.0);
+        hoodTalon.configPeakOutputVoltage(+12.0, -12.0);
         hoodTalon.setInverted(true);
         hoodTalon.setSensorPhase(true);
 
-        hoodTalon.configForwardSoftLimitThreshold(85000);
+        hoodTalon.configForwardSoftLimitThreshold(100000);
         hoodTalon.configForwardSoftLimitEnable(true);
         hoodTalon.configReverseSoftLimitThreshold(0);
         hoodTalon.configReverseSoftLimitEnable(true);
@@ -100,10 +101,16 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         turretTalon.config_kD(0, 0.0, 0);
         turretTalon.config_kF(0, 0.0, 0);
         turretTalon.changeControlMode(ControlMode.Position);
+        turretTalon.setNeutralMode(NeutralMode.Coast);
         turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
+        turretTalon.configMotionCruiseVelocity(800); // measured velocity of ~100K
+        // at 80%; set cruise to that
+        turretTalon.configMotionAcceleration(3200); // acceleration of 4x velocity
+        // allows cruise in 1/4 second
+
         turretTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-        turretTalon.configPeakOutputVoltage(+2.0, -2.0);
+        turretTalon.configPeakOutputVoltage(+4.0, -4.0);
 
         turretTalon.configForwardSoftLimitThreshold(6000);
         turretTalon.configForwardSoftLimitEnable(true);
@@ -128,7 +135,8 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         updateHistory();
     }
 
-    private static final double CAMERA_LAG = 0.150; // was .200; changing to .150 at CMP
+    // KBS: tuned below at practice field on 21 Feb 2020 via successive refinement.
+    private static final double CAMERA_LAG = 0.08; // .05 was best so far in 2020; used .150 in 2019
 
     private void updateHistory() {
         double now = Timer.getFPGATimestamp();
@@ -152,8 +160,9 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
                 m_targetSpeedRPM - convertTicksPer100msToRPM(shooterWheelTalon.getSelectedSensorVelocity(0)));
         SmartDashboard.putNumber("Shooter Wheel Voltage", shooterWheelTalon.getMotorOutputVoltage());
 
-        SmartDashboard.putNumber("Shooter turet pos", turretTalon.getPosition());
-        SmartDashboard.putNumber("Shooter turet vbus", turretTalon.getMotorOutputVoltage());
+        SmartDashboard.putNumber("Shooter turret pos", turretTalon.getPosition());
+        SmartDashboard.putNumber("Shooter turret vbus", turretTalon.getMotorOutputVoltage());
+        SmartDashboard.putNumber("Shooter turret velocity", turretTalon.getSelectedSensorVelocity(0));
 
         SmartDashboard.putNumber("Shooter hood pos", hoodTalon.getPosition());
         SmartDashboard.putNumber("Shooter feeder speed", feederTalon.getPosition());
@@ -176,8 +185,8 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         if (pos > TURRET_MAX_POS) {
             pos = TURRET_MAX_POS;
         }
-
-        turretTalon.set(ControlMode.Position, pos);
+        // turretTalon.set(ControlMode.Position, pos);
+        turretTalon.set(ControlMode.MotionMagic, pos);
     }
 
     /**

@@ -48,13 +48,13 @@ public class Drive extends SubsystemBase {
 	// NavX parameters
 	private double m_desiredHeading = 0.0;
 	private boolean m_useHeadingCorrection = true;
-	private static final double HEADING_PID_P_FOR_HIGH_GEAR = 0.030;
-	private static final double HEADING_PID_P_FOR_LOW_GEAR = HEADING_PID_P_FOR_HIGH_GEAR / 2.0;
+	private static final double HEADING_PID_P_FOR_HIGH_GEAR = 0.007;  // was 0.030 in 2019
+	private static final double HEADING_PID_P_FOR_LOW_GEAR = HEADING_PID_P_FOR_HIGH_GEAR;
 	private static final double kToleranceDegreesPIDControl = 0.2;
 
 	// Drive parameters
 	// pi * diameter * (pulley ratios) / (counts per rev * gearbox reduction)
-	public static final double DISTANCE_PER_PULSE = 3.14 * 5.75 * 36.0 / 42.0 / (2048.0 * 7.56);
+	public static final double DISTANCE_PER_PULSE = 3.14 * 5.75 * 36.0 / 42.0 / (2048.0 * 7.56); // corrected for 2020
 
 	private boolean m_closedLoopMode = false;
 	private double m_maxWheelSpeed = 1.0; // set to 1.0 as default for "open loop" percentVBus drive
@@ -262,12 +262,12 @@ public class Drive extends SubsystemBase {
 
 	private void resetAndEnableHeadingPID() {
 		// if (Robot.shifter.getGear() == Shifter.HIGH_GEAR) {
-		// m_HeadingPid.setP(HEADING_PID_P_FOR_HIGH_GEAR);
+		m_HeadingPid.setP(HEADING_PID_P_FOR_HIGH_GEAR);
 		// } else
-		{
+		// {
 			// low gear
-			m_HeadingPid.setP(HEADING_PID_P_FOR_LOW_GEAR);
-		}
+			// m_HeadingPid.setP(HEADING_PID_P_FOR_LOW_GEAR);
+		// }
 		m_HeadingPid.reset();
 		m_HeadingPid.enable();
 	}
