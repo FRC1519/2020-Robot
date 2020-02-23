@@ -1,5 +1,4 @@
 package org.mayheminc.robot2020.subsystems;
-
 import edu.wpi.first.wpilibj.PIDOutput;
 
 /**
@@ -7,6 +6,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
  * @author user This class holds the correction that is calculated by the PID
  *         Controller.
  */
+@SuppressWarnings("removal")
 public class PIDHeadingCorrection implements PIDOutput {
 
 	public double HeadingCorrection = 0.0;

@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.Utils;
 
+// TODO:  Address all deprecated code masked by @SuppressWarnings("removal") annotations (not just in Drive.java) 
+@SuppressWarnings("removal")
 public class Drive extends SubsystemBase {
 
 	History headingHistory = new History();
@@ -27,7 +29,6 @@ public class Drive extends SubsystemBase {
 	public static final boolean COAST_MODE = false;
 
 	// PID loop variables
-	// TODO:  Suppress 'deprecated' warnings from the compiler 
 	private PIDController m_HeadingPid;
 	private PIDHeadingError m_HeadingError;
 	private PIDHeadingCorrection m_HeadingCorrection;
@@ -49,8 +50,7 @@ public class Drive extends SubsystemBase {
 	// NavX parameters
 	private double m_desiredHeading = 0.0;
 	private boolean m_useHeadingCorrection = true;
-	private static final double HEADING_PID_P_FOR_HIGH_GEAR = 0.007;  // was 0.030 in 2019
-	private static final double HEADING_PID_P_FOR_LOW_GEAR = HEADING_PID_P_FOR_HIGH_GEAR;
+	private static final double HEADING_PID_P = 0.007;  // was 0.030 in 2019 for HIGH_GEAR
 	private static final double kToleranceDegreesPIDControl = 0.2;
 
 	// Drive parameters
@@ -94,7 +94,7 @@ public class Drive extends SubsystemBase {
 		m_HeadingError = new PIDHeadingError();
 		m_HeadingError.m_Error = 0.0;
 		m_HeadingCorrection = new PIDHeadingCorrection();
-		m_HeadingPid = new PIDController(HEADING_PID_P_FOR_HIGH_GEAR, 0.000, 0.04, m_HeadingError, m_HeadingCorrection,
+		m_HeadingPid = new PIDController(HEADING_PID_P, 0.000, 0.04, m_HeadingError, m_HeadingCorrection,
 				0.020 /* period in seconds */);
 		m_HeadingPid.setInputRange(-180.0f, 180.0f);
 		m_HeadingPid.setContinuous(true); // treats the input range as "continous" with wrap-around
@@ -263,7 +263,7 @@ public class Drive extends SubsystemBase {
 
 	private void resetAndEnableHeadingPID() {
 		// if (Robot.shifter.getGear() == Shifter.HIGH_GEAR) {
-		m_HeadingPid.setP(HEADING_PID_P_FOR_HIGH_GEAR);
+		m_HeadingPid.setP(HEADING_PID_P);
 		// } else
 		// {
 			// low gear

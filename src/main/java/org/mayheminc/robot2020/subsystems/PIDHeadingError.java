@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
  * 
  * @author user This is a class to hold the Heading error of the drive.
  */
+@SuppressWarnings("removal")
 public class PIDHeadingError implements PIDSource {
 
 	@Override
