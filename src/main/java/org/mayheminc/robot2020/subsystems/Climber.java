@@ -29,14 +29,20 @@ public class Climber extends SubsystemBase {
    * Creates a new Climber.
    */
   public Climber() {
+
+    // TODO:  Add "soft limit" to top of climber travel to avoid "overwinding"
+    // TODO:  Add position control to go all the way to the top, and nearly all the way in for climbing
+    
     winchLeft.setNeutralMode(NeutralMode.Brake);
     winchLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     winchLeft.configPeakOutputVoltage(+12.0, -12.0);
+    winchLeft.setInverted(true);
 
     winchRight.setNeutralMode(NeutralMode.Brake);
     winchRight.configNominalOutputVoltage(+0.0f, -0.0f);
     winchRight.configPeakOutputVoltage(+12.0, -12.0);
-
+    winchRight.setInverted(false);
+    
     // walkerRight.setNeutralMode(NeutralMode.Brake);
     // walkerRight.configNominalOutputVoltage(+0.0f, -0.0f);
     // walkerRight.configPeakOutputVoltage(+12.0, -12.0);
