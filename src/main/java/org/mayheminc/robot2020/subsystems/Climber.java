@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
   private final MayhemTalonSRX winchLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_LEFT);
   private final MayhemTalonSRX winchRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_RIGHT);
-  private final MayhemTalonSRX walkerLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
-  private final MayhemTalonSRX walkerRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_RIGHT);
+  // private final MayhemTalonSRX walkerLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
+  // private final MayhemTalonSRX walkerRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_RIGHT);
 
   private final Solenoid pistons = new Solenoid(Constants.Solenoid.CLIMBER_PISTONS);
 
@@ -37,13 +37,13 @@ public class Climber extends SubsystemBase {
     winchRight.configNominalOutputVoltage(+0.0f, -0.0f);
     winchRight.configPeakOutputVoltage(+12.0, -12.0);
 
-    walkerRight.setNeutralMode(NeutralMode.Brake);
-    walkerRight.configNominalOutputVoltage(+0.0f, -0.0f);
-    walkerRight.configPeakOutputVoltage(+12.0, -12.0);
+    // walkerRight.setNeutralMode(NeutralMode.Brake);
+    // walkerRight.configNominalOutputVoltage(+0.0f, -0.0f);
+    // walkerRight.configPeakOutputVoltage(+12.0, -12.0);
 
-    walkerLeft.setNeutralMode(NeutralMode.Brake);
-    walkerLeft.configNominalOutputVoltage(+0.0f, -0.0f);
-    walkerLeft.configPeakOutputVoltage(+12.0, -12.0);
+    // walkerLeft.setNeutralMode(NeutralMode.Brake);
+    // walkerLeft.configNominalOutputVoltage(+0.0f, -0.0f);
+    // walkerLeft.configPeakOutputVoltage(+12.0, -12.0);
 
   }
 
@@ -70,13 +70,13 @@ public class Climber extends SubsystemBase {
     winchRight.set(ControlMode.PercentOutput, power);
   }
 
-  public void setWalkerLeftSpeed(double power) {
-    walkerLeft.set(ControlMode.Velocity, power);
-  }
+  // public void setWalkerLeftSpeed(double power) {
+  //   walkerLeft.set(ControlMode.Velocity, power);
+  // }
 
-  public void setWalkerRightSpeed(double power) {
-    walkerRight.set(ControlMode.Velocity, power);
-  }
+  // public void setWalkerRightSpeed(double power) {
+  //   walkerRight.set(ControlMode.Velocity, power);
+  // }
 
   public void setPistons(boolean b) {
     pistons.set(b);

@@ -27,6 +27,7 @@ public class Drive extends SubsystemBase {
 	public static final boolean COAST_MODE = false;
 
 	// PID loop variables
+	// TODO:  Suppress 'deprecated' warnings from the compiler 
 	private PIDController m_HeadingPid;
 	private PIDHeadingError m_HeadingError;
 	private PIDHeadingCorrection m_HeadingCorrection;

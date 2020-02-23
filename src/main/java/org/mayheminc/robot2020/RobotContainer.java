@@ -62,7 +62,7 @@ public class RobotContainer {
         pidtuner = new PidTuner(RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SIX,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SEVEN,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_ELEVEN,
-                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, intake);
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, shooter);
 
         cameraLights.set(true);
     }
@@ -166,15 +166,11 @@ public class RobotContainer {
         // Debug shooter pid velocity
         DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterAdjustWheel(100.0));
         DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterAdjustWheel(-100.0));
-        DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheel(0.0));
+        DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheelVBus(0.0));
         DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterSetWheel(3000));
         // TODO:  above hard-coded constant (3000) should be a named constant from Shooter.java
 
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterSetFeeder(1.0));
-
-        // debug climber pistons
-        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ClimberSetPistons(true));
-        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ClimberSetPistons(false));
 
     }
 
@@ -206,8 +202,7 @@ public class RobotContainer {
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new ShooterSetHoodVBus(+1.0));
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new ShooterSetHoodVBus(-1.0));
 
-        // OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new
-        // ClimberSetWinchesPower(0.7));
+        OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new ClimberSetWinchesPower(0.7));
         OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whileHeld(new ClimberSetWinchesPower(-0.7));
 
         // OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_UP.whenPressed(new

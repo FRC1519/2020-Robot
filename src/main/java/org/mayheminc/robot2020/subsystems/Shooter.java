@@ -16,7 +16,8 @@ import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
 
 public class Shooter extends SubsystemBase implements PidTunerObject {
-    private final MayhemTalonSRX shooterWheelTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL);
+    private final MayhemTalonSRX shooterWheelLeft = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL_LEFT);
+    private final MayhemTalonSRX shooterWheelRight = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL_RIGHT);
     private final MayhemTalonSRX turretTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_TURRET);
     private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
     private final MayhemTalonSRX feederTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_FEEDER);
@@ -47,20 +48,24 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
      * Creates a new Shooter.
      */
     public Shooter() {
+        configureWheelFalcons();
         configureTurretTalon();
-        configureWheelTalon();
         configureHoodTalon();
         configureFeederTalon();
 
-        shooterWheelTalon.config_kP(0, 3.0, 0);
-        shooterWheelTalon.config_kI(0, 0.0, 0);
-        shooterWheelTalon.config_kD(0, 0.0, 0);
-        shooterWheelTalon.config_kF(0, 0.048); // 1023.0 / convertRpmToTicksPer100ms(5760), 0);
+        shooterWheelLeft.config_kP(0, 3.0, 0);
+        shooterWheelLeft.config_kI(0, 0.0, 0);
+        shooterWheelLeft.config_kD(0, 0.0, 0);
+        shooterWheelLeft.config_kF(0, 0.046);          // 1023.0 / convertRpmToTicksPer100ms(5760), 0);
+
+        // set right Falcon to follow the left Falcon
+		shooterWheelRight.changeControlMode(ControlMode.Follower);
+		shooterWheelRight.set(shooterWheelLeft.getDeviceID());
     }
 
     public void init() {
+        configureWheelFalcons();
         configureTurretTalon();
-        configureWheelTalon();
         configureHoodTalon();
         configureFeederTalon();
 
@@ -120,11 +125,20 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         this.setTurretVBus(0.0);
     }
 
-    private void configureWheelTalon() {
-        shooterWheelTalon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
-        shooterWheelTalon.setNeutralMode(NeutralMode.Coast);
-        shooterWheelTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-        shooterWheelTalon.configPeakOutputVoltage(+12.0, 0.0);
+    private void configureWheelFalcons() {
+        shooterWheelLeft.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
+        shooterWheelLeft.setNeutralMode(NeutralMode.Coast);
+        shooterWheelLeft.configNominalOutputVoltage(+0.0f, -0.0f);
+        shooterWheelLeft.configPeakOutputVoltage(+12.0, 0.0);
+        shooterWheelLeft.setInverted(false);
+        shooterWheelLeft.setSensorPhase(false);
+        
+        shooterWheelRight.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
+        shooterWheelRight.setNeutralMode(NeutralMode.Coast);
+        shooterWheelRight.configNominalOutputVoltage(+0.0f, -0.0f);
+        shooterWheelRight.configPeakOutputVoltage(+12.0, 0.0);
+        shooterWheelRight.setInverted(true);
+        shooterWheelRight.setSensorPhase(true);
     }
 
     @Override
@@ -150,15 +164,29 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     }
 
     private void UpdateDashboard() {
-        SmartDashboard.putNumber("Shooter Wheel pos", shooterWheelTalon.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Shooter Wheel speed", shooterWheelTalon.getSelectedSensorVelocity(0));
+        SmartDashboard.putNumber("Shooter Wheel pos", shooterWheelLeft.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Shooter Wheel speed", shooterWheelLeft.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Shooter Wheel RPM",
-                convertTicksPer100msToRPM(shooterWheelTalon.getSelectedSensorVelocity(0)));
+                convertTicksPer100msToRPM(shooterWheelLeft.getSelectedSensorVelocity(0)));
 
         SmartDashboard.putNumber("Shooter Wheel target RPM", m_targetSpeedRPM);
         SmartDashboard.putNumber("Shooter Wheel Error",
-                m_targetSpeedRPM - convertTicksPer100msToRPM(shooterWheelTalon.getSelectedSensorVelocity(0)));
-        SmartDashboard.putNumber("Shooter Wheel Voltage", shooterWheelTalon.getMotorOutputVoltage());
+                m_targetSpeedRPM - convertTicksPer100msToRPM(shooterWheelLeft.getSelectedSensorVelocity(0)));
+        SmartDashboard.putNumber("Shooter Wheel Voltage", shooterWheelLeft.getMotorOutputVoltage());
+        SmartDashboard.putNumber("Shooter Wheel Bus Voltage", shooterWheelLeft.getBusVoltage());
+        SmartDashboard.putNumber("Shooter Wheel Current", shooterWheelLeft.getSupplyCurrent());
+
+        SmartDashboard.putNumber("Shooter Wheel R-pos", shooterWheelRight.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Shooter Wheel R-speed", shooterWheelRight.getSelectedSensorVelocity(0));
+        SmartDashboard.putNumber("Shooter Wheel R-RPM",
+                convertTicksPer100msToRPM(shooterWheelRight.getSelectedSensorVelocity(0)));
+
+        SmartDashboard.putNumber("Shooter Wheel R-target RPM", m_targetSpeedRPM);
+        SmartDashboard.putNumber("Shooter Wheel R-Error",
+                m_targetSpeedRPM - convertTicksPer100msToRPM(shooterWheelRight.getSelectedSensorVelocity(0)));
+        SmartDashboard.putNumber("Shooter Wheel R-Voltage", shooterWheelRight.getMotorOutputVoltage());
+        SmartDashboard.putNumber("Shooter Wheel R-Bus Voltage", shooterWheelRight.getBusVoltage());
+        SmartDashboard.putNumber("Shooter Wheel R-Current", shooterWheelRight.getSupplyCurrent());
 
         SmartDashboard.putNumber("Shooter turret pos", turretTalon.getPosition());
         SmartDashboard.putNumber("Shooter turret vbus", turretTalon.getMotorOutputVoltage());
@@ -235,15 +263,15 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     public void setShooterWheelSpeed(double rpm) {
         double ticks = convertRpmToTicksPer100ms(rpm);
         m_targetSpeedRPM = rpm;
-        shooterWheelTalon.set(ControlMode.Velocity, ticks);
+        shooterWheelLeft.set(ControlMode.Velocity, ticks);
     }
 
     public void setShooterWheelSpeedVBus(double pos) {
-        shooterWheelTalon.set(ControlMode.PercentOutput, pos);
+        shooterWheelLeft.set(ControlMode.PercentOutput, pos);
     }
 
     public double getShooterWheelSpeed() {
-        return convertTicksPer100msToRPM(shooterWheelTalon.getSelectedSensorVelocity(0));
+        return convertTicksPer100msToRPM(shooterWheelLeft.getSelectedSensorVelocity(0));
     }
 
     public double getShooterWheelTargetSpeed() {
@@ -251,51 +279,51 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     }
 
     public double getShooterWheelSpeedVBus() {
-        return shooterWheelTalon.getMotorOutputVoltage();
+        return shooterWheelLeft.getMotorOutputVoltage();
     }
 
     ////////////////////////////////////////////////////
     // PidTunerObject
     @Override
     public double getP() {
-        return turretTalon.getP();
+        return shooterWheelLeft.getP();
     }
 
     @Override
     public double getI() {
-        return turretTalon.getI();
+        return shooterWheelLeft.getI();
     }
 
     @Override
     public double getD() {
-        return turretTalon.getD();
+        return shooterWheelLeft.getD();
     }
 
     @Override
     public double getF() {
-        return turretTalon.getF();
+        return shooterWheelLeft.getF();
 
     }
 
     @Override
     public void setP(double d) {
-        turretTalon.config_kP(0, d, 0);
+        shooterWheelLeft.config_kP(0, d, 0);
     }
 
     @Override
     public void setI(double d) {
-        turretTalon.config_kI(0, d, 0);
+        shooterWheelLeft.config_kI(0, d, 0);
     }
 
     @Override
     public void setD(double d) {
-        turretTalon.config_kD(0, d, 0);
+        shooterWheelLeft.config_kD(0, d, 0);
 
     }
 
     @Override
     public void setF(double d) {
-        turretTalon.config_kF(0, d, 0);
+        shooterWheelLeft.config_kF(0, d, 0);
     }
 
 }
