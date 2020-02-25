@@ -104,31 +104,8 @@ public class MayhemTalonSRX extends TalonSRX {
 
 	}
 
-	public void setPID(double wheelP, double wheelI, double wheelD, double wheelF, int i, double m_voltageRampRate,
-			int j) {
-		this.config_kP(pidProfile, wheelP, 1000);
-		this.config_kI(pidProfile, wheelI, 1000);
-		this.config_kD(pidProfile, wheelD, 1000);
-		this.config_kF(pidProfile, wheelF, 1000);
-	}
-
 	public double getError() {
 		return this.getClosedLoopError(0);
-	}
-
-	int pidProfile;
-
-	public void setProfile(int pidSlot) {
-		pidProfile = pidSlot;
-	}
-
-	public void setPID(double pDown, double iDown, double dDown) {
-		setPID(pDown, iDown, dDown, 0.0, 0, 0.0, 0);
-	}
-
-	public void setVoltageRampRate(double d) {
-		// Need to convert volts per second to time
-		this.configClosedloopRamp(0, 0);
 	}
 
 	public void setPosition(int zeroPositionCount) {

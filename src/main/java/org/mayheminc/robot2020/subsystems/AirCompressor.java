@@ -17,6 +17,8 @@ public class AirCompressor extends SubsystemBase {
    * Creates a new compressor.
    */
   public AirCompressor() {
+    // turn on the compressor in the constructor
+    setCompressor(true);
   }
 
   public void setCompressor(boolean b) {

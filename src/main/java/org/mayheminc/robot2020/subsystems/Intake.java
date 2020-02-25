@@ -47,10 +47,10 @@ public class Intake extends SubsystemBase implements PidTunerObject {
     rollerTalon.configNominalOutputVoltage(+0.0f, -0.0f);
     rollerTalon.configPeakOutputVoltage(+12.0, -12.0);
 
-    configMotor(pivotTalon);
+    configPivotMotor(pivotTalon);
   }
 
-  void configMotor(MayhemTalonSRX motor) {
+  void configPivotMotor(MayhemTalonSRX motor) {
     // initial calcs for computing kP...
     // If we want 50% power when at the full extreme,
     // Full extreme is 900 ticks
@@ -71,6 +71,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
 
     motor.setNeutralMode(NeutralMode.Coast);
     motor.setInverted(false);
+    // in general, sensor phase inversion needed for gearboxes which reverse sensor direction due to odd number of stages
     motor.setSensorPhase(true);
     motor.configNominalOutputVoltage(+0.0f, -0.0f);
     motor.configPeakOutputVoltage(+12.0, -12.0);

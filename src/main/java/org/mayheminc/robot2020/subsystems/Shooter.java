@@ -36,10 +36,12 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     double m_targetSpeedRPM;
     History headingHistory = new History();
 
+    // Note:  for ease of thinking, 1 RPM =~ 3.4 native units for the shooter
     double convertRpmToTicksPer100ms(double rpm) {
         return rpm / SECONDS_PER_MINUTE * TALON_TICKS_PER_REV / HUNDRED_MS_PER_SECOND;
     }
 
+    // Note:  3.413 native units =~ 1.0 RPM for the shooter
     double convertTicksPer100msToRPM(double ticks) {
         return ticks * HUNDRED_MS_PER_SECOND / TALON_TICKS_PER_REV * SECONDS_PER_MINUTE;
     }
@@ -52,15 +54,6 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         configureTurretTalon();
         configureHoodTalon();
         configureFeederTalon();
-
-        shooterWheelLeft.config_kP(0, 3.0, 0);
-        shooterWheelLeft.config_kI(0, 0.0, 0);
-        shooterWheelLeft.config_kD(0, 0.0, 0);
-        shooterWheelLeft.config_kF(0, 0.046);          // 1023.0 / convertRpmToTicksPer100ms(5760), 0);
-
-        // set right Falcon to follow the left Falcon
-		shooterWheelRight.changeControlMode(ControlMode.Follower);
-		shooterWheelRight.set(shooterWheelLeft.getDeviceID());
     }
 
     public void init() {
@@ -125,26 +118,38 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         this.setTurretVBus(0.0);
     }
 
+    // configure a pair of shooter wheel falcons
     private void configureWheelFalcons() {
-        shooterWheelLeft.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
-        shooterWheelLeft.setNeutralMode(NeutralMode.Coast);
-        shooterWheelLeft.configNominalOutputVoltage(+0.0f, -0.0f);
-        shooterWheelLeft.configPeakOutputVoltage(+12.0, 0.0);
+        // most of the configuration is shared for the two Falcons
+        configureOneWheelFalcon(shooterWheelLeft);
+        configureOneWheelFalcon(shooterWheelRight);
+
+        // with the exception of one rotating the opposite direction
         shooterWheelLeft.setInverted(false);
-        shooterWheelLeft.setSensorPhase(false);
-        
-        shooterWheelRight.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
-        shooterWheelRight.setNeutralMode(NeutralMode.Coast);
-        shooterWheelRight.configNominalOutputVoltage(+0.0f, -0.0f);
-        shooterWheelRight.configPeakOutputVoltage(+12.0, 0.0);
         shooterWheelRight.setInverted(true);
-        shooterWheelRight.setSensorPhase(true);
+    }
+    private void configureOneWheelFalcon(MayhemTalonSRX shooterWheelFalcon) {
+        shooterWheelFalcon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
+        shooterWheelFalcon.setNeutralMode(NeutralMode.Coast);
+        shooterWheelFalcon.configNominalOutputVoltage(+0.0f, -0.0f);
+        shooterWheelFalcon.configPeakOutputVoltage(+12.0, 0.0);
+        shooterWheelFalcon.configNeutralDeadband(0.001);  // Config neutral deadband to be the smallest possible
+
+        // For PIDF computations, 1023 is interpreted as "full" motor output
+        // Velocity is in native units of TicksPer100ms.
+        // 1000rpm =~ 3413 native units.
+        // P of "3.0" means that full power applied with error of 341 native units = 100rpm
+        //   (above also means that 50% power boost applied with error of 50rpm)
+        shooterWheelFalcon.config_kP(0, 0.1, 0);  // previously used 3.0
+        shooterWheelFalcon.config_kI(0, 0.0, 0);
+        shooterWheelFalcon.config_kD(0, 0.0, 0);  // CTRE recommends starting at 10x P-gain
+        shooterWheelFalcon.config_kF(0, 0.046, 0);    // 1023.0 / convertRpmToTicksPer100ms(5760), 0);
+        shooterWheelFalcon.configAllowableClosedloopError(0, 0, 0);   // no "neutral" zone around target
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-
         UpdateDashboard();
         updateHistory();
     }
@@ -261,13 +266,15 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
      * @param rpm
      */
     public void setShooterWheelSpeed(double rpm) {
-        double ticks = convertRpmToTicksPer100ms(rpm);
         m_targetSpeedRPM = rpm;
+        double ticks = convertRpmToTicksPer100ms(rpm);
         shooterWheelLeft.set(ControlMode.Velocity, ticks);
+        shooterWheelRight.set(ControlMode.Velocity, ticks);
     }
 
     public void setShooterWheelSpeedVBus(double pos) {
         shooterWheelLeft.set(ControlMode.PercentOutput, pos);
+        shooterWheelRight.set(ControlMode.PercentOutput, pos);
     }
 
     public double getShooterWheelSpeed() {
@@ -308,22 +315,25 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     @Override
     public void setP(double d) {
         shooterWheelLeft.config_kP(0, d, 0);
+        shooterWheelRight.config_kP(0, d, 0);
     }
 
     @Override
     public void setI(double d) {
         shooterWheelLeft.config_kI(0, d, 0);
+        shooterWheelRight.config_kI(0, d, 0);
     }
 
     @Override
     public void setD(double d) {
         shooterWheelLeft.config_kD(0, d, 0);
-
+        shooterWheelRight.config_kD(0, d, 0);
     }
 
     @Override
     public void setF(double d) {
         shooterWheelLeft.config_kF(0, d, 0);
+        shooterWheelRight.config_kF(0, d, 0);
     }
 
 }

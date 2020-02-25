@@ -75,6 +75,15 @@ public class RobotContainer {
         drive.setDefaultCommand(new DriveDefault());
         // intake.setDefaultCommand(new IntakeExtenderVBus());
         magazine.setDefaultCommand(new MagazineDefault());
+
+        // TODO:  Figure out if the current approach of "AirCompressorDefault()" is the way to go for compressor control.
+        // KBS doesn't think the below is the right way to have the compressor be on "by default" because
+        // it would require there to always be a command running to keep the compressor off.  However, that
+        // is a good way to ensure it doesn't get left off by accident.  Not quite sure how to handle this;
+        // would really rather that other commands which need the compressor off (such as a high-power command
+        // which wants all the battery power available) would turn the compressor off when the command starts
+        // and off when the command ends.)  Then again, maybe the "defaultCommand" is a good way to do this
+        // and I just don't understand the style yet.
         compressor.setDefaultCommand(new AirCompressorDefault());
     }
 
@@ -188,22 +197,24 @@ public class RobotContainer {
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new IntakeSetRollers(-1.0));
 
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_SEVEN.whileHeld(new TurretAimToTarget());
-
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(1.0));
+        
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_NINE.whenPressed(new ClimberSetPistons(true));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_TEN.whenPressed(new ClimberSetPistons(false));
 
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollers(1.0));
+
         // OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new
         // IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
         // OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whenPressed(new
         // IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whileHeld(new ShooterSetTurretVBus(-0.2));
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whileHeld(new ShooterSetTurretVBus(+0.2));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new ShooterSetHoodVBus(+1.0));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new ShooterSetHoodVBus(-1.0));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new ShooterAdjustHood(+1000.0));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new ShooterAdjustHood(-1000.0));
 
-        OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new ClimberSetWinchesPower(0.7));
-        OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whileHeld(new ClimberSetWinchesPower(-0.7));
+        // TODO:  Consider if below should use "variable power" for climber or just always full speed?
+        OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new ClimberSetWinchesPower(1.0));
+        OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whileHeld(new ClimberSetWinchesPower(-1.0));
 
         // OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_UP.whenPressed(new
         // MagazineSetTurntable());

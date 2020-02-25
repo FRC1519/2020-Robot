@@ -35,7 +35,7 @@ public class DriveStraightOnHeading extends CommandBase {
 		addRequirements(RobotContainer.drive);
 
 		if (units == DistanceUnits.INCHES) {
-			arg_distance = arg_distance / Drive.DISTANCE_PER_PULSE;
+			arg_distance = arg_distance / Drive.DISTANCE_PER_PULSE_IN_INCHES;
 		}
 		m_targetPower = arg_targetSpeed;
 		m_desiredDisplacement = Math.abs(arg_distance);

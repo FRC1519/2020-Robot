@@ -55,11 +55,11 @@ public class Drive extends SubsystemBase {
 
 	// Drive parameters
 	// pi * diameter * (pulley ratios) / (counts per rev * gearbox reduction)
-	public static final double DISTANCE_PER_PULSE = 3.14 * 5.75 * 36.0 / 42.0 / (2048.0 * 7.56); // corrected for 2020
+	public static final double DISTANCE_PER_PULSE_IN_INCHES = 3.14 * 5.75 * 36.0 / 42.0 / (2048.0 * 7.56); // corrected for 2020
 
 	private boolean m_closedLoopMode = false;
-	private double m_maxWheelSpeed = 1.0; // set to 1.0 as default for "open loop" percentVBus drive
-	private double m_voltageRampRate = 48.0;
+	private double m_maxWheelSpeed = 1.0;    // should be maximum wheel speed in native units
+	private static final double CLOSED_LOOP_RAMP_RATE = 0.1;    // time from neutral to full in seconds
 
 	private double m_initialWheelDistance = 0.0;
 	private int m_iterationsSinceRotationCommanded = 0;
@@ -102,17 +102,14 @@ public class Drive extends SubsystemBase {
 		m_HeadingPid.setAbsoluteTolerance(kToleranceDegreesPIDControl);
 
 		// confirm all four drive talons are in coast mode
-		leftFrontTalon.setNeutralMode(NeutralMode.Coast);
-		leftRearTalon.setNeutralMode(NeutralMode.Coast);
-		rightFrontTalon.setNeutralMode(NeutralMode.Coast);
-		rightRearTalon.setNeutralMode(NeutralMode.Coast);
+		leftFrontTalon.setNeutralMode(NeutralMode.Brake);
+		leftRearTalon.setNeutralMode(NeutralMode.Brake);
+		rightFrontTalon.setNeutralMode(NeutralMode.Brake);
+		rightRearTalon.setNeutralMode(NeutralMode.Brake);
 
 		// set rear talons to follow their respective front talons
-		leftRearTalon.changeControlMode(ControlMode.Follower);
-		leftRearTalon.set(leftFrontTalon.getDeviceID());
-
-		rightRearTalon.changeControlMode(ControlMode.Follower);
-		rightRearTalon.set(rightFrontTalon.getDeviceID());
+		leftRearTalon.follow(leftFrontTalon);
+		rightRearTalon.follow(rightFrontTalon);
 
 		// the left motors move the robot forwards with positive power
 		// but the right motors are backwards.
@@ -120,12 +117,6 @@ public class Drive extends SubsystemBase {
 		leftRearTalon.setInverted(false);
 		rightFrontTalon.setInverted(true);
 		rightRearTalon.setInverted(true);
-
-		// sensor phase is reversed, since there are 3 reduction stages in the gearbox
-		leftFrontTalon.setSensorPhase(true);
-		leftRearTalon.setSensorPhase(true);
-		rightFrontTalon.setSensorPhase(true);
-		rightRearTalon.setSensorPhase(true);
 	}
 
 	public void init() {
@@ -133,8 +124,8 @@ public class Drive extends SubsystemBase {
 		zeroHeadingGyro(0.0);
 
 		// talon closed loop config
-		configureCanTalon(leftFrontTalon);
-		configureCanTalon(rightFrontTalon);
+		configureDriveTalon(leftFrontTalon);
+		configureDriveTalon(rightFrontTalon);
 	}
 
 	public void zeroHeadingGyro(double headingOffset) {
@@ -155,29 +146,22 @@ public class Drive extends SubsystemBase {
 		// setDefaultCommand(new SpeedRacerDrive());
 	}
 
-	private void configureCanTalon(MayhemTalonSRX talon) {
+	private void configureDriveTalon(MayhemTalonSRX talon) {
 		double wheelP = 1.5;
 		double wheelI = 0.0;
 		double wheelD = 0.0;
 		double wheelF = 1.0;
 
 		talon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
-
-		// talon.reverseSensor(false);
+	
 		talon.configNominalOutputVoltage(+0.0f, -0.0f);
 		talon.configPeakOutputVoltage(+12.0, -12.0);
 
-		if (m_closedLoopMode) {
-			talon.changeControlMode(ControlMode.Velocity);
-			m_maxWheelSpeed = 270;
-		} else {
-			talon.changeControlMode(ControlMode.PercentOutput);
-			m_maxWheelSpeed = 1.0;
-		}
-
-		talon.setPID(wheelP, wheelI, wheelD, wheelF, 0, m_voltageRampRate, 0);
-
-		// talon.enableControl();
+		talon.config_kP(0, wheelP);
+		talon.config_kI(0, wheelI);
+		talon.config_kD(0, wheelD);
+		talon.config_kF(0, wheelF);
+		talon.configClosedloopRamp(CLOSED_LOOP_RAMP_RATE);  // specify minimum time for neutral to full in seconds
 
 		DriverStation.reportError("setWheelPIDF: " + wheelP + " " + wheelI + " " + wheelD + " " + wheelF + "\n", false);
 	}
@@ -210,16 +194,10 @@ public class Drive extends SubsystemBase {
 
 	public void setClosedLoopMode() {
 		m_closedLoopMode = true;
-		// reconfigure the "master" drive talons now that we're in closed loop mode
-		configureCanTalon(leftFrontTalon);
-		configureCanTalon(rightFrontTalon);
 	}
 
 	public void setOpenLoopMode() {
 		m_closedLoopMode = false;
-		// reconfigure the "master" drive talons now that we're in open loop mode
-		configureCanTalon(leftFrontTalon);
-		configureCanTalon(rightFrontTalon);
 	}
 
 	// ********************* ENCODER-GETTERS ************************************
@@ -417,6 +395,89 @@ public class Drive extends SubsystemBase {
 	}
 
 	public void speedRacerDrive(double throttle, double rawSteeringX, boolean quickTurn) {
+		speedRacerDriveNew(throttle, rawSteeringX, quickTurn);
+	}
+
+
+	public void speedRacerDriveNew(double throttle, double rawSteeringX, boolean quickTurn) {
+		double leftPower, rightPower;
+		double rotation = 0;
+		final double QUICK_TURN_GAIN = 0.55; // 2019: .75. 2020: .75 was too fast.
+
+		int throttleSign;
+		if (throttle >= 0.0) {
+			throttleSign = 1;
+		} else {
+			throttleSign = -1;
+		}
+
+		// check for if steering input is essentially zero for "DriveStraight" functionality
+		if ((-0.01 < rawSteeringX) && (rawSteeringX < 0.01)) {
+			// no turn being commanded, drive straight or stay still
+			m_iterationsSinceRotationCommanded++;
+			if ((-0.01 < throttle) && (throttle < 0.01)) {
+				// no motion commanded, stay still
+				m_iterationsSinceMovementCommanded++;
+				rotation = 0.0;
+				m_desiredHeading = getHeading(); // whenever motionless, set desired heading to current heading
+				// reset the PID controller loop now that we have a new desired heading
+				resetAndEnableHeadingPID();
+			} else {
+				// driving straight
+				if ((m_iterationsSinceRotationCommanded == LOOPS_GYRO_DELAY)
+						|| (m_iterationsSinceMovementCommanded >= LOOPS_GYRO_DELAY)) {
+					// exactly LOOPS_GYRO_DELAY iterations with no commanded turn,
+					// or haven't had movement commanded for longer than LOOPS_GYRO_DELAY,
+					// so we want to take steps to preserve our current heading hereafter
+
+					// get current heading as desired heading
+					m_desiredHeading = getHeading();
+
+					// reset the PID controller loop now that we have a new desired heading
+					resetAndEnableHeadingPID();
+					rotation = 0.0;
+				} else if (m_iterationsSinceRotationCommanded < LOOPS_GYRO_DELAY) {
+					// not long enough since we were last turning,
+					// just drive straight without special heading maintenance
+					rotation = 0.0;
+				} else if (m_iterationsSinceRotationCommanded > LOOPS_GYRO_DELAY) {
+					// after more then LOOPS_GYRO_DELAY iterations since commanded turn,
+					// maintain the target heading
+					rotation = maintainHeading();
+				}
+				m_iterationsSinceMovementCommanded = 0;
+			}
+		} else {
+			// commanding a turn, reset iterationsSinceRotationCommanded
+			m_iterationsSinceRotationCommanded = 0;
+			m_iterationsSinceMovementCommanded = 0;
+		}
+
+		if (quickTurn) {
+			// want a high-rate turn (also allows "spin" behavior)
+			// power to each wheel is a combination of the throttle and rotation
+			rotation = rawSteeringX * throttleSign * QUICK_TURN_GAIN;
+			leftPower = throttle + rotation;
+			rightPower = throttle - rotation;
+		} else {
+			// want a standard rate turn (scaled by the throttle)
+			if (rawSteeringX >= 0.0) {
+				// turning to the right, derate the right power by turn amount
+				// note that rawSteeringX is positive in this portion of the "if"
+				leftPower = throttle;
+				rightPower = throttle * (1.0 - Math.abs(rawSteeringX));
+			} else {
+				// turning to the left, derate the left power by turn amount
+				// note that rawSteeringX is negative in this portion of the "if"
+				leftPower = throttle * (1.0 - Math.abs(rawSteeringX));
+				rightPower = throttle;
+			}
+		}
+		setMotorPower(leftPower, rightPower);
+	}
+
+
+	public void speedRacerDriveOld(double throttle, double rawSteeringX, boolean quickTurn) {
 		double leftPower, rightPower;
 		double rotation = 0;
 		double adjustedSteeringX = rawSteeringX * throttle;
@@ -498,7 +559,6 @@ public class Drive extends SubsystemBase {
 		leftPower = throttle + rotation;
 		rightPower = throttle - rotation;
 		setMotorPower(leftPower, rightPower);
-
 	}
 
 	public int stage = 0;
@@ -597,9 +657,9 @@ public class Drive extends SubsystemBase {
 		// b - divide by 12 (1 foot per 12 inches)
 		// c - multiply by distance (in inches) per pulse
 		SmartDashboard.putNumber("Left Speed (fps)",
-				leftFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 * DISTANCE_PER_PULSE);
+				leftFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 * DISTANCE_PER_PULSE_IN_INCHES);
 		SmartDashboard.putNumber("Right Speed (fps)",
-				rightFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 * DISTANCE_PER_PULSE);
+				rightFrontTalon.getSelectedSensorVelocity(0) * 10 / 12 * DISTANCE_PER_PULSE_IN_INCHES);
 
 		SmartDashboard.putNumber("Left Talon Output Voltage", leftFrontTalon.getMotorOutputVoltage());
 		SmartDashboard.putNumber("Right Talon Output Voltage", rightFrontTalon.getMotorOutputVoltage());

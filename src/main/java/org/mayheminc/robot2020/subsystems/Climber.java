@@ -18,6 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
+  private static final int MAX_HEIGHT_SOFT_LIMIT = 640000;
+  private static final int MIN_HEIGHT_SOFT_LIMIT = 5000;
+
   private final MayhemTalonSRX winchLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_LEFT);
   private final MayhemTalonSRX winchRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_RIGHT);
   // private final MayhemTalonSRX walkerLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
@@ -37,11 +40,19 @@ public class Climber extends SubsystemBase {
     winchLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     winchLeft.configPeakOutputVoltage(+12.0, -12.0);
     winchLeft.setInverted(true);
+    winchLeft.configForwardSoftLimitThreshold(MAX_HEIGHT_SOFT_LIMIT);
+    winchLeft.configForwardSoftLimitEnable(true);
+    winchLeft.configReverseSoftLimitThreshold(MIN_HEIGHT_SOFT_LIMIT);
+    winchLeft.configReverseSoftLimitEnable(true);
 
     winchRight.setNeutralMode(NeutralMode.Brake);
     winchRight.configNominalOutputVoltage(+0.0f, -0.0f);
     winchRight.configPeakOutputVoltage(+12.0, -12.0);
     winchRight.setInverted(false);
+    winchRight.configForwardSoftLimitThreshold(MAX_HEIGHT_SOFT_LIMIT);
+    winchRight.configForwardSoftLimitEnable(true);
+    winchRight.configReverseSoftLimitThreshold(MIN_HEIGHT_SOFT_LIMIT);
+    winchRight.configReverseSoftLimitEnable(true);
     
     // walkerRight.setNeutralMode(NeutralMode.Brake);
     // walkerRight.configNominalOutputVoltage(+0.0f, -0.0f);
@@ -50,7 +61,6 @@ public class Climber extends SubsystemBase {
     // walkerLeft.setNeutralMode(NeutralMode.Brake);
     // walkerLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     // walkerLeft.configPeakOutputVoltage(+12.0, -12.0);
-
   }
 
   public void zero() {
