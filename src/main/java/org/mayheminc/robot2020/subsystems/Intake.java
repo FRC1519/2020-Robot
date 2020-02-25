@@ -11,18 +11,20 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
 
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase implements PidTunerObject {
 
   private final int PIVOT_CLOSE_ENOUGH = 50;
-  private final MayhemTalonSRX rollerTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_ROLLERS);
+  private final VictorSPX rollerTalon = new VictorSPX(Constants.Talon.INTAKE_ROLLERS);
   private final MayhemTalonSRX pivotTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_PIVOT);
   private final int PIVOT_ZERO_POSITION = 900;
   public final double PIVOT_UP = 900.0;
@@ -44,8 +46,10 @@ public class Intake extends SubsystemBase implements PidTunerObject {
    */
   public Intake() {
     rollerTalon.setNeutralMode(NeutralMode.Coast);
-    rollerTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-    rollerTalon.configPeakOutputVoltage(+12.0, -12.0);
+    rollerTalon.configNominalOutputForward(+0.0f);
+    rollerTalon.configNominalOutputReverse(0.0);
+    rollerTalon.configPeakOutputForward(+12.0);
+    rollerTalon.configPeakOutputReverse(-12.0);
 
     configPivotMotor(pivotTalon);
   }
@@ -93,12 +97,10 @@ public class Intake extends SubsystemBase implements PidTunerObject {
    */
   public void setRollers(double power) {
     rollerTalon.set(ControlMode.PercentOutput, power);
-
   }
 
   public void setPivot(Double b) {
     m_targetPosition = b;
-    // pivotTalon.set(ControlMode.Position, b);
 
     mode = PivotMode.PID_MODE;
     isMoving = true;
@@ -159,7 +161,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
 
     SmartDashboard.putBoolean("Intake Is Moving", isMoving);
     SmartDashboard.putBoolean("Intake PID Mode", (mode == PivotMode.PID_MODE));
-    SmartDashboard.putNumber("Intake Rollers", rollerTalon.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Intake Rollers", rollerTalon.getMotorOutputPercent());
   }
 
   public void setPivotVBus(double VBus) {

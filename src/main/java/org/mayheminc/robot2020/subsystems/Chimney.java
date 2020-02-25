@@ -9,23 +9,30 @@ package org.mayheminc.robot2020.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
 
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Chimney extends SubsystemBase {
-  private final MayhemTalonSRX chimneyTalon = new MayhemTalonSRX(Constants.Talon.MAGAZINE_CHIMNEY);
+  private final VictorSPX chimneyTalon = new VictorSPX(Constants.Talon.MAGAZINE_CHIMNEY);
 
   /**
    * Creates a new Chimney.
    */
   public Chimney() {
     chimneyTalon.setNeutralMode(NeutralMode.Coast);
-    chimneyTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-    chimneyTalon.configPeakOutputVoltage(+12.0, -12.0);
+    // chimneyTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+    // chimneyTalon.configPeakOutputVoltage(+12.0, -12.0);
+    chimneyTalon.configNominalOutputForward(+0.0f);
+    chimneyTalon.configNominalOutputReverse(0.0);
+    chimneyTalon.configPeakOutputForward(+12.0);
+    chimneyTalon.configPeakOutputReverse(-12.0);
+
     chimneyTalon.setInverted(true);
   }
 
@@ -37,8 +44,8 @@ public class Chimney extends SubsystemBase {
   }
 
   void updateSmartDashboard() {
-    SmartDashboard.putNumber("Chimney Speed", chimneyTalon.getSpeed());
-    SmartDashboard.putNumber("Chimney Current", chimneyTalon.getStatorCurrent());
+    SmartDashboard.putNumber("Chimney Speed", chimneyTalon.getMotorOutputPercent());
+    // SmartDashboard.putNumber("Chimney Current", chimneyTalon.getStatorCurrent());
   }
 
   void monitorTurntableMovement() {
