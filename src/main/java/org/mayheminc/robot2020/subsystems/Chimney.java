@@ -12,12 +12,15 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
+import org.mayheminc.util.RangeFinder_GP2D120;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Chimney extends SubsystemBase {
   private final MayhemTalonSRX chimneyTalon = new MayhemTalonSRX(Constants.Talon.MAGAZINE_CHIMNEY);
+  private final RangeFinder_GP2D120 frontIR = new RangeFinder_GP2D120(2, 0);
+  private final RangeFinder_GP2D120 middleIR = new RangeFinder_GP2D120(3, 0);
 
   /**
    * Creates a new Chimney.
@@ -34,11 +37,15 @@ public class Chimney extends SubsystemBase {
     // This method will be called once per scheduler run
     updateSmartDashboard();
     monitorTurntableMovement();
+    frontIR.periodic();
+    middleIR.periodic();
   }
 
   void updateSmartDashboard() {
     SmartDashboard.putNumber("Chimney Speed", chimneyTalon.getSpeed());
     SmartDashboard.putNumber("Chimney Current", chimneyTalon.getStatorCurrent());
+    SmartDashboard.putBoolean("Chimney FrontIR", frontIR.isObjectClose());
+    SmartDashboard.putBoolean("Chimney MidddleIR", middleIR.isObjectClose());
   }
 
   void monitorTurntableMovement() {
@@ -46,5 +53,13 @@ public class Chimney extends SubsystemBase {
 
   public void setChimneySpeed(double speed) {
     chimneyTalon.set(ControlMode.PercentOutput, speed);
+  }
+
+  public boolean isBallInFrontOfChimney() {
+    return frontIR.isObjectClose();
+  }
+
+  public boolean isBallInMiddleOfChimney() {
+    return middleIR.isObjectClose();
   }
 }
