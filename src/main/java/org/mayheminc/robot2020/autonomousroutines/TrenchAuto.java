@@ -24,7 +24,7 @@ public class TrenchAuto extends SequentialCommandGroup {
         // first, shoot the balls that were pre-loaded
 
         addCommands(new IntakeSetPositionWithoutWaiting(RobotContainer.intake.PIVOT_DOWN));
-        addCommands(new ShooterReadyAimFire());
+        addCommands(new ShooterReadyAimFire(3.0));
 
         // then, perform a 3-point turn
         addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 48, 160));
@@ -41,7 +41,7 @@ public class TrenchAuto extends SequentialCommandGroup {
         addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 120, 0));
         addCommands(new DriveStraightOnHeading(-0.1, DistanceUnits.INCHES, 6, 0));
 
-        addCommands(new ShooterReadyAimFire());
+        addCommands(new ShooterReadyAimFire(6.0));
 
         // turn the wheel off now that the shooting is all done
         addCommands( new ShooterSetWheel(0.0));

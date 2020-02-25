@@ -31,7 +31,7 @@ public class Targeting extends SubsystemBase {
   private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 76.5;
 
   // Define the "target location" to be halfway from left to right
-  private final double CENTER_OF_TARGET_X = 0.5;
+  private final double CENTER_OF_TARGET_X = 0.510;
 
   // Calculate ticks per degree.
   // encoder ticks * turret pulley teeth / drive pulley teeth / 360 degrees

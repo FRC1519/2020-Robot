@@ -20,7 +20,7 @@ public class ShooterReadyAimFire extends SequentialCommandGroup {
   /**
    * Creates a new ShooterReadyAimFire.
    */
-  public ShooterReadyAimFire() {
+  public ShooterReadyAimFire(double waitDuration) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super();
@@ -43,7 +43,7 @@ public class ShooterReadyAimFire extends SequentialCommandGroup {
                     new ShooterSetFeeder(1.0),
                     new SequentialCommandGroup(new Wait(0.1), new ChimneySetChimney(0.5)),
                     new SequentialCommandGroup(new Wait(0.2), new MagazineSetTurntable(0.3)),
-                    new Wait(6.0)));
+                    new Wait(waitDuration)));
 
     addCommands(new ParallelRaceGroup(
       new MagazineSetTurntable(0.0),
