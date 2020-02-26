@@ -5,6 +5,7 @@ import org.mayheminc.robot2020.Constants;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +21,7 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     private final MayhemTalonSRX shooterWheelRight = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL_RIGHT);
     private final MayhemTalonSRX turretTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_TURRET);
     private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
-    private final MayhemTalonSRX feederTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_FEEDER);
+    private final VictorSPX feederTalon = new VictorSPX(Constants.Talon.SHOOTER_FEEDER);
 
     // private final double MAX_SPEED_RPM = 5760.0;
     private final double TALON_TICKS_PER_REV = 2048.0;
@@ -66,10 +67,13 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
     }
 
     private void configureFeederTalon() {
-        feederTalon.changeControlMode(ControlMode.PercentOutput);
+        // feederTalon.changeControlMode(ControlMode.PercentOutput);
         feederTalon.setNeutralMode(NeutralMode.Brake);
-        feederTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-        feederTalon.configPeakOutputVoltage(+6.0, -6.0);
+
+        feederTalon.configNominalOutputForward(+0.0f);
+        feederTalon.configNominalOutputReverse(0.0);
+        feederTalon.configPeakOutputForward(+6.0);
+        feederTalon.configPeakOutputReverse(-6.0);
     }
 
     private void configureHoodTalon() {
@@ -198,7 +202,7 @@ public class Shooter extends SubsystemBase implements PidTunerObject {
         SmartDashboard.putNumber("Shooter turret velocity", turretTalon.getSelectedSensorVelocity(0));
 
         SmartDashboard.putNumber("Shooter hood pos", hoodTalon.getPosition());
-        SmartDashboard.putNumber("Shooter feeder speed", feederTalon.getPosition());
+        SmartDashboard.putNumber("Shooter feeder speed", feederTalon.getMotorOutputVoltage());
 
         // SmartDashboard.putNumber("Shooter Debug", debugShooter++);
     }
