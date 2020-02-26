@@ -119,7 +119,7 @@ public class MayhemDriverPad {
         private static final double STEERING_DEAD_ZONE_PERCENT = 0.05;
         private static final double MIN_STEERING_FOR_MOVEMENT = 0.02;
         private static final double NORMAL_MAX_STEERING = 1.00;
-        private static final double SLOW_MODE_MAX_STEERING = 0.50;   // maximum steering in "slow mode" is 50%
+        private static final double SLOW_MODE_MAX_STEERING = 0.80;   // maximum steering in "slow mode" is 50%
 
         public double steeringX() {
                 // SteeringX is the "X" axis of the right stick on the Driver Gamepad.

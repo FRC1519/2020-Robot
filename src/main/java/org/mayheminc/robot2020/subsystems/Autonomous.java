@@ -55,6 +55,11 @@ public class Autonomous extends SubsystemBase {
 
 	private final int MAX_DELAY = 9;
 
+	@Override
+	public void periodic() {
+		updateSmartDashboard();
+	}
+
 	public void adjustDelay(final int delta) {
 		delay += delta;
 		if (delay < 0) {

@@ -12,10 +12,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.mayheminc.robot2020.Constants;
-import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.RangeFinder_GP2D120;
 
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 

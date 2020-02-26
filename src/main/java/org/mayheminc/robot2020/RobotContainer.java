@@ -33,7 +33,10 @@ public class RobotContainer {
 
     public static final Climber climber = new Climber();
     public static final Magazine magazine = new Magazine();
-    public static final Shooter shooter = new Shooter();
+    public static final ShooterWheel shooterWheel = new ShooterWheel();
+    public static final Hood hood = new Hood();
+    public static final Turret turret = new Turret();
+    public static final Feeder feeder = new Feeder();
     public static final Drive drive = new Drive();
     public static final Intake intake = new Intake();
     public static final Autonomous autonomous = new Autonomous();
@@ -62,13 +65,13 @@ public class RobotContainer {
         pidtuner = new PidTuner(RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SIX,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SEVEN,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_ELEVEN,
-                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, shooter);
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, drive);
 
         cameraLights.set(true);
     }
 
     public static void init() {
-        shooter.init();
+        shooterWheel.init();
     }
 
     private void configureDefaultCommands() {
@@ -84,7 +87,7 @@ public class RobotContainer {
         // which wants all the battery power available) would turn the compressor off when the command starts
         // and off when the command ends.)  Then again, maybe the "defaultCommand" is a good way to do this
         // and I just don't understand the style yet.
-        compressor.setDefaultCommand(new AirCompressorDefault());
+        // compressor.setDefaultCommand(new AirCompressorDefault());
     }
 
     private void configureAutonomousPrograms() {
@@ -93,7 +96,9 @@ public class RobotContainer {
         // TODO:  fix so that auto program is shown not just when changed (as shows old setting sometimes)
         
         // autonomousPrograms.push(/* 01 */ new StayStill());
+        autonomousPrograms.push(/* 01 */ new DriveStraightOnly());
         autonomousPrograms.push(/* 00 */ new TrenchAuto());
+
         // autonomousPrograms.push( new ShooterReadyAimFire());
         // autonomousPrograms.push(new TestTurret());
 
@@ -155,8 +160,8 @@ public class RobotContainer {
         // about -30 degrees
         // DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whileHeld(new
         // ShooterSetTurretVBus(+0.2));// about +30 degrees
-        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetHoodAbs(Shooter.HOOD_INITIATION_LINE_POSITION));
-        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new HoodSetAbs(Hood.HOOD_INITIATION_LINE_POSITION));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new HoodSetAbs(Hood.HOOD_TARGET_ZONE_POSITION));
 
         // DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new
         // ShooterSetTurretRel(-200.0));
@@ -173,13 +178,15 @@ public class RobotContainer {
         // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whileHeld(new ShooterSetHoodVBus(-1.0));
 
         // Debug shooter pid velocity
-        DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterAdjustWheel(100.0));
-        DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterAdjustWheel(-100.0));
-        DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterSetWheelVBus(0.0));
-        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterSetWheel(3000));
+        DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterWheelAdjust(100.0));
+        DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterWheelAdjust(-100.0));
+        DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterWheelSetVBus(0.0));
+        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterWheelSet(3000));
+
+        DRIVER_PAD.DRIVER_PAD_BACK_BUTTON.whileHeld(new DriveStraight(0.1));
         // TODO:  above hard-coded constant (3000) should be a named constant from Shooter.java
 
-        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterSetFeeder(1.0));
+        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new FeederSet(1.0));
 
     }
 
@@ -207,12 +214,11 @@ public class RobotContainer {
         // IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
         // OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whenPressed(new
         // IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whileHeld(new ShooterSetTurretVBus(-0.2));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whileHeld(new ShooterSetTurretVBus(+0.2));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new ShooterAdjustHood(+1000.0));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new ShooterAdjustHood(-1000.0));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whileHeld(new TurretSetVBus(-0.2));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whileHeld(new TurretSetVBus(+0.2));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new HoodAdjust(+1000.0));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new HoodAdjust(-1000.0));
 
-        // TODO:  Consider if below should use "variable power" for climber or just always full speed?
         OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new ClimberSetWinchesPower(1.0));
         OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whileHeld(new ClimberSetWinchesPower(-1.0));
 

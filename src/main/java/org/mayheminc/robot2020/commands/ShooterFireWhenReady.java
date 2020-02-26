@@ -18,7 +18,7 @@ public class ShooterFireWhenReady extends CommandBase {
    */
   public ShooterFireWhenReady() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.shooter);
+    // addRequirements(RobotContainer.shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -39,8 +39,8 @@ public class ShooterFireWhenReady extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.shooter.setFeederSpeed(0);
-    RobotContainer.shooter.setShooterWheelSpeed(0);
+    RobotContainer.feeder.setSpeed(0);
+    RobotContainer.shooterWheel.setSpeed(0);
   }
 
   // Returns true when the command should end.

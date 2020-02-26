@@ -17,7 +17,7 @@ public class TurretAimToTarget extends CommandBase {
    */
   public TurretAimToTarget() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.shooter);
+    addRequirements(RobotContainer.turret);
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +29,7 @@ public class TurretAimToTarget extends CommandBase {
   @Override
   public void execute() {
     double pos = RobotContainer.targeting.getDesiredAzimuth();
-    RobotContainer.shooter.setTurretPositionAbs(pos);
+    RobotContainer.turret.setPositionAbs(pos);
   }
 
   // Called once the command ends or is interrupted.

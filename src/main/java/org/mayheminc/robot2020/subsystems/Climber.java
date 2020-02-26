@@ -33,7 +33,6 @@ public class Climber extends SubsystemBase {
    */
   public Climber() {
 
-    // TODO:  Add "soft limit" to top of climber travel to avoid "overwinding"
     // TODO:  Add position control to go all the way to the top, and nearly all the way in for climbing
     
     winchLeft.setNeutralMode(NeutralMode.Brake);

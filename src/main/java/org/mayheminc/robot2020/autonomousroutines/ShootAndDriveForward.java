@@ -7,7 +7,7 @@
 
 package org.mayheminc.robot2020.autonomousroutines;
 
-import org.mayheminc.robot2020.commands.ShooterSetWheel;
+import org.mayheminc.robot2020.commands.ShooterWheelSet;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -23,7 +23,7 @@ public class ShootAndDriveForward extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super();
 
-    addCommands(new ShooterSetWheel(5500));
+    addCommands(new ShooterWheelSet(5500));
     // addCommands(new Wait(2.0));
   }
 }

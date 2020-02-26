@@ -17,7 +17,6 @@ import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
 
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 

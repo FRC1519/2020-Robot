@@ -8,7 +8,6 @@ import org.mayheminc.util.History;
 import edu.wpi.first.wpilibj.*;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.fasterxml.jackson.annotation.JacksonInject.Value;
 
 //import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,11 +16,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import org.mayheminc.robot2020.Robot;
 //import org.mayheminc.robot2019.RobotMap;
 import org.mayheminc.util.MayhemTalonSRX;
+import org.mayheminc.util.PidTunerObject;
 import org.mayheminc.util.Utils;
 
 // TODO:  Address all deprecated code masked by @SuppressWarnings("removal") annotations (not just in Drive.java) 
 @SuppressWarnings("removal")
-public class Drive extends SubsystemBase {
+public class Drive extends SubsystemBase implements PidTunerObject {
 
 	History headingHistory = new History();
 
@@ -51,7 +51,7 @@ public class Drive extends SubsystemBase {
 	// NavX parameters
 	private double m_desiredHeading = 0.0;
 	private boolean m_useHeadingCorrection = true;
-	private static final double HEADING_PID_P = 0.007; // was 0.030 in 2019 for HIGH_GEAR
+	private static final double HEADING_PID_P = 0.007; // was 0.030 in 2019 for HIGH_GEAR; was 0.007 in early 2020
 	private static final double kToleranceDegreesPIDControl = 0.2;
 
 	// Drive parameters
@@ -59,8 +59,8 @@ public class Drive extends SubsystemBase {
 	public static final double DISTANCE_PER_PULSE_IN_INCHES = 3.14 * 5.75 * 36.0 / 42.0 / (2048.0 * 7.56); // corrected
 																											// for 2020
 
-	private boolean m_closedLoopMode = false;
-	private final double m_maxWheelSpeed = 1.0; // should be maximum wheel speed in native units
+	private boolean m_closedLoopMode = true;
+	private final double m_maxWheelSpeed = 18000.0; // should be maximum wheel speed in native units
 	private static final double CLOSED_LOOP_RAMP_RATE = 0.1; // time from neutral to full in seconds
 
 	private double m_initialWheelDistance = 0.0;
@@ -104,10 +104,10 @@ public class Drive extends SubsystemBase {
 		m_HeadingPid.setAbsoluteTolerance(kToleranceDegreesPIDControl);
 
 		// confirm all four drive talons are in coast mode
-		leftFrontTalon.setNeutralMode(NeutralMode.Brake);
-		leftRearTalon.setNeutralMode(NeutralMode.Brake);
-		rightFrontTalon.setNeutralMode(NeutralMode.Brake);
-		rightRearTalon.setNeutralMode(NeutralMode.Brake);
+		leftFrontTalon.setNeutralMode(NeutralMode.Coast);
+		leftRearTalon.setNeutralMode(NeutralMode.Coast);
+		rightFrontTalon.setNeutralMode(NeutralMode.Coast);
+		rightRearTalon.setNeutralMode(NeutralMode.Coast);
 
 		// set rear talons to follow their respective front talons
 		leftRearTalon.follow(leftFrontTalon);
@@ -119,6 +119,10 @@ public class Drive extends SubsystemBase {
 		leftRearTalon.setInverted(false);
 		rightFrontTalon.setInverted(true);
 		rightRearTalon.setInverted(true);
+
+		// talon closed loop config
+		configureDriveTalon(leftFrontTalon);
+		configureDriveTalon(rightFrontTalon);
 	}
 
 	public void init() {
@@ -149,20 +153,20 @@ public class Drive extends SubsystemBase {
 	}
 
 	private void configureDriveTalon(final MayhemTalonSRX talon) {
-		final double wheelP = 1.5;
-		final double wheelI = 0.0;
-		final double wheelD = 0.0;
-		final double wheelF = 1.0;
+		final double wheelP = 0.020;
+		final double wheelI = 0.000;
+		final double wheelD = 0.200;
+		final double wheelF = 0.060;
 
 		talon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
 
 		talon.configNominalOutputVoltage(+0.0f, -0.0f);
 		talon.configPeakOutputVoltage(+12.0, -12.0);
 
-		talon.config_kP(0, wheelP);
-		talon.config_kI(0, wheelI);
-		talon.config_kD(0, wheelD);
-		talon.config_kF(0, wheelF);
+		talon.config_kP(0, wheelP, 0);
+		talon.config_kI(0, wheelI, 0);
+		talon.config_kD(0, wheelD, 0);
+		talon.config_kF(0, wheelF, 0);
 		talon.configClosedloopRamp(CLOSED_LOOP_RAMP_RATE); // specify minimum time for neutral to full in seconds
 
 		DriverStation.reportError("setWheelPIDF: " + wheelP + " " + wheelI + " " + wheelD + " " + wheelF + "\n", false);
@@ -397,11 +401,11 @@ public class Drive extends SubsystemBase {
 		// Robot.lights.set(LedPatternFactory.autoAlignGotIt);
 	}
 
-	public void speedRacerDrive(final double throttle, final double rawSteeringX, final boolean quickTurn) {
+	public void speedRacerDrive(double throttle, double rawSteeringX, boolean quickTurn) {
 		speedRacerDriveNew(throttle, rawSteeringX, quickTurn);
 	}
 
-	public void speedRacerDriveNew(final double throttle, final double rawSteeringX, final boolean quickTurn) {
+	public void speedRacerDriveNew(double throttle, double rawSteeringX, boolean quickTurn) {
 		double leftPower, rightPower;
 		double rotation = 0;
 		final double QUICK_TURN_GAIN = 0.55; // 2019: .75. 2020: .75 was too fast.
@@ -450,30 +454,32 @@ public class Drive extends SubsystemBase {
 				}
 				m_iterationsSinceMovementCommanded = 0;
 			}
+			// driveStraight code benefits from "spin" behavior when needed
+			leftPower = throttle + rotation;
+			rightPower = throttle - rotation;
 		} else {
 			// commanding a turn, reset iterationsSinceRotationCommanded
 			m_iterationsSinceRotationCommanded = 0;
 			m_iterationsSinceMovementCommanded = 0;
-		}
-
-		if (quickTurn) {
-			// want a high-rate turn (also allows "spin" behavior)
-			// power to each wheel is a combination of the throttle and rotation
-			rotation = rawSteeringX * throttleSign * QUICK_TURN_GAIN;
-			leftPower = throttle + rotation;
-			rightPower = throttle - rotation;
-		} else {
-			// want a standard rate turn (scaled by the throttle)
-			if (rawSteeringX >= 0.0) {
-				// turning to the right, derate the right power by turn amount
-				// note that rawSteeringX is positive in this portion of the "if"
-				leftPower = throttle;
-				rightPower = throttle * (1.0 - Math.abs(rawSteeringX));
+			if (quickTurn) {
+				// want a high-rate turn (also allows "spin" behavior)
+				// power to each wheel is a combination of the throttle and rotation
+				rotation = rawSteeringX * throttleSign * QUICK_TURN_GAIN;
+				leftPower = throttle + rotation;
+				rightPower = throttle - rotation;
 			} else {
-				// turning to the left, derate the left power by turn amount
-				// note that rawSteeringX is negative in this portion of the "if"
-				leftPower = throttle * (1.0 - Math.abs(rawSteeringX));
-				rightPower = throttle;
+				// want a standard rate turn (scaled by the throttle)
+				if (rawSteeringX >= 0.0) {
+					// turning to the right, derate the right power by turn amount
+					// note that rawSteeringX is positive in this portion of the "if"
+					leftPower = throttle;
+					rightPower = throttle * (1.0 - Math.abs(rawSteeringX));
+				} else {
+					// turning to the left, derate the left power by turn amount
+					// note that rawSteeringX is negative in this portion of the "if"
+					leftPower = throttle * (1.0 - Math.abs(rawSteeringX));
+					rightPower = throttle;
+				}
 			}
 		}
 		setMotorPower(leftPower, rightPower);
@@ -730,5 +736,55 @@ public class Drive extends SubsystemBase {
 		// reset the heading control loop for the new heading
 		resetAndEnableHeadingPID();
 	}
+
+
+	
+    ////////////////////////////////////////////////////
+    // PidTunerObject
+    @Override
+    public double getP() {
+        return leftFrontTalon.getP();
+    }
+
+    @Override
+    public double getI() {
+        return leftFrontTalon.getI();
+    }
+
+    @Override
+    public double getD() {
+        return leftFrontTalon.getD();
+    }
+
+    @Override
+    public double getF() {
+        return leftFrontTalon.getF();
+
+    }
+
+    @Override
+    public void setP(double d) {
+        leftFrontTalon.config_kP(0, d, 0);
+        rightFrontTalon.config_kP(0, d, 0);
+    }
+
+    @Override
+    public void setI(double d) {
+        leftFrontTalon.config_kI(0, d, 0);
+        rightFrontTalon.config_kI(0, d, 0);
+    }
+
+    @Override
+    public void setD(double d) {
+        leftFrontTalon.config_kD(0, d, 0);
+        rightFrontTalon.config_kD(0, d, 0);
+    }
+
+    @Override
+    public void setF(double d) {
+        leftFrontTalon.config_kF(0, d, 0);
+        rightFrontTalon.config_kF(0, d, 0);
+    }
+
 
 }

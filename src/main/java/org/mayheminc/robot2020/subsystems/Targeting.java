@@ -108,14 +108,14 @@ public class Targeting extends SubsystemBase {
       m_bestY = 0.0;
       m_tilt = 0.0;
       m_area = 0.0;
-      m_desiredAzimuth = RobotContainer.shooter.getAzimuthForCapturedImage();
+      m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else if (m_target_array[0] < 0.0) {
       // this means the array has no valid data. Set m_xError = 0.0
       m_bestX = 0.0;
       m_bestY = 0.0;
       m_tilt = 0.0;
       m_area = 0.0;
-      m_desiredAzimuth = RobotContainer.shooter.getAzimuthForCapturedImage();
+      m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else {
       // We have a valid data array.
       // There are three different situations:
@@ -192,7 +192,7 @@ public class Targeting extends SubsystemBase {
     ticksError = angleError * TICKS_PER_DEGREE;
 
     // Convert angleError into a desired azimuth, using the azimuth history
-    desiredAzimuth = ticksError + RobotContainer.shooter.getAzimuthForCapturedImage();
+    desiredAzimuth = ticksError + RobotContainer.turret.getAzimuthForCapturedImage();
     // Update SmartDashboard
     SmartDashboard.putNumber("Vision Angle Error", angleError);
     SmartDashboard.putNumber("Vision Desired Azimuth", desiredAzimuth);

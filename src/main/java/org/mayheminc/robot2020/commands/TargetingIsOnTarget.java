@@ -54,7 +54,7 @@ public class TargetingIsOnTarget extends CommandBase {
     // return bearingGood && wheelsGood;
 
     double targetPos = RobotContainer.targeting.getDesiredAzimuth();
-    double turretPos = RobotContainer.shooter.getTurretPosition();
+    double turretPos = RobotContainer.turret.getPosition();
 
     return ( Math.abs( targetPos - turretPos) < 50);
   }
