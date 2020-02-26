@@ -8,6 +8,7 @@ import org.mayheminc.util.History;
 import edu.wpi.first.wpilibj.*;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.fasterxml.jackson.annotation.JacksonInject.Value;
 
 //import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,9 +30,9 @@ public class Drive extends SubsystemBase {
 	public static final boolean COAST_MODE = false;
 
 	// PID loop variables
-	private PIDController m_HeadingPid;
-	private PIDHeadingError m_HeadingError;
-	private PIDHeadingCorrection m_HeadingCorrection;
+	private final PIDController m_HeadingPid;
+	private final PIDHeadingError m_HeadingError;
+	private final PIDHeadingCorrection m_HeadingCorrection;
 	private boolean m_HeadingPidPreventWindup = false;
 	private static final int LOOPS_GYRO_DELAY = 10;
 
@@ -45,21 +46,22 @@ public class Drive extends SubsystemBase {
 	private AHRS Navx;
 
 	// Driving mode
-	private boolean m_speedRacerDriveMode = true; // set by default
+	private final boolean m_speedRacerDriveMode = true; // set by default
 
 	// NavX parameters
 	private double m_desiredHeading = 0.0;
 	private boolean m_useHeadingCorrection = true;
-	private static final double HEADING_PID_P = 0.007;  // was 0.030 in 2019 for HIGH_GEAR
+	private static final double HEADING_PID_P = 0.007; // was 0.030 in 2019 for HIGH_GEAR
 	private static final double kToleranceDegreesPIDControl = 0.2;
 
 	// Drive parameters
 	// pi * diameter * (pulley ratios) / (counts per rev * gearbox reduction)
-	public static final double DISTANCE_PER_PULSE_IN_INCHES = 3.14 * 5.75 * 36.0 / 42.0 / (2048.0 * 7.56); // corrected for 2020
+	public static final double DISTANCE_PER_PULSE_IN_INCHES = 3.14 * 5.75 * 36.0 / 42.0 / (2048.0 * 7.56); // corrected
+																											// for 2020
 
 	private boolean m_closedLoopMode = false;
-	private double m_maxWheelSpeed = 1.0;    // should be maximum wheel speed in native units
-	private static final double CLOSED_LOOP_RAMP_RATE = 0.1;    // time from neutral to full in seconds
+	private final double m_maxWheelSpeed = 1.0; // should be maximum wheel speed in native units
+	private static final double CLOSED_LOOP_RAMP_RATE = 0.1; // time from neutral to full in seconds
 
 	private double m_initialWheelDistance = 0.0;
 	private int m_iterationsSinceRotationCommanded = 0;
@@ -84,7 +86,7 @@ public class Drive extends SubsystemBase {
 			 */
 			Navx = new AHRS(SPI.Port.kMXP);
 			Navx.reset();
-		} catch (RuntimeException ex) {
+		} catch (final RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
 			System.out.println("Error loading navx.");
 		}
@@ -128,7 +130,7 @@ public class Drive extends SubsystemBase {
 		configureDriveTalon(rightFrontTalon);
 	}
 
-	public void zeroHeadingGyro(double headingOffset) {
+	public void zeroHeadingGyro(final double headingOffset) {
 		Navx.zeroYaw();
 		setHeadingOffset(headingOffset);
 
@@ -146,14 +148,14 @@ public class Drive extends SubsystemBase {
 		// setDefaultCommand(new SpeedRacerDrive());
 	}
 
-	private void configureDriveTalon(MayhemTalonSRX talon) {
-		double wheelP = 1.5;
-		double wheelI = 0.0;
-		double wheelD = 0.0;
-		double wheelF = 1.0;
+	private void configureDriveTalon(final MayhemTalonSRX talon) {
+		final double wheelP = 1.5;
+		final double wheelI = 0.0;
+		final double wheelD = 0.0;
+		final double wheelF = 1.0;
 
 		talon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
-	
+
 		talon.configNominalOutputVoltage(+0.0f, -0.0f);
 		talon.configPeakOutputVoltage(+12.0, -12.0);
 
@@ -161,7 +163,7 @@ public class Drive extends SubsystemBase {
 		talon.config_kI(0, wheelI);
 		talon.config_kD(0, wheelD);
 		talon.config_kF(0, wheelF);
-		talon.configClosedloopRamp(CLOSED_LOOP_RAMP_RATE);  // specify minimum time for neutral to full in seconds
+		talon.configClosedloopRamp(CLOSED_LOOP_RAMP_RATE); // specify minimum time for neutral to full in seconds
 
 		DriverStation.reportError("setWheelPIDF: " + wheelP + " " + wheelI + " " + wheelD + " " + wheelF + "\n", false);
 	}
@@ -172,9 +174,9 @@ public class Drive extends SubsystemBase {
 	 * @param brakeMode - true for "brake in neutral" and false for "coast in
 	 *                  neutral"
 	 */
-	public void setBrakeMode(boolean brakeMode) {
+	public void setBrakeMode(final boolean brakeMode) {
 
-		NeutralMode mode = (brakeMode) ? NeutralMode.Brake : NeutralMode.Coast;
+		final NeutralMode mode = (brakeMode) ? NeutralMode.Brake : NeutralMode.Coast;
 
 		leftFrontTalon.setNeutralMode(mode);
 		leftRearTalon.setNeutralMode(mode);
@@ -221,8 +223,8 @@ public class Drive extends SubsystemBase {
 
 	// *************************** GYRO *******************************************
 
-	public double calculateHeadingError(double Target) {
-		double currentHeading = getHeading();
+	public double calculateHeadingError(final double Target) {
+		final double currentHeading = getHeading();
 		double error = Target - currentHeading;
 		error = error % 360.0;
 		if (error > 180.0) {
@@ -235,7 +237,7 @@ public class Drive extends SubsystemBase {
 		return m_useHeadingCorrection;
 	}
 
-	public void setHeadingCorrectionMode(boolean useHeadingCorrection) {
+	public void setHeadingCorrectionMode(final boolean useHeadingCorrection) {
 		m_useHeadingCorrection = useHeadingCorrection;
 	}
 
@@ -244,8 +246,8 @@ public class Drive extends SubsystemBase {
 		m_HeadingPid.setP(HEADING_PID_P);
 		// } else
 		// {
-			// low gear
-			// m_HeadingPid.setP(HEADING_PID_P_FOR_LOW_GEAR);
+		// low gear
+		// m_HeadingPid.setP(HEADING_PID_P_FOR_LOW_GEAR);
 		// }
 		m_HeadingPid.reset();
 		m_HeadingPid.enable();
@@ -256,11 +258,11 @@ public class Drive extends SubsystemBase {
 	static private double m_prevRightDistance = 0.0;
 
 	public boolean isStationary() {
-		double leftDistance = getLeftEncoder();
-		double rightDistance = getRightEncoder();
+		final double leftDistance = getLeftEncoder();
+		final double rightDistance = getRightEncoder();
 
-		double leftDelta = Math.abs(leftDistance - m_prevLeftDistance);
-		double rightDelta = Math.abs(rightDistance - m_prevRightDistance);
+		final double leftDelta = Math.abs(leftDistance - m_prevLeftDistance);
+		final double rightDelta = Math.abs(rightDistance - m_prevRightDistance);
 
 		m_prevLeftDistance = leftDistance;
 		m_prevRightDistance = rightDistance;
@@ -279,7 +281,7 @@ public class Drive extends SubsystemBase {
 
 	private double m_headingOffset = 0.0;
 
-	public void setHeadingOffset(double arg_offset) {
+	public void setHeadingOffset(final double arg_offset) {
 		m_headingOffset = arg_offset;
 	}
 
@@ -346,7 +348,7 @@ public class Drive extends SubsystemBase {
 		double rf;
 		double lb;
 		double rb;
-		double fudgeFactor = 0.0;
+		final double fudgeFactor = 0.0;
 
 		lf = pdp.getCurrent(Constants.PDP.DRIVE_LEFT_A) - fudgeFactor;
 		rf = pdp.getCurrent(Constants.PDP.DRIVE_LEFT_B) - fudgeFactor;
@@ -357,6 +359,7 @@ public class Drive extends SubsystemBase {
 		SmartDashboard.putNumber("Right Front I", rf);
 		SmartDashboard.putNumber("Left Back I", lb);
 		SmartDashboard.putNumber("Right Back I", rb);
+
 	}
 
 	/*
@@ -394,12 +397,11 @@ public class Drive extends SubsystemBase {
 		// Robot.lights.set(LedPatternFactory.autoAlignGotIt);
 	}
 
-	public void speedRacerDrive(double throttle, double rawSteeringX, boolean quickTurn) {
+	public void speedRacerDrive(final double throttle, final double rawSteeringX, final boolean quickTurn) {
 		speedRacerDriveNew(throttle, rawSteeringX, quickTurn);
 	}
 
-
-	public void speedRacerDriveNew(double throttle, double rawSteeringX, boolean quickTurn) {
+	public void speedRacerDriveNew(final double throttle, final double rawSteeringX, final boolean quickTurn) {
 		double leftPower, rightPower;
 		double rotation = 0;
 		final double QUICK_TURN_GAIN = 0.55; // 2019: .75. 2020: .75 was too fast.
@@ -411,7 +413,8 @@ public class Drive extends SubsystemBase {
 			throttleSign = -1;
 		}
 
-		// check for if steering input is essentially zero for "DriveStraight" functionality
+		// check for if steering input is essentially zero for "DriveStraight"
+		// functionality
 		if ((-0.01 < rawSteeringX) && (rawSteeringX < 0.01)) {
 			// no turn being commanded, drive straight or stay still
 			m_iterationsSinceRotationCommanded++;
@@ -476,11 +479,10 @@ public class Drive extends SubsystemBase {
 		setMotorPower(leftPower, rightPower);
 	}
 
-
-	public void speedRacerDriveOld(double throttle, double rawSteeringX, boolean quickTurn) {
+	public void speedRacerDriveOld(final double throttle, final double rawSteeringX, final boolean quickTurn) {
 		double leftPower, rightPower;
 		double rotation = 0;
-		double adjustedSteeringX = rawSteeringX * throttle;
+		final double adjustedSteeringX = rawSteeringX * throttle;
 		final double QUICK_TURN_GAIN = 0.55; // 2019: .75. 2020: .75 was too fast.
 		final double STD_TURN_GAIN = 0.9; // 2019: 1.5. 2020: 1.5 was too fast// the driver wants the non-quick turn
 											// turning a little more responsive.
@@ -611,7 +613,7 @@ public class Drive extends SubsystemBase {
 		return headingCorrection;
 	}
 
-	public void rotate(double RotateX) {
+	public void rotate(final double RotateX) {
 		m_desiredHeading += RotateX;
 		if (m_desiredHeading > 180) {
 			m_desiredHeading -= 360;
@@ -623,7 +625,7 @@ public class Drive extends SubsystemBase {
 		m_iterationsSinceMovementCommanded = 0;
 	}
 
-	public void rotateToHeading(double desiredHeading) {
+	public void rotateToHeading(final double desiredHeading) {
 		m_desiredHeading = desiredHeading;
 	}
 
@@ -643,6 +645,9 @@ public class Drive extends SubsystemBase {
 		// ***** KBS: Uncommenting below, as it takes a LONG time to get PDP values
 		// updateSdbPdp();
 
+		int matchnumber = DriverStation.getInstance().getMatchNumber();
+		DriverStation.MatchType MatchType = DriverStation.getInstance().getMatchType();
+		SmartDashboard.putString("matchInfo", "" + MatchType + '_' + matchnumber);
 		SmartDashboard.putNumber("Left Front Encoder Counts", leftFrontTalon.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Right Front Encoder Counts", rightFrontTalon.getSelectedSensorPosition(0));
 		SmartDashboard.putNumber("Left Rear Encoder Counts", leftRearTalon.getSelectedSensorPosition(0));
@@ -687,13 +692,13 @@ public class Drive extends SubsystemBase {
 	private static final double CAMERA_LAG = 0.150; // was .200; changing to .150 at CMP
 
 	public void updateHistory() {
-		double now = Timer.getFPGATimestamp();
+		final double now = Timer.getFPGATimestamp();
 		headingHistory.add(now, getHeading());
 	}
 
 	public double getHeadingForCapturedImage() {
-		double now = Timer.getFPGATimestamp();
-		double indexTime = now - CAMERA_LAG;
+		final double now = Timer.getFPGATimestamp();
+		final double indexTime = now - CAMERA_LAG;
 		return headingHistory.getAzForTime(indexTime);
 	}
 
@@ -712,12 +717,12 @@ public class Drive extends SubsystemBase {
 	 * @return
 	 */
 	public double getWheelDistance() {
-		double dist = (getLeftEncoder() + getRightEncoder()) / 2;
+		final double dist = (getLeftEncoder() + getRightEncoder()) / 2;
 		return dist - m_initialWheelDistance;
 	}
 
 	// NOTE the difference between rotateToHeading(...) and goToHeading(...)
-	public void setDesiredHeading(double desiredHeading) {
+	public void setDesiredHeading(final double desiredHeading) {
 		m_desiredHeading = desiredHeading;
 		m_iterationsSinceRotationCommanded = LOOPS_GYRO_DELAY + 1;
 		m_iterationsSinceMovementCommanded = 0;
