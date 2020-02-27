@@ -11,18 +11,13 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ShooterPermissionToFire extends CommandBase {
-
+public class ShooterAimToTarget extends CommandBase {
   /**
-   * Creates a new ShooterPositionToFire This command is intended to shoot while
-   * the driver holds the "Permission To Fire" button
+   * Creates a new TurretAimToTarget.
    */
-  public ShooterPermissionToFire() {
+  public ShooterAimToTarget() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.chimney);
-    addRequirements(RobotContainer.feeder);
     addRequirements(RobotContainer.hood);
-    addRequirements(RobotContainer.revolver);
     addRequirements(RobotContainer.shooterWheel);
     addRequirements(RobotContainer.turret);
   }
@@ -30,8 +25,7 @@ public class ShooterPermissionToFire extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // command the shooterWheel to turn at speed, aimHood, aimTurret
-    // RobotContainer.shooterWheel.setSpeed(RobotContainer.targeting.getDesiredWheelSpeed());
+    // aim the hood and turret
     RobotContainer.hood.setPosition(RobotContainer.targeting.getDesiredHood());
     RobotContainer.turret.setPositionAbs(RobotContainer.targeting.getDesiredAzimuth());
   }
@@ -39,31 +33,24 @@ public class ShooterPermissionToFire extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // command the shooterWheel to turn at speed
-    // RobotContainer.shooterWheel.setSpeed(RobotContainer.targeting.getWheelSpeedFromY());
-
-    // aim the hood
+    // aim the hood and turret
     RobotContainer.hood.setPosition(RobotContainer.targeting.getDesiredHood());
-
-    // aim the turret
     RobotContainer.turret.setPositionAbs(RobotContainer.targeting.getDesiredAzimuth());
-
-    // if speed is good, turret is aimed, and hood is aimed, start shooting!
-    // if shooterWheels at speed, turret aimed, and hood aimed, then fire!
-    // firing actions as follows:
-    // feed roller after 0.0 seconds since start of firing
-    // chimney after 0.1 seconds since start of firing
-
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if (!interrupted) {
+      RobotContainer.shooterWheel.setSpeed(RobotContainer.targeting.getDesiredWheelSpeed());
+
+      // want to also schedule a command here that does the shooting!
+    }
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return (RobotContainer.hood.isAtPosition() && RobotContainer.turret.isAtDesiredPosition());
   }
 }

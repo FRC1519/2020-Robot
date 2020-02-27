@@ -177,8 +177,8 @@ public class RobotContainer {
         // about -30 degrees
         // DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whileHeld(new
         // ShooterSetTurretVBus(+0.2));// about +30 degrees
-        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new HoodSetAbsWhileHeld(Hood.HOOD_INITIATION_LINE_POSITION));
-        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new HoodSetAbsWhileHeld(Hood.HOOD_TARGET_ZONE_POSITION));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new HoodSetAbsWhileHeld(Hood.STARTING_POSITION));
 
         // DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new
         // ShooterSetTurretRel(-200.0));
@@ -195,8 +195,8 @@ public class RobotContainer {
         // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whileHeld(new ShooterSetHoodVBus(-1.0));
 
         // Debug shooter pid velocity
-        DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterWheelAdjust(100.0));
-        DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterWheelAdjust(-100.0));
+        DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterWheelAdjust(50.0));
+        DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterWheelAdjust(-50.0));
         DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterWheelSetVBus(0.0));
         DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterWheelSet(3000));
 
@@ -204,7 +204,8 @@ public class RobotContainer {
         // TODO: above hard-coded constant (3000) should be a named constant from
         // Shooter.java
 
-        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new FeederSet(1.0));
+        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterPermissionToFire());
+        DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new FeederSet(1.0));
 
     }
 
@@ -221,7 +222,7 @@ public class RobotContainer {
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new ChimneySet(1.0));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_SIX.whileHeld(new IntakeSetRollersWhileHeld(-1.0));
 
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_SEVEN.whileHeld(new TurretAimToTarget());
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_SEVEN.whenPressed(new ShooterAimToTarget());
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollersWhileHeld(1.0));
 
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_NINE.whenPressed(new ClimberSetPistons(true));

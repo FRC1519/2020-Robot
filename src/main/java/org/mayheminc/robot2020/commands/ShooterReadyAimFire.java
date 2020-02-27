@@ -46,6 +46,6 @@ public class ShooterReadyAimFire extends SequentialCommandGroup {
         new ParallelRaceGroup(new FeederSet(0.0), new ChimneySet(0.0), new RevolverSetTurntable(0.0), new Wait(0.1)));
 
     // Lower the hood now that we're done shooting
-    addCommands(new HoodSetAbsWhileHeld(Hood.HOOD_STARTING_POSITION));
+    addCommands(new HoodSetAbsWhileHeld(Hood.STARTING_POSITION));
   }
 }

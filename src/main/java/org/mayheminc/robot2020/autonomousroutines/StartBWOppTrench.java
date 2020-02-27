@@ -29,7 +29,7 @@ public class StartBWOppTrench extends SequentialCommandGroup {
                 addCommands(new IntakeSetRollers(-1.0));
 
                 // make sure the hood is down
-                addCommands(new HoodSetAbsWhileHeld(Hood.HOOD_TARGET_ZONE_POSITION));
+                addCommands(new HoodSetAbsWhileHeld(Hood.TARGET_ZONE_POSITION));
 
                 // drive to get balls from opponent's trench
                 addCommands(new DriveStraightOnHeading(0.2, DistanceUnits.INCHES, 108, 180));
@@ -46,7 +46,7 @@ public class StartBWOppTrench extends SequentialCommandGroup {
                 // in shooting position, prepare everything for shooting
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
                                 new ShooterWheelSet(ShooterWheel.SHOOTER_WHEEL_INITIATION_LINE_SPEED),
-                                new HoodSetAbsWhileHeld(Hood.HOOD_INITIATION_LINE_POSITION + 3000.0),
+                                new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION + 3000.0),
                                 new TurretSetAbs((105.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
                 // turn on the intake gently while shooting to help balls settle
@@ -58,6 +58,6 @@ public class StartBWOppTrench extends SequentialCommandGroup {
                 addCommands(new IntakeSetRollers(0.0));
 
                 // turn the wheel off now that the shooting is all done
-                addCommands(new HoodSetAbsWhileHeld(Hood.HOOD_TARGET_ZONE_POSITION));
+                addCommands(new HoodSetAbsWhileHeld(Hood.TARGET_ZONE_POSITION));
         }
 }

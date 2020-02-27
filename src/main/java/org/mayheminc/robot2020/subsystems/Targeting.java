@@ -27,11 +27,11 @@ public class Targeting extends SubsystemBase {
   // Diagonal FOV = 78.0
   // Horizontal FOV = 70.42
   // Vertical FOV = 43.3
-  // NOTE:  76.5 horizontal FOV determined empirically by Ken on 2/22/2020
+  // NOTE: 76.5 horizontal FOV determined empirically by Ken on 2/22/2020
   private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 76.5;
 
   // Define the "target location" to be halfway from left to right
-  private final double CENTER_OF_TARGET_X = 0.510;
+  private final double CENTER_OF_TARGET_X = 0.475;
 
   // Calculate ticks per degree.
   // encoder ticks * turret pulley teeth / drive pulley teeth / 360 degrees
@@ -45,6 +45,8 @@ public class Targeting extends SubsystemBase {
   private static final double AZIMUTH_CORRECTION_OFFSET = 0.0; // was -2.0 at CMP
 
   private double m_desiredAzimuth;
+  private double m_desiredHood;
+  private double m_desiredWheelSpeed;
   private double[] m_target_array;
   private int m_priorFrameCount;
   private double m_priorFrameTime;
@@ -108,14 +110,14 @@ public class Targeting extends SubsystemBase {
       m_bestY = 0.0;
       m_tilt = 0.0;
       m_area = 0.0;
-      m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
+      // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else if (m_target_array[0] < 0.0) {
       // this means the array has no valid data. Set m_xError = 0.0
       m_bestX = 0.0;
       m_bestY = 0.0;
       m_tilt = 0.0;
       m_area = 0.0;
-      m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
+      // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else {
       // We have a valid data array.
       // There are three different situations:
@@ -131,6 +133,8 @@ public class Targeting extends SubsystemBase {
       m_area = m_target_array[3];
 
       m_desiredAzimuth = findDesiredAzimuth(m_bestX, m_bestY, m_tilt, m_area);
+      m_desiredHood = getHoodFromY();
+      m_desiredWheelSpeed = getWheelSpeedFromY();
     }
 
     // at this point in the code, the "selected" target should be in the "best"
@@ -138,10 +142,24 @@ public class Targeting extends SubsystemBase {
     SmartDashboard.putNumber("m_bestY", m_bestY);
     SmartDashboard.putNumber("m_tilt", m_tilt);
     SmartDashboard.putNumber("m_area", m_area);
+
+    SmartDashboard.putNumber("Range per Y", this.getRangeFromY());
+    SmartDashboard.putNumber("Range per Area", this.getRangeFromArea());
+
+    SmartDashboard.putNumber("Wheel Speed From Y", this.getWheelSpeedFromY());
+    SmartDashboard.putNumber("Hood Angle From Y", this.getHoodFromY());
   }
 
   public double getDesiredAzimuth() {
     return m_desiredAzimuth + AZIMUTH_CORRECTION_OFFSET;
+  }
+
+  public double getDesiredHood() {
+    return m_desiredHood;
+  }
+
+  public double getDesiredWheelSpeed() {
+    return m_desiredWheelSpeed;
   }
 
   public double getRecommendedSpeed() {
@@ -197,6 +215,42 @@ public class Targeting extends SubsystemBase {
     SmartDashboard.putNumber("Vision Angle Error", angleError);
     SmartDashboard.putNumber("Vision Desired Azimuth", desiredAzimuth);
     return desiredAzimuth;
+  }
+
+  /**
+   * use m_bestY to get the desired hood setting for the target
+   * 
+   * @return
+   */
+  private double getHoodFromY() {
+    return 105874 + -407324 * m_bestY + 881911 * m_bestY * m_bestY + -506286 * m_bestY * m_bestY * m_bestY;
+  }
+
+  /**
+   * use m_bestY to get the desired wheel speed for the target
+   * 
+   * @return
+   */
+  private double getWheelSpeedFromY() {
+    return 2618 + -1939 * m_bestY + 3583 * m_bestY * m_bestY;
+  }
+
+  /**
+   * use m_bestY to get the range in feet to the target.
+   * 
+   * @return
+   */
+  public double getRangeFromY() {
+    return 8.11 + -9.17 * m_bestY + 33.9 * m_bestY * m_bestY;
+  }
+
+  /**
+   * Use the area to calculate the range in feet.
+   * 
+   * @return
+   */
+  public double getRangeFromArea() {
+    return 0.912 * Math.pow(m_area, -0.695);
   }
 
 }

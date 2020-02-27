@@ -28,7 +28,7 @@ public class StartBWShoot3 extends SequentialCommandGroup {
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
                                 new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN),
                                 new ShooterWheelSet(ShooterWheel.SHOOTER_WHEEL_INITIATION_LINE_SPEED),
-                                new HoodSetAbsWhileHeld(Hood.HOOD_INITIATION_LINE_POSITION),
+                                new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION),
                                 new TurretSetAbs((180.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
                 addCommands(new ShooterReadyAimFire(1.5));
@@ -37,6 +37,6 @@ public class StartBWShoot3 extends SequentialCommandGroup {
                 addCommands(new ParallelCommandGroup( // below commands in parallel
                                 new ShooterWheelSet(0.0), //
                                 new IntakeSetRollers(0.0), // turn off the rollers
-                                new HoodSetAbs(Hood.HOOD_STARTING_POSITION)));
+                                new HoodSetAbs(Hood.STARTING_POSITION)));
         }
 }

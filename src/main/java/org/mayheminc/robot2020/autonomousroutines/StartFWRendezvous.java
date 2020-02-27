@@ -31,7 +31,7 @@ public class StartFWRendezvous extends SequentialCommandGroup {
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
                                 new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN),
                                 new ShooterWheelSet(ShooterWheel.SHOOTER_WHEEL_INITIATION_LINE_SPEED),
-                                new HoodSetAbs(Hood.HOOD_INITIATION_LINE_POSITION),
+                                new HoodSetAbs(Hood.INITIATION_LINE_POSITION),
                                 new TurretSetAbs((10.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
                 addCommands(new ShooterReadyAimFire(1.0));
@@ -44,8 +44,7 @@ public class StartFWRendezvous extends SequentialCommandGroup {
                 addCommands(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
 
                 // rais the hood a little to shoot from this increased distance
-                addCommands(new HoodSetAbsWhileHeld(
-                                (Hood.HOOD_INITIATION_LINE_POSITION + Hood.HOOD_TRENCH_MID_POSITION) / 2.0));
+                addCommands(new HoodSetAbsWhileHeld((Hood.INITIATION_LINE_POSITION + Hood.TRENCH_MID_POSITION) / 2.0));
                 addCommands(new DriveStraightOnHeading(-0.3, DistanceUnits.INCHES, 144, 50));
 
                 // turn on the intake to pick up balls
@@ -70,6 +69,6 @@ public class StartFWRendezvous extends SequentialCommandGroup {
                 addCommands(new IntakeSetRollers(0.0));
 
                 // turn the wheel off now that the shooting is all done
-                addCommands(new HoodSetAbsWhileHeld(Hood.HOOD_TARGET_ZONE_POSITION));
+                addCommands(new HoodSetAbsWhileHeld(Hood.TARGET_ZONE_POSITION));
         }
 }

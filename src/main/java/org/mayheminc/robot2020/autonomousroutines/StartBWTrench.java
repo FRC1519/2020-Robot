@@ -32,7 +32,7 @@ public class StartBWTrench extends SequentialCommandGroup {
                                 // intake while driving down the trench
                                 new IntakeSetRollers(-1.0),
                                 // ensure the hood is down
-                                new HoodSetAbsWhileHeld(Hood.HOOD_STARTING_POSITION),
+                                new HoodSetAbsWhileHeld(Hood.STARTING_POSITION),
                                 // drive the path under the control panel to the end
                                 new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 180, 180)));
 
@@ -50,7 +50,7 @@ public class StartBWTrench extends SequentialCommandGroup {
                 // wheels, raising the hood, and re-aiming the turret
                 addCommands(new ParallelCommandGroup(
                                 new ShooterWheelSet(ShooterWheel.SHOOTER_WHEEL_INITIATION_LINE_SPEED),
-                                new HoodSetAbsWhileHeld(Hood.HOOD_INITIATION_LINE_POSITION),
+                                new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION),
                                 new TurretSetAbs((168.0 * Turret.TICKS_PER_DEGREE)),
                                 new DriveStraightOnHeading(-0.5, DistanceUnits.INCHES, 96, 160)));
 
@@ -68,6 +68,6 @@ public class StartBWTrench extends SequentialCommandGroup {
                 addCommands(new IntakeSetRollers(0.0));
 
                 // turn the wheel off now that the shooting is all done
-                addCommands(new HoodSetAbsWhileHeld(Hood.HOOD_TARGET_ZONE_POSITION));
+                addCommands(new HoodSetAbsWhileHeld(Hood.TARGET_ZONE_POSITION));
         }
 }

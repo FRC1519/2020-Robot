@@ -14,12 +14,14 @@ import org.mayheminc.util.PidTunerObject;
 public class Hood extends SubsystemBase implements PidTunerObject {
     private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
 
-    public final static double HOOD_STARTING_POSITION = 0;
-    public final static double HOOD_TARGET_ZONE_POSITION = 5000;
-    public final static double HOOD_INITIATION_LINE_POSITION = 65000;
-    public final static double HOOD_TRENCH_MID_POSITION = 80000;
-
+    private final static int MIN_POSITION = 0;
+    private final static int MAX_POSITION = 90000;
     private final static double POSITION_TOLERANCE = 1000.0;
+
+    public final static double STARTING_POSITION = 0;
+    public final static double TARGET_ZONE_POSITION = 5000;
+    public final static double INITIATION_LINE_POSITION = 65000;
+    public final static double TRENCH_MID_POSITION = 80000;
 
     private double m_desiredPosition = 0.0;
 
@@ -49,9 +51,9 @@ public class Hood extends SubsystemBase implements PidTunerObject {
         hoodTalon.setInverted(true);
         hoodTalon.setSensorPhase(true);
 
-        hoodTalon.configForwardSoftLimitThreshold(100000);
+        hoodTalon.configForwardSoftLimitThreshold(MAX_POSITION);
         hoodTalon.configForwardSoftLimitEnable(true);
-        hoodTalon.configReverseSoftLimitThreshold(0);
+        hoodTalon.configReverseSoftLimitThreshold(MIN_POSITION);
         hoodTalon.configReverseSoftLimitEnable(true);
     }
 
@@ -63,6 +65,7 @@ public class Hood extends SubsystemBase implements PidTunerObject {
 
     private void UpdateDashboard() {
         SmartDashboard.putNumber("Shooter Hood Pos", hoodTalon.getPosition());
+        SmartDashboard.putNumber("Shooter Hood Setpoint", m_desiredPosition);
     }
 
     public void zero() {

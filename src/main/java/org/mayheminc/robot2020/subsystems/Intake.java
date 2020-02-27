@@ -124,7 +124,14 @@ public class Intake extends SubsystemBase implements PidTunerObject {
       // if the pivot is close enough, turn the motor on gently downards
       if (Math.abs(pivotTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH) {
         isMoving = false;
-        setPivotVBus(-0.05);
+
+        // if the current position is closer to PIVOT UP than PIVOT DOWN, apply a little
+        // positive power.
+        if (pivotTalon.getPosition() > PIVOT_UP / 2) {
+          setPivotVBus(+0.05);
+        } else { // we are close to the PIVOT DOWN, so apply a little negative power.
+          setPivotVBus(-0.05);
+        }
       } else {
         pivotTalon.set(ControlMode.Position, m_targetPosition, DemandType.ArbitraryFeedForward, m_feedForward);
       }
