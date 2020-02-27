@@ -20,6 +20,9 @@ public class ShooterWheel extends SubsystemBase implements PidTunerObject {
     private final double SECONDS_PER_MINUTE = 60.0;
     private final double HUNDRED_MS_PER_SECOND = 10.0;
 
+    public static final double SHOOTER_WHEEL_INITIATION_LINE_SPEED = 3000.0;
+    public static final double SHOOTER_WHEEL_TRENCH_FRONT_SPEED = 3400.0;
+
     double m_targetSpeedRPM;
 
     // Note:  for ease of thinking, 1 RPM =~ 3.4 native units for the shooter

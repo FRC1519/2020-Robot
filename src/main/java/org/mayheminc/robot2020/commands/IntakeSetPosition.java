@@ -13,16 +13,26 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class IntakeSetPosition extends CommandBase {
   double m_position;
+  boolean m_waitForDone;
 
   /**
-   * Creates a new IntakeSetPosition.
+   * Creates a new IntakeSetPosition, with "wait" set to false
    */
-  public IntakeSetPosition(Double position) {
+  public IntakeSetPosition(double position) {
+    this (position, false);
+  }
+
+  /**
+   * Creates a new IntakeSetPosition
+   */
+  public IntakeSetPosition(double position, boolean wait) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.intake);
-    m_position = position;
 
+    m_position = position;
+    m_waitForDone = wait;
   }
+
 
   // Called when the command is initially scheduled.
   @Override
@@ -33,6 +43,10 @@ public class IntakeSetPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.intake.isPivotAtPosition();
+    if (m_waitForDone) {
+      return RobotContainer.intake.isPivotAtPosition();
+    } else {
+      return true;
+    }
   }
 }

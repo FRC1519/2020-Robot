@@ -24,23 +24,28 @@ public class ShooterReadyAimFire extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super();
 
-    addCommands(new HoodSetAbs(Hood.HOOD_INITIATION_LINE_POSITION));
-
     // Turn off compressor while actively shooting.
     addCommands(new AirCompressorPause());
 
-    // aim to the target until we are on target.
-    addCommands(
-        new ParallelRaceGroup(new ParallelCommandGroup(new TargetingIsOnTarget(), new ShooterWheelSet(3000.0, true)),
-            new TurretAimToTarget()));
+    // aim to the target before starting shooting.
+    // don't continue to next command (to actually start) until both onTarget and up
+    // to speed
+    addCommands(new ParallelRaceGroup(
+        new ParallelCommandGroup(/* new TargetingIsOnTarget(), */ new ShooterWheelSet(3000.0, true)),
+        new TurretAimToTarget()));
 
     // turn on the feeder, wait 0.1, turn on the Chimney, wait 0.1, turn on the
-    // magazine, shoot for about 4 seconds
-    addCommands(new ParallelRaceGroup(new FeederSet(1.0),
-        new SequentialCommandGroup(new Wait(0.1), new ChimneySetChimney(0.5)),
-        new SequentialCommandGroup(new Wait(0.2), new MagazineSetTurntable(0.3)), new Wait(waitDuration)));
+    // revolver turntable, shoot for specified duration
+    // TODO: should really shoot until no balls detected any more
+    addCommands(
+        new ParallelRaceGroup(new FeederSet(1.0), new SequentialCommandGroup(new Wait(0.1), new ChimneySet(1.0)),
+            new SequentialCommandGroup(new Wait(0.2), new RevolverSetTurntable(0.3)), new Wait(waitDuration)));
 
-    addCommands(new ParallelRaceGroup(new MagazineSetTurntable(0.0), new ChimneySetChimney(0.0),
-        new FeederSet(0.0), new Wait(0.1)));
+    // turn off the feeder, chimney, and revolver, ending after 0.1 seconds
+    addCommands(
+        new ParallelRaceGroup(new FeederSet(0.0), new ChimneySet(0.0), new RevolverSetTurntable(0.0), new Wait(0.1)));
+
+    // Lower the hood now that we're done shooting
+    addCommands(new HoodSetAbsWhileHeld(Hood.HOOD_STARTING_POSITION));
   }
 }

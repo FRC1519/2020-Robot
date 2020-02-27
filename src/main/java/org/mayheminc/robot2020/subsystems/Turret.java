@@ -15,10 +15,19 @@ import org.mayheminc.util.PidTunerObject;
 public class Turret extends SubsystemBase implements PidTunerObject {
     private final MayhemTalonSRX turretTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_TURRET);
 
-    private final int MIN_POSITION = -12500;
-    private final int MAX_POSITION = +26000;
+    public static final boolean WAIT_FOR_DONE = true;
+    private final int MIN_POSITION = -12500; // approx 90 degrees
+    private final int MAX_POSITION = +26000; // approx 180 degrees
+    private final int DESTINATION_TOLERANCE = 200;
+    // TICKS_PER_DEGREE computed by 4096 ticks per rotation of shaft / 1 rotation of
+    // shaft per 18t * 225t / 1 rotation of turret
 
-    double m_targetSpeedRPM;
+    public final static double TICKS_PER_DEGREE = 4096.0 / 18.0 * 225.0 / 360.0;
+    // above works out to 142.2 ticks per degree
+    // a full circle is 51,200 ticks
+
+    double m_targetSpeedRPM = 0.0;
+    double m_desiredPosition = 0.0;
     History headingHistory = new History();
 
     /**
@@ -41,13 +50,11 @@ public class Turret extends SubsystemBase implements PidTunerObject {
         turretTalon.setNeutralMode(NeutralMode.Coast);
         turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-        turretTalon.configMotionCruiseVelocity(800); // measured velocity of ~100K
-        // at 80%; set cruise to that
-        turretTalon.configMotionAcceleration(3200); // acceleration of 4x velocity
-        // allows cruise in 1/4 second
+        turretTalon.configMotionCruiseVelocity(2500); // max velocity at 100% is about 3200, cruise at 80%
+        turretTalon.configMotionAcceleration(5000); // acceleration of 2x velocity, allows cruise in 1/2 second
 
         turretTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-        turretTalon.configPeakOutputVoltage(+6.0, -6.0);
+        turretTalon.configPeakOutputVoltage(+12.0, -12.0);
 
         turretTalon.configForwardSoftLimitThreshold(MAX_POSITION);
         turretTalon.configForwardSoftLimitEnable(true);
@@ -56,8 +63,6 @@ public class Turret extends SubsystemBase implements PidTunerObject {
 
         this.setVBus(0.0);
     }
-
-   
 
     @Override
     public void periodic() {
@@ -87,6 +92,7 @@ public class Turret extends SubsystemBase implements PidTunerObject {
     }
 
     public void zero() {
+        m_desiredPosition = 0.0;
         turretTalon.setPosition(0);
     }
 
@@ -100,6 +106,7 @@ public class Turret extends SubsystemBase implements PidTunerObject {
         if (pos > MAX_POSITION) {
             pos = MAX_POSITION;
         }
+        m_desiredPosition = pos;
         turretTalon.set(ControlMode.MotionMagic, pos);
     }
 
@@ -109,7 +116,8 @@ public class Turret extends SubsystemBase implements PidTunerObject {
      * @param pos number of encoder ticks to adjust.
      */
     public void setPositionRel(double pos) {
-        setPositionAbs(getPosition() + pos);
+        m_desiredPosition = getPosition() + pos;
+        setPositionAbs(m_desiredPosition);
     }
 
     public void setVBus(double power) {
@@ -125,6 +133,23 @@ public class Turret extends SubsystemBase implements PidTunerObject {
         return turretTalon.getPosition();
     }
 
+    /**
+     * Get the desired position of the turret.
+     * 
+     * @return
+     */
+    public double getDesiredPosition() {
+        return m_desiredPosition;
+    }
+
+    /**
+     * Return true if close enough to desired position
+     * 
+     * @return
+     */
+    public boolean isAtDesiredPosition() {
+        return (Math.abs(getPosition() - getDesiredPosition()) < DESTINATION_TOLERANCE);
+    }
 
     ////////////////////////////////////////////////////
     // PidTunerObject

@@ -52,6 +52,7 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 	private double m_desiredHeading = 0.0;
 	private boolean m_useHeadingCorrection = true;
 	private static final double HEADING_PID_P = 0.007; // was 0.030 in 2019 for HIGH_GEAR; was 0.007 in early 2020
+	private static final double HEADING_PID_D = 0.080; // was 0.04 in 2019
 	private static final double kToleranceDegreesPIDControl = 0.2;
 
 	// Drive parameters
@@ -96,7 +97,7 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 		m_HeadingError = new PIDHeadingError();
 		m_HeadingError.m_Error = 0.0;
 		m_HeadingCorrection = new PIDHeadingCorrection();
-		m_HeadingPid = new PIDController(HEADING_PID_P, 0.000, 0.04, m_HeadingError, m_HeadingCorrection,
+		m_HeadingPid = new PIDController(HEADING_PID_P, 0.000, HEADING_PID_D, m_HeadingError, m_HeadingCorrection,
 				0.020 /* period in seconds */);
 		m_HeadingPid.setInputRange(-180.0f, 180.0f);
 		m_HeadingPid.setContinuous(true); // treats the input range as "continous" with wrap-around
@@ -737,54 +738,51 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 		resetAndEnableHeadingPID();
 	}
 
+	////////////////////////////////////////////////////
+	// PidTunerObject
+	@Override
+	public double getP() {
+		return leftFrontTalon.getP();
+	}
 
-	
-    ////////////////////////////////////////////////////
-    // PidTunerObject
-    @Override
-    public double getP() {
-        return leftFrontTalon.getP();
-    }
+	@Override
+	public double getI() {
+		return leftFrontTalon.getI();
+	}
 
-    @Override
-    public double getI() {
-        return leftFrontTalon.getI();
-    }
+	@Override
+	public double getD() {
+		return leftFrontTalon.getD();
+	}
 
-    @Override
-    public double getD() {
-        return leftFrontTalon.getD();
-    }
+	@Override
+	public double getF() {
+		return leftFrontTalon.getF();
 
-    @Override
-    public double getF() {
-        return leftFrontTalon.getF();
+	}
 
-    }
+	@Override
+	public void setP(double d) {
+		leftFrontTalon.config_kP(0, d, 0);
+		rightFrontTalon.config_kP(0, d, 0);
+	}
 
-    @Override
-    public void setP(double d) {
-        leftFrontTalon.config_kP(0, d, 0);
-        rightFrontTalon.config_kP(0, d, 0);
-    }
+	@Override
+	public void setI(double d) {
+		leftFrontTalon.config_kI(0, d, 0);
+		rightFrontTalon.config_kI(0, d, 0);
+	}
 
-    @Override
-    public void setI(double d) {
-        leftFrontTalon.config_kI(0, d, 0);
-        rightFrontTalon.config_kI(0, d, 0);
-    }
+	@Override
+	public void setD(double d) {
+		leftFrontTalon.config_kD(0, d, 0);
+		rightFrontTalon.config_kD(0, d, 0);
+	}
 
-    @Override
-    public void setD(double d) {
-        leftFrontTalon.config_kD(0, d, 0);
-        rightFrontTalon.config_kD(0, d, 0);
-    }
-
-    @Override
-    public void setF(double d) {
-        leftFrontTalon.config_kF(0, d, 0);
-        rightFrontTalon.config_kF(0, d, 0);
-    }
-
+	@Override
+	public void setF(double d) {
+		leftFrontTalon.config_kF(0, d, 0);
+		rightFrontTalon.config_kF(0, d, 0);
+	}
 
 }

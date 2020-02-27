@@ -14,9 +14,14 @@ import org.mayheminc.util.PidTunerObject;
 public class Hood extends SubsystemBase implements PidTunerObject {
     private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
 
+    public final static double HOOD_STARTING_POSITION = 0;
     public final static double HOOD_TARGET_ZONE_POSITION = 5000;
     public final static double HOOD_INITIATION_LINE_POSITION = 65000;
     public final static double HOOD_TRENCH_MID_POSITION = 80000;
+
+    private final static double POSITION_TOLERANCE = 1000.0;
+
+    private double m_desiredPosition = 0.0;
 
     /**
      * Creates a new Hood.
@@ -47,7 +52,7 @@ public class Hood extends SubsystemBase implements PidTunerObject {
         hoodTalon.configForwardSoftLimitThreshold(100000);
         hoodTalon.configForwardSoftLimitEnable(true);
         hoodTalon.configReverseSoftLimitThreshold(0);
-        hoodTalon.configReverseSoftLimitEnable(false);
+        hoodTalon.configReverseSoftLimitEnable(true);
     }
 
     @Override
@@ -62,10 +67,17 @@ public class Hood extends SubsystemBase implements PidTunerObject {
 
     public void zero() {
         hoodTalon.setPosition(0);
+        m_desiredPosition = 0.0;
+        hoodTalon.set(ControlMode.PercentOutput, 0.0);
     }
 
     public void setPosition(double pos) {
-        hoodTalon.set(ControlMode.Position, pos);
+        m_desiredPosition = pos;
+        hoodTalon.set(ControlMode.Position, m_desiredPosition);
+    }
+
+    public boolean isAtPosition() {
+        return (Math.abs(getPosition() - m_desiredPosition) < POSITION_TOLERANCE);
     }
 
     public double getPosition() {

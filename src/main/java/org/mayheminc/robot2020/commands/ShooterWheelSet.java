@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterWheelSet extends CommandBase {
   double m_rpm;
-  boolean m_waitForSpeed;
+  boolean m_waitForDone;
 
   public ShooterWheelSet(double rpm) {
     this(rpm, false);
@@ -27,7 +27,7 @@ public class ShooterWheelSet extends CommandBase {
     addRequirements(RobotContainer.shooterWheel);
 
     m_rpm = rpm;
-    m_waitForSpeed = wait;
+    m_waitForDone = wait;
   }
 
   // Called when the command is initially scheduled.
@@ -39,7 +39,7 @@ public class ShooterWheelSet extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if( m_waitForSpeed)
+    if( m_waitForDone)
     {
       return  (Math.abs( m_rpm - RobotContainer.shooterWheel.getSpeed() ) < 100);
     }

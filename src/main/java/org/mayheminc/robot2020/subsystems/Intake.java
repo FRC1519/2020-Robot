@@ -74,7 +74,8 @@ public class Intake extends SubsystemBase implements PidTunerObject {
 
     motor.setNeutralMode(NeutralMode.Coast);
     motor.setInverted(false);
-    // in general, sensor phase inversion needed for gearboxes which reverse sensor direction due to odd number of stages
+    // in general, sensor phase inversion needed for gearboxes which reverse sensor
+    // direction due to odd number of stages
     motor.setSensorPhase(true);
     motor.configNominalOutputVoltage(+0.0f, -0.0f);
     motor.configPeakOutputVoltage(+12.0, -12.0);
@@ -100,7 +101,6 @@ public class Intake extends SubsystemBase implements PidTunerObject {
 
   public void setPivot(Double b) {
     m_targetPosition = b;
-
     mode = PivotMode.PID_MODE;
     isMoving = true;
   }
@@ -121,11 +121,10 @@ public class Intake extends SubsystemBase implements PidTunerObject {
   private void updatePivotPower() {
 
     if (mode == PivotMode.PID_MODE) {
-
-      // if the pivot is close enough, turn off the motor
+      // if the pivot is close enough, turn the motor on gently downards
       if (Math.abs(pivotTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH) {
         isMoving = false;
-        setPivotVBus(0);
+        setPivotVBus(-0.05);
       } else {
         pivotTalon.set(ControlMode.Position, m_targetPosition, DemandType.ArbitraryFeedForward, m_feedForward);
       }

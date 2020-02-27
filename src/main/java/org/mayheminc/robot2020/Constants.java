@@ -34,8 +34,8 @@ public final class Constants {
         public static final int INTAKE_ROLLERS = 9;
         public static final int INTAKE_PIVOT = 10;
 
-        public static final int MAGAZINE_TURNTABLE = 11;
-        public static final int MAGAZINE_CHIMNEY = 12;
+        public static final int REVOLVER_TURNTABLE = 11;
+        public static final int CHIMNEY_ROLLER = 12;
 
         public static final int CLIMBER_WINCH_LEFT = 14; // high current
         public static final int CLIMBER_WINCH_RIGHT = 13; // high current
