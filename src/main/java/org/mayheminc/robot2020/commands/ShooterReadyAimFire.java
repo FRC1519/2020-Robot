@@ -32,7 +32,7 @@ public class ShooterReadyAimFire extends SequentialCommandGroup {
     // to speed
     addCommands(new ParallelRaceGroup(
         new ParallelCommandGroup(/* new TargetingIsOnTarget(), */ new ShooterWheelSet(3000.0, true)),
-        new TurretAimToTarget()));
+        new TurretAimToTargetContinuously()));
 
     // turn on the feeder, wait 0.1, turn on the Chimney, wait 0.1, turn on the
     // revolver turntable, shoot for specified duration

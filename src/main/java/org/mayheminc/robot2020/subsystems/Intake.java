@@ -37,8 +37,8 @@ public class Intake extends SubsystemBase implements PidTunerObject {
     MANUAL_MODE, PID_MODE,
   };
 
-  PivotMode mode = PivotMode.MANUAL_MODE;
-  boolean isMoving;
+  PivotMode m_mode = PivotMode.MANUAL_MODE;
+  boolean m_isMoving;
   double m_targetPosition;
   double m_feedForward;
   Timer m_pidTimer = new Timer();
@@ -104,14 +104,14 @@ public class Intake extends SubsystemBase implements PidTunerObject {
 
   public void setPivot(Double b) {
     m_targetPosition = b;
-    mode = PivotMode.PID_MODE;
-    isMoving = true;
+    m_mode = PivotMode.PID_MODE;
+    m_isMoving = true;
 
     m_pidTimer.start();
   }
 
   public boolean isPivotAtPosition() {
-    return !isMoving;
+    return !m_isMoving;
   }
 
   @Override
@@ -125,12 +125,12 @@ public class Intake extends SubsystemBase implements PidTunerObject {
 
   private void updatePivotPower() {
 
-    if (mode == PivotMode.PID_MODE) {
+    if (m_mode == PivotMode.PID_MODE) {
       // if the pivot is close enough or it has been on too long, turn the motor on
       // gently downards
       if ((Math.abs(pivotTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH)
           || m_pidTimer.hasPeriodPassed(Intake.MAX_PID_MOVEMENT_TIME_SEC)) {
-        isMoving = false;
+        m_isMoving = false;
 
         // if the current position is closer to PIVOT UP than PIVOT DOWN, apply a little
         // positive power.
@@ -171,14 +171,14 @@ public class Intake extends SubsystemBase implements PidTunerObject {
     SmartDashboard.putNumber("Intake Target", m_targetPosition);
     SmartDashboard.putNumber("Intake FeedForward", m_feedForward);
 
-    SmartDashboard.putBoolean("Intake Is Moving", isMoving);
-    SmartDashboard.putBoolean("Intake PID Mode", (mode == PivotMode.PID_MODE));
+    SmartDashboard.putBoolean("Intake Is Moving", m_isMoving);
+    SmartDashboard.putBoolean("Intake PID Mode", (m_mode == PivotMode.PID_MODE));
     SmartDashboard.putNumber("Intake Rollers", rollerTalon.getMotorOutputPercent());
   }
 
   public void setPivotVBus(double VBus) {
     pivotTalon.set(ControlMode.PercentOutput, VBus);
-    mode = PivotMode.MANUAL_MODE;
+    m_mode = PivotMode.MANUAL_MODE;
   }
 
   @Override

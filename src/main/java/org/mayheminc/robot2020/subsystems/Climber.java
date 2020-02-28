@@ -23,8 +23,10 @@ public class Climber extends SubsystemBase {
 
   private final MayhemTalonSRX winchLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_LEFT);
   private final MayhemTalonSRX winchRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_RIGHT);
-  // private final MayhemTalonSRX walkerLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
-  // private final MayhemTalonSRX walkerRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_RIGHT);
+  // private final MayhemTalonSRX walkerLeft = new
+  // MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
+  // private final MayhemTalonSRX walkerRight = new
+  // MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_RIGHT);
 
   private final Solenoid pistons = new Solenoid(Constants.Solenoid.CLIMBER_PISTONS);
 
@@ -33,8 +35,6 @@ public class Climber extends SubsystemBase {
    */
   public Climber() {
 
-    // TODO:  Add position control to go all the way to the top, and nearly all the way in for climbing
-    
     winchLeft.setNeutralMode(NeutralMode.Brake);
     winchLeft.configNominalOutputVoltage(+0.0f, -0.0f);
     winchLeft.configPeakOutputVoltage(+12.0, -12.0);
@@ -52,7 +52,7 @@ public class Climber extends SubsystemBase {
     winchRight.configForwardSoftLimitEnable(true);
     winchRight.configReverseSoftLimitThreshold(MIN_HEIGHT_SOFT_LIMIT);
     winchRight.configReverseSoftLimitEnable(true);
-    
+
     // walkerRight.setNeutralMode(NeutralMode.Brake);
     // walkerRight.configNominalOutputVoltage(+0.0f, -0.0f);
     // walkerRight.configPeakOutputVoltage(+12.0, -12.0);
@@ -86,11 +86,11 @@ public class Climber extends SubsystemBase {
   }
 
   // public void setWalkerLeftSpeed(double power) {
-  //   walkerLeft.set(ControlMode.Velocity, power);
+  // walkerLeft.set(ControlMode.Velocity, power);
   // }
 
   // public void setWalkerRightSpeed(double power) {
-  //   walkerRight.set(ControlMode.Velocity, power);
+  // walkerRight.set(ControlMode.Velocity, power);
   // }
 
   public void setPistons(boolean b) {

@@ -199,11 +199,10 @@ public class RobotContainer {
         DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterWheelAdjust(50.0));
         DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterWheelAdjust(-50.0));
         DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterWheelSetVBus(0.0));
-        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterWheelSet(3000));
+        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON
+                .whenPressed(new ShooterWheelSet(RobotContainer.shooterWheel.SHOOTER_WHEEL_INITIATION_LINE_SPEED));
 
         DRIVER_PAD.DRIVER_PAD_BACK_BUTTON.whileHeld(new DriveStraight(0.1));
-        // TODO: above hard-coded constant (3000) should be a named constant from
-        // Shooter.java
 
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whenHeld(new ShooterFiringSequence(60.0));
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whenReleased(new ShooterCeaseFire());

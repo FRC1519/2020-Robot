@@ -11,11 +11,11 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class TurretAimToTarget extends CommandBase {
+public class TurretAimToTargetContinuously extends CommandBase {
   /**
    * Creates a new TurretAimToTarget.
    */
-  public TurretAimToTarget() {
+  public TurretAimToTargetContinuously() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.turret);
   }
@@ -28,7 +28,11 @@ public class TurretAimToTarget extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // TODO: may want to only aim at the target if recent valid target data from the
+    // camera
     double pos = RobotContainer.targeting.getDesiredAzimuth();
+    // TODO: if the desired azimuth is "beyond the soft stop" should we turn the
+    // robot?
     RobotContainer.turret.setPositionAbs(pos);
   }
 

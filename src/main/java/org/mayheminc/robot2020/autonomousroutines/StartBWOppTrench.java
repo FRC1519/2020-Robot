@@ -27,7 +27,7 @@ public class StartBWOppTrench extends SequentialCommandGroup {
                 // lower the intake and turn it on before driving forwards
                 addCommands(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
                 addCommands(new IntakeSetRollers(-1.0));
-                addCommands(new Wait(5.0));
+                addCommands(new Wait(2.5));
 
                 // make sure the hood is down
                 addCommands(new HoodSetAbsWhileHeld(Hood.TARGET_ZONE_POSITION));
@@ -52,6 +52,9 @@ public class StartBWOppTrench extends SequentialCommandGroup {
 
                 // turn on the intake gently while shooting to help balls settle
                 addCommands(new IntakeSetRollers(-0.2));
+
+                // wait 2/10 of a second to get some camera data after turning turret
+                addCommands(new Wait(0.2));
 
                 // use the "one button" firing sequence
                 addCommands(new ShooterFiringSequence(5.0));
