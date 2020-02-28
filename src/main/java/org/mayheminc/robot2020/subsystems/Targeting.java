@@ -37,9 +37,6 @@ public class Targeting extends SubsystemBase {
   // encoder ticks * turret pulley teeth / drive pulley teeth / 360 degrees
   private final double TICKS_PER_DEGREE = (4096.0 * 225.0 / 18.0 / 360.0); // was 6300 / 45
 
-  private static final double SPEED_EQ_M = -4.115;
-  private static final double SPEED_EQ_B = 2.244;
-
   // After computing a desired azimuth, add a "fudge" offset to correct
   // empirically measured error. Offset should be in azimuth "ticks."
   private static final double AZIMUTH_CORRECTION_OFFSET = 0.0; // was -2.0 at CMP
@@ -162,29 +159,6 @@ public class Targeting extends SubsystemBase {
     return m_desiredWheelSpeed;
   }
 
-  public double getRecommendedSpeed() {
-    // Returns a speed based upon the Y value
-    double speed;
-
-    if (m_bestY < 0.1) {
-      // can't see the target, set speed to something real slow
-      speed = 0.2;
-    } else {
-
-      // use the equation to determine the speed from m_bestY
-      speed = (SPEED_EQ_M * m_bestY) + SPEED_EQ_B;
-
-      // enforce min speed of 0.30 and max speed of 0.90
-      if (speed < 0.30) {
-        speed = 0.30;
-      } else if (speed > 0.90) {
-        speed = 0.90;
-      }
-    }
-
-    return speed;
-  }
-
   /**
    * Return the desired turrent encoder ticks in the turret for the center of the
    * target.
@@ -240,7 +214,7 @@ public class Targeting extends SubsystemBase {
    * 
    * @return
    */
-  public double getRangeFromY() {
+  private double getRangeFromY() {
     return 8.11 + -9.17 * m_bestY + 33.9 * m_bestY * m_bestY;
   }
 
@@ -249,7 +223,7 @@ public class Targeting extends SubsystemBase {
    * 
    * @return
    */
-  public double getRangeFromArea() {
+  private double getRangeFromArea() {
     return 0.912 * Math.pow(m_area, -0.695);
   }
 

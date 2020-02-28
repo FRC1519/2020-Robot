@@ -18,7 +18,6 @@ public class ShooterAimToTarget extends CommandBase {
   public ShooterAimToTarget() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.hood);
-    addRequirements(RobotContainer.shooterWheel);
     addRequirements(RobotContainer.turret);
   }
 
@@ -42,7 +41,7 @@ public class ShooterAimToTarget extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     if (!interrupted) {
-      RobotContainer.shooterWheel.setSpeed(RobotContainer.targeting.getDesiredWheelSpeed());
+      // RobotContainer.shooterWheel.setSpeed(RobotContainer.targeting.getDesiredWheelSpeed());
 
       // want to also schedule a command here that does the shooting!
     }

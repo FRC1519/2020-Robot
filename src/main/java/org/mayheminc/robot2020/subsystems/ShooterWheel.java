@@ -22,15 +22,16 @@ public class ShooterWheel extends SubsystemBase implements PidTunerObject {
 
     public static final double SHOOTER_WHEEL_INITIATION_LINE_SPEED = 3000.0;
     public static final double SHOOTER_WHEEL_TRENCH_FRONT_SPEED = 3400.0;
+    private static final double MAX_SPEED_RPM = 3500;
 
     double m_targetSpeedRPM;
 
-    // Note:  for ease of thinking, 1 RPM =~ 3.4 native units for the shooter
+    // Note: for ease of thinking, 1 RPM =~ 3.4 native units for the shooter
     double convertRpmToTicksPer100ms(double rpm) {
         return rpm / SECONDS_PER_MINUTE * TALON_TICKS_PER_REV / HUNDRED_MS_PER_SECOND;
     }
 
-    // Note:  3.413 native units =~ 1.0 RPM for the shooter
+    // Note: 3.413 native units =~ 1.0 RPM for the shooter
     double convertTicksPer100msToRPM(double ticks) {
         return ticks * HUNDRED_MS_PER_SECOND / TALON_TICKS_PER_REV * SECONDS_PER_MINUTE;
     }
@@ -46,6 +47,7 @@ public class ShooterWheel extends SubsystemBase implements PidTunerObject {
         configureWheelFalcons();
         setSpeedVBus(0.0);
     }
+
     // configure a pair of shooter wheel falcons
     private void configureWheelFalcons() {
         // most of the configuration is shared for the two Falcons
@@ -56,23 +58,25 @@ public class ShooterWheel extends SubsystemBase implements PidTunerObject {
         shooterWheelLeft.setInverted(false);
         shooterWheelRight.setInverted(true);
     }
+
     private void configureOneWheelFalcon(MayhemTalonSRX shooterWheelFalcon) {
         shooterWheelFalcon.setFeedbackDevice(FeedbackDevice.IntegratedSensor);
         shooterWheelFalcon.setNeutralMode(NeutralMode.Coast);
         shooterWheelFalcon.configNominalOutputVoltage(+0.0f, -0.0f);
         shooterWheelFalcon.configPeakOutputVoltage(+12.0, 0.0);
-        shooterWheelFalcon.configNeutralDeadband(0.001);  // Config neutral deadband to be the smallest possible
+        shooterWheelFalcon.configNeutralDeadband(0.001); // Config neutral deadband to be the smallest possible
 
         // For PIDF computations, 1023 is interpreted as "full" motor output
         // Velocity is in native units of TicksPer100ms.
         // 1000rpm =~ 3413 native units.
-        // P of "3.0" means that full power applied with error of 341 native units = 100rpm
-        //   (above also means that 50% power boost applied with error of 50rpm)
-        shooterWheelFalcon.config_kP(0, 0.1, 0);  // previously used 3.0
+        // P of "3.0" means that full power applied with error of 341 native units =
+        // 100rpm
+        // (above also means that 50% power boost applied with error of 50rpm)
+        shooterWheelFalcon.config_kP(0, 0.1, 0); // previously used 3.0
         shooterWheelFalcon.config_kI(0, 0.0, 0);
-        shooterWheelFalcon.config_kD(0, 0.0, 0);  // CTRE recommends starting at 10x P-gain
-        shooterWheelFalcon.config_kF(0, 0.046, 0);    // 1023.0 / convertRpmToTicksPer100ms(5760), 0);
-        shooterWheelFalcon.configAllowableClosedloopError(0, 0, 0);   // no "neutral" zone around target
+        shooterWheelFalcon.config_kD(0, 0.0, 0); // CTRE recommends starting at 10x P-gain
+        shooterWheelFalcon.config_kF(0, 0.046, 0); // 1023.0 / convertRpmToTicksPer100ms(5760), 0);
+        shooterWheelFalcon.configAllowableClosedloopError(0, 0, 0); // no "neutral" zone around target
     }
 
     @Override
@@ -80,7 +84,6 @@ public class ShooterWheel extends SubsystemBase implements PidTunerObject {
         // This method will be called once per scheduler run
         UpdateDashboard();
     }
-
 
     private void UpdateDashboard() {
         SmartDashboard.putNumber("Shooter Wheel pos", shooterWheelLeft.getSelectedSensorPosition(0));
@@ -117,6 +120,11 @@ public class ShooterWheel extends SubsystemBase implements PidTunerObject {
      * @param rpm
      */
     public void setSpeed(double rpm) {
+
+        if (rpm > MAX_SPEED_RPM) {
+            rpm = MAX_SPEED_RPM;
+        }
+
         m_targetSpeedRPM = rpm;
         double ticks = convertRpmToTicksPer100ms(rpm);
         shooterWheelLeft.set(ControlMode.Velocity, ticks);

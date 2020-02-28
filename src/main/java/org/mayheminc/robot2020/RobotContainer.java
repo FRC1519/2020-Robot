@@ -106,18 +106,19 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-        autonomousPrograms.push(/* 11 */ new StayStill());
-        autonomousPrograms.push(/* 10 */ new StartBWDriveOnlyToRP());
-        autonomousPrograms.push(/* 09 */ new StartBWDriveOnlyToWall());
-        autonomousPrograms.push(/* 08 */ new StartFWDriveOnlyToRP());
-        autonomousPrograms.push(/* 07 */ new StartFWDriveOnlyToWall());
-        autonomousPrograms.push(/* 06 */ new StartBWShoot3ThenToRP());
-        autonomousPrograms.push(/* 05 */ new StartBWShoot3ThenToWall());
-        autonomousPrograms.push(/* 04 */ new StartFWShoot3ThenToRP());
-        autonomousPrograms.push(/* 03 */ new StartFWShoot3ThenToWall());
-        autonomousPrograms.push(/* 02 */ new StartFWRendezvous());
-        autonomousPrograms.push(/* 01 */ new StartBWOppTrench());
-        autonomousPrograms.push(/* 00 */ new StartBWTrench());
+        autonomousPrograms.push(/* 12 */ new StayStill());
+        autonomousPrograms.push(/* 11 */ new StartBWDriveOnlyToRP());
+        autonomousPrograms.push(/* 10 */ new StartBWDriveOnlyToWall());
+        autonomousPrograms.push(/* 09 */ new StartFWDriveOnlyToRP());
+        autonomousPrograms.push(/* 08 */ new StartFWDriveOnlyToWall());
+        autonomousPrograms.push(/* 07 */ new StartBWShoot3ThenToRP());
+        autonomousPrograms.push(/* 06 */ new StartBWShoot3ThenToWall());
+        autonomousPrograms.push(/* 05 */ new StartFWShoot3ThenToRP());
+        autonomousPrograms.push(/* 04 */ new StartFWShoot3ThenToWall());
+        autonomousPrograms.push(/* 03 */ new StartFWRendezvous());
+        autonomousPrograms.push(/* 02 */ new StartBWOppTrench());
+        autonomousPrograms.push(/* 01 */ new StartBWTrench3());
+        autonomousPrograms.push(/* 00 */ new StartBWTrench5());
 
         autonomous.setAutonomousPrograms(autonomousPrograms);
 
@@ -204,7 +205,9 @@ public class RobotContainer {
         // TODO: above hard-coded constant (3000) should be a named constant from
         // Shooter.java
 
-        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whileHeld(new ShooterPermissionToFire());
+        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whenHeld(new ShooterFiringSequence(60.0));
+        DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whenReleased(new ShooterCeaseFire());
+
         DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new FeederSet(1.0));
 
     }

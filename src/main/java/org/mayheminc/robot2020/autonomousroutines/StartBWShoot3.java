@@ -31,12 +31,14 @@ public class StartBWShoot3 extends SequentialCommandGroup {
                                 new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION),
                                 new TurretSetAbs((180.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
-                addCommands(new ShooterReadyAimFire(1.5));
+                addCommands(new ShooterFiringSequence(1.5));
+
+                // note that the above turns everything off again when it is done.
 
                 // turn the shooter wheel and intake off now that the shooting is all done
-                addCommands(new ParallelCommandGroup( // below commands in parallel
-                                new ShooterWheelSet(0.0), //
-                                new IntakeSetRollers(0.0), // turn off the rollers
-                                new HoodSetAbs(Hood.STARTING_POSITION)));
+                // addCommands(new ParallelRaceGroup( // below commands in parallel
+                // new ShooterWheelSet(0.0), //
+                // new IntakeSetRollers(0.0), // turn off the rollers
+                // new HoodSetAbs(Hood.STARTING_POSITION)));
         }
 }

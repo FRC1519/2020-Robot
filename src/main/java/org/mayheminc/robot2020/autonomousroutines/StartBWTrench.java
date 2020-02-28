@@ -19,13 +19,14 @@ public class StartBWTrench extends SequentialCommandGroup {
         /**
          * Add your docs here.
          */
-        public StartBWTrench() {
+        public StartBWTrench(double extraDistance) {
+                // Note: extra distance planned to be 40 inches
 
                 // start backwards and shoot the first three balls
                 addCommands(new StartBWShoot3());
 
                 // then, drive to the trench entrance (jog left a little to get there)
-                addCommands(new DriveStraightOnHeading(0.5, DistanceUnits.INCHES, 40, 150));
+                addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 46, 140));
 
                 // pick up balls while heading down the trench.
                 addCommands(new ParallelCommandGroup(
@@ -34,7 +35,7 @@ public class StartBWTrench extends SequentialCommandGroup {
                                 // ensure the hood is down
                                 new HoodSetAbsWhileHeld(Hood.STARTING_POSITION),
                                 // drive the path under the control panel to the end
-                                new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 180, 180)));
+                                new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 140 + extraDistance, 180)));
 
                 // now driven to the balls at far end of trench
                 addCommands(new Wait(0.8), // wait for last two balls to get into robot
@@ -44,7 +45,7 @@ public class StartBWTrench extends SequentialCommandGroup {
 
                 // after getting all three balls, go back to shooting position
                 // first, make sure we drive straight out from under the control panel
-                addCommands(new DriveStraightOnHeading(-0.5, DistanceUnits.INCHES, 48, 180));
+                addCommands(new DriveStraightOnHeading(-0.6, DistanceUnits.INCHES, 8 + extraDistance, 180));
 
                 // drive diagonally over towards the shooting position, while turning on shooter
                 // wheels, raising the hood, and re-aiming the turret
@@ -61,7 +62,7 @@ public class StartBWTrench extends SequentialCommandGroup {
                 addCommands(new IntakeSetRollers(-0.2));
 
                 // start the shooting sequence
-                addCommands(new ShooterReadyAimFire(6.0));
+                addCommands(new ShooterFiringSequence(6.0));
 
                 // turn the shooter wheel and intake off now that the shooting is all done
                 addCommands(new ShooterWheelSet(0.0));

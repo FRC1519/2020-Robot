@@ -9,9 +9,9 @@ package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HoodSetAbsWhileHeld extends InstantCommand {
+public class HoodSetAbsWhileHeld extends CommandBase {
   double m_set;
 
   /**
@@ -28,6 +28,11 @@ public class HoodSetAbsWhileHeld extends InstantCommand {
   @Override
   public void initialize() {
     RobotContainer.hood.setPosition(m_set);
+  }
+
+  @Override
+  public boolean isFinished() {
+    return true;
   }
 
 }

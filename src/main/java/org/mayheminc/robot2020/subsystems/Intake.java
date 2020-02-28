@@ -17,6 +17,7 @@ import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,6 +31,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
   public final double PIVOT_DOWN = 0.0;
 
   private static final double HORIZONTAL_HOLD_OUTPUT = 0.00;
+  private static final double MAX_PID_MOVEMENT_TIME_SEC = 10.0;
 
   enum PivotMode {
     MANUAL_MODE, PID_MODE,
@@ -39,6 +41,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
   boolean isMoving;
   double m_targetPosition;
   double m_feedForward;
+  Timer m_pidTimer = new Timer();
 
   /**
    * Creates a new Intake.
@@ -103,6 +106,8 @@ public class Intake extends SubsystemBase implements PidTunerObject {
     m_targetPosition = b;
     mode = PivotMode.PID_MODE;
     isMoving = true;
+
+    m_pidTimer.start();
   }
 
   public boolean isPivotAtPosition() {
@@ -121,8 +126,10 @@ public class Intake extends SubsystemBase implements PidTunerObject {
   private void updatePivotPower() {
 
     if (mode == PivotMode.PID_MODE) {
-      // if the pivot is close enough, turn the motor on gently downards
-      if (Math.abs(pivotTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH) {
+      // if the pivot is close enough or it has been on too long, turn the motor on
+      // gently downards
+      if ((Math.abs(pivotTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH)
+          || m_pidTimer.hasPeriodPassed(Intake.MAX_PID_MOVEMENT_TIME_SEC)) {
         isMoving = false;
 
         // if the current position is closer to PIVOT UP than PIVOT DOWN, apply a little
