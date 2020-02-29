@@ -14,11 +14,11 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class TargetingIsOnTarget extends CommandBase {
+public class TurretIsOnTarget extends CommandBase {
   /**
    * Creates a new TargetingIsOnTarget.
    */
-  public TargetingIsOnTarget() {
+  public TurretIsOnTarget() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -30,12 +30,6 @@ public class TargetingIsOnTarget extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // double bearingToTarget = RobotContainer.targeting.getBearingToTarget();
-    // double rangeToTarget = RobotContainer.targeting.getRangeToTarget();
-
-    // RobotContainer.shooter.setTurretPositionRel(RobotContainer.shooter.getTurretPosition()
-    // + bearingToTarget);
-    // RobotContainer.shooter.setShooterWheelSpeed(Targeting.convertRangeToWheelSpeed(rangeToTarget));
   }
 
   // Called once the command ends or is interrupted.
@@ -46,16 +40,9 @@ public class TargetingIsOnTarget extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // boolean bearingGood = Math.abs(RobotContainer.targeting.getBearingToTarget())
-    // < 2;
-    // boolean wheelsGood =
-    // Math.abs(Targeting.convertRangeToWheelSpeed(RobotContainer.targeting.getRangeToTarget())
-    // - RobotContainer.shooter.getShooterWheelSpeed()) < 100;
-    // return bearingGood && wheelsGood;
-
     double targetPos = RobotContainer.targeting.getDesiredAzimuth();
     double turretPos = RobotContainer.turret.getPosition();
 
-    return ( Math.abs( targetPos - turretPos) < 50);
+    return (Math.abs(targetPos - turretPos) < 50);
   }
 }
