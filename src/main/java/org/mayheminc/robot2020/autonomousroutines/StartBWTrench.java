@@ -49,7 +49,7 @@ public class StartBWTrench extends SequentialCommandGroup {
 
                 // drive diagonally over towards the shooting position, while turning on shooter
                 // wheels, raising the hood, and re-aiming the turret
-                addCommands(new ParallelCommandGroup(new ShooterWheelSet(ShooterWheel.INITIATION_LINE_SPEED),
+                addCommands(new ParallelCommandGroup(new ShooterWheelSet(ShooterWheel.IDLE_SPEED),
                                 new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION),
                                 new TurretSetAbs((168.0 * Turret.TICKS_PER_DEGREE)),
                                 new DriveStraightOnHeading(-0.5, DistanceUnits.INCHES, 96, 160)));
