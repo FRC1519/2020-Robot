@@ -7,6 +7,9 @@
 
 package org.mayheminc.robot2020.commands;
 
+import org.mayheminc.robot2020.RobotContainer;
+
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -22,11 +25,11 @@ public class ShooterFiringSequence extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super();
 
-    // Turn off compressor while actively shooting.
-    addCommands(new AirCompressorPause());
-
-    // one last aim at the target before starting shooting.
-    addCommands(new ShooterAimToTarget());
+    // shooting.
+    addCommands(new ParallelCommandGroup( // prepare for shooting,
+        new AirCompressorPause(), // Turn off compressor while actively shooting,
+        new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN), // ensure intake is lowered,
+        new ShooterAimToTarget())); // take one last aim at the target before starting
 
     addCommands(new ParallelRaceGroup(new ShooterWheelSetToTarget(true), new TurretAimToTargetContinuously()));
 
@@ -36,7 +39,7 @@ public class ShooterFiringSequence extends SequentialCommandGroup {
     addCommands(new ParallelRaceGroup( //
         new TurretAimToTargetContinuously(), // continue aiming while shooting
         new FeederSet(1.0), new SequentialCommandGroup(new Wait(0.1), new ChimneySet(1.0)),
-        new SequentialCommandGroup(new Wait(0.2), new RevolverSetTurntable(0.3)), new Wait(waitDuration)));
+        new SequentialCommandGroup(new Wait(0.2), new RevolverSetTurntable(0.5)), new Wait(waitDuration)));
 
     // turn off the feeder, chimney, and revolver, ending after 0.1 seconds
     addCommands(new ShooterCeaseFire());

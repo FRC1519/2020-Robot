@@ -199,8 +199,7 @@ public class RobotContainer {
         DRIVER_PAD.DRIVER_PAD_BLUE_BUTTON.whenPressed(new ShooterWheelAdjust(50.0));
         DRIVER_PAD.DRIVER_PAD_GREEN_BUTTON.whenPressed(new ShooterWheelAdjust(-50.0));
         DRIVER_PAD.DRIVER_PAD_RED_BUTTON.whenPressed(new ShooterWheelSetVBus(0.0));
-        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON
-                .whenPressed(new ShooterWheelSet(RobotContainer.shooterWheel.SHOOTER_WHEEL_INITIATION_LINE_SPEED));
+        DRIVER_PAD.DRIVER_PAD_YELLOW_BUTTON.whenPressed(new ShooterWheelSet(ShooterWheel.INITIATION_LINE_SPEED));
 
         DRIVER_PAD.DRIVER_PAD_BACK_BUTTON.whileHeld(new DriveStraight(0.1));
 
@@ -217,7 +216,7 @@ public class RobotContainer {
     private void configureOperatorPadButtons() {
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whileHeld(new RevolverSetTurntable(0.2));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whileHeld(new RevolverSetTurntable(0.5));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whileHeld(new RevolverSetTurntable(1.0));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
 
         // new ShooterSetWheel(1000));

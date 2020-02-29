@@ -32,7 +32,7 @@ public class StartFWRendezvous extends SequentialCommandGroup {
                 // is turned towards the target
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
                                 new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN),
-                                new ShooterWheelSet(ShooterWheel.SHOOTER_WHEEL_INITIATION_LINE_SPEED),
+                                new ShooterWheelSet(ShooterWheel.INITIATION_LINE_SPEED),
                                 new HoodSetAbs(Hood.INITIATION_LINE_POSITION),
                                 new TurretSetAbs((10.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
@@ -63,7 +63,7 @@ public class StartFWRendezvous extends SequentialCommandGroup {
 
                 // in shooting position, prepare everything for shooting
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
-                                new ShooterWheelSet(ShooterWheel.SHOOTER_WHEEL_TRENCH_FRONT_SPEED),
+                                new ShooterWheelSet(ShooterWheel.TRENCH_FRONT_SPEED),
                                 new TurretSetAbs((0.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
                 // turn on the intake gently while shooting to help balls settle
@@ -71,7 +71,7 @@ public class StartFWRendezvous extends SequentialCommandGroup {
                 addCommands(new ShooterFiringSequence(6.0));
 
                 // turn the shooter wheel and intake off now that the shooting is all done
-                addCommands(new ShooterWheelSet(0.0));
+                addCommands(new ShooterWheelSet(ShooterWheel.IDLE_SPEED));
                 addCommands(new IntakeSetRollers(0.0));
 
                 // turn the wheel off now that the shooting is all done

@@ -206,7 +206,13 @@ public class Targeting extends SubsystemBase {
    * @return
    */
   private double getWheelSpeedFromY() {
-    return 2618 + -1939 * m_bestY + 3583 * m_bestY * m_bestY;
+    double computedWheelSpeed = 2618 + -1939 * m_bestY + 3583 * m_bestY * m_bestY;
+    if (computedWheelSpeed < ShooterWheel.IDLE_SPEED) {
+      computedWheelSpeed = ShooterWheel.IDLE_SPEED;
+    } else if (computedWheelSpeed > ShooterWheel.MAX_SPEED_RPM) {
+      computedWheelSpeed = ShooterWheel.MAX_SPEED_RPM;
+    }
+    return computedWheelSpeed;
   }
 
   /**

@@ -46,7 +46,7 @@ public class StartBWOppTrench extends SequentialCommandGroup {
 
                 // in shooting position, prepare everything for shooting
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
-                                new ShooterWheelSet(ShooterWheel.SHOOTER_WHEEL_INITIATION_LINE_SPEED),
+                                new ShooterWheelSet(ShooterWheel.INITIATION_LINE_SPEED),
                                 new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION + 3000.0),
                                 new TurretSetAbs((105.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
@@ -60,7 +60,7 @@ public class StartBWOppTrench extends SequentialCommandGroup {
                 addCommands(new ShooterFiringSequence(5.0));
 
                 // turn the shooter wheel and intake off now that the shooting is all done
-                addCommands(new ShooterWheelSet(0.0));
+                addCommands(new ShooterWheelSet(ShooterWheel.IDLE_SPEED));
                 addCommands(new IntakeSetRollers(0.0));
 
                 // turn the wheel off now that the shooting is all done
