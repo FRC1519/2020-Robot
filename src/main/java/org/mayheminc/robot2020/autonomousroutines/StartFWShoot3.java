@@ -7,9 +7,9 @@
 
 package org.mayheminc.robot2020.autonomousroutines;
 
-import org.mayheminc.robot2020.RobotContainer;
 import org.mayheminc.robot2020.commands.*;
 import org.mayheminc.robot2020.subsystems.Hood;
+import org.mayheminc.robot2020.subsystems.Intake;
 import org.mayheminc.robot2020.subsystems.ShooterWheel;
 import org.mayheminc.robot2020.subsystems.Turret;
 
@@ -26,7 +26,7 @@ public class StartFWShoot3 extends SequentialCommandGroup {
                 // first, lower the intake, start the shooter wheel, and wait until the turret
                 // is turned towards the target
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
-                                new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN),
+                                new IntakeSetPosition(Intake.PIVOT_DOWN),
                                 new ShooterWheelSet(ShooterWheel.INITIATION_LINE_SPEED),
                                 new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION),
                                 new TurretSetAbs((0.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));

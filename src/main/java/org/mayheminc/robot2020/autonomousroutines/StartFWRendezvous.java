@@ -7,10 +7,10 @@
 
 package org.mayheminc.robot2020.autonomousroutines;
 
-import org.mayheminc.robot2020.RobotContainer;
 import org.mayheminc.robot2020.commands.*;
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading.DistanceUnits;
 import org.mayheminc.robot2020.subsystems.Hood;
+import org.mayheminc.robot2020.subsystems.Intake;
 import org.mayheminc.robot2020.subsystems.ShooterWheel;
 import org.mayheminc.robot2020.subsystems.Turret;
 
@@ -25,14 +25,13 @@ public class StartFWRendezvous extends SequentialCommandGroup {
                 // start out facing in the normal direction
                 addCommands(new DriveZeroGyro(0.0));
 
-                addCommands(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
+                addCommands(new IntakeSetPosition(Intake.PIVOT_DOWN));
 
                 // shoot the 3 balls we started with
                 // first, lower the intake, start the shooter wheel, and wait until the turret
                 // is turned towards the target
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
-                                new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN),
-                                new ShooterWheelSet(ShooterWheel.IDLE_SPEED),
+                                new IntakeSetPosition(Intake.PIVOT_DOWN), new ShooterWheelSet(ShooterWheel.IDLE_SPEED),
                                 new HoodSetAbs(Hood.INITIATION_LINE_POSITION),
                                 new TurretSetAbs((10.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
@@ -43,7 +42,7 @@ public class StartFWRendezvous extends SequentialCommandGroup {
 
                 // now that we are clear of other robots, lower the intake while backing up
                 // further
-                addCommands(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
+                addCommands(new IntakeSetPosition(Intake.PIVOT_DOWN));
 
                 // raise the hood a little to shoot from this increased distance
                 addCommands(new HoodSetAbsWhileHeld((Hood.INITIATION_LINE_POSITION + Hood.TRENCH_MID_POSITION) / 2.0));

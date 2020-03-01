@@ -85,20 +85,15 @@ public class RobotContainer {
         // intake.setDefaultCommand(new IntakeExtenderVBus());
         revolver.setDefaultCommand(new RevolverDefault());
 
-        // TODO: Figure out if the current approach of "AirCompressorDefault()" is the
-        // way to go for compressor control.
         // KBS doesn't think the below is the right way to have the compressor be on "by
-        // default" because
-        // it would require there to always be a command running to keep the compressor
-        // off. However, that
-        // is a good way to ensure it doesn't get left off by accident. Not quite sure
-        // how to handle this;
+        // default" because it would require there to always be a command running to
+        // keep the compressor off.
+        // However, that is a good way to ensure it doesn't get left off by accident.
+        // Not quite sure how to handle this;
         // would really rather that other commands which need the compressor off (such
-        // as a high-power command
-        // which wants all the battery power available) would turn the compressor off
-        // when the command starts
-        // and off when the command ends.) Then again, maybe the "defaultCommand" is a
-        // good way to do this
+        // as a high-power command which wants all the battery power available) would
+        // turn the compressor off when the command starts and off when the command
+        // ends.) Then again, maybe the "defaultCommand" is a good way to do this
         // and I just don't understand the style yet.
         // compressor.setDefaultCommand(new AirCompressorDefault());
     }
@@ -206,7 +201,11 @@ public class RobotContainer {
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whenHeld(new ShooterFiringSequence(60.0));
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whenReleased(new ShooterCeaseFire());
 
-        DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new FeederSet(1.0));
+        DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new ShooterCloseFiringSequence(60.0));
+        DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whenReleased(new ShooterCeaseFire());
+
+        // DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new
+        // FeederSet(1.0));
 
     }
 
@@ -215,9 +214,9 @@ public class RobotContainer {
 
     private void configureOperatorPadButtons() {
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_ONE.whileHeld(new RevolverSetTurntable(0.2));
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_TWO.whenPressed(new IntakeSetPosition(Intake.PIVOT_DOWN));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_THREE.whileHeld(new RevolverSetTurntable(1.0));
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_FOUR.whenPressed(new IntakeSetPosition(Intake.PIVOT_UP));
 
         // new ShooterSetWheel(1000));
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_FIVE.whileHeld(new ChimneySet(1.0));

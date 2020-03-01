@@ -7,10 +7,10 @@
 
 package org.mayheminc.robot2020.autonomousroutines;
 
-import org.mayheminc.robot2020.RobotContainer;
 import org.mayheminc.robot2020.commands.*;
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading.DistanceUnits;
 import org.mayheminc.robot2020.subsystems.Hood;
+import org.mayheminc.robot2020.subsystems.Intake;
 import org.mayheminc.robot2020.subsystems.ShooterWheel;
 import org.mayheminc.robot2020.subsystems.Turret;
 
@@ -24,10 +24,11 @@ public class StartBWOppTrench extends SequentialCommandGroup {
 
                 addCommands(new DriveZeroGyro(180.0));
 
-                // lower the intake and turn it on before driving forwards
-                addCommands(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
-                addCommands(new IntakeSetRollers(-1.0));
+                // lower the intake and wait for it to be on before turning on rollers or
+                // driving forwards
+                addCommands(new IntakeSetPosition(Intake.PIVOT_DOWN));
                 addCommands(new Wait(2.5));
+                addCommands(new IntakeSetRollers(-1.0));
 
                 // make sure the hood is down
                 addCommands(new HoodSetAbsWhileHeld(Hood.TARGET_ZONE_POSITION));
@@ -37,7 +38,7 @@ public class StartBWOppTrench extends SequentialCommandGroup {
 
                 // now driven to get the balls from opposing trench
                 addCommands(new Wait(0.8), // wait for last two balls to get into robot
-                                new IntakeSetRollers(0), // turn off the intake
+                                // new IntakeSetRollers(0), // slow down the intake
                                 new DriveStraightOnHeading(-0.4, DistanceUnits.INCHES, 36, 180)); // start backing up
                                                                                                   // slowly
 
@@ -46,7 +47,7 @@ public class StartBWOppTrench extends SequentialCommandGroup {
 
                 // in shooting position, prepare everything for shooting
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
-                                new ShooterWheelSet(ShooterWheel.INITIATION_LINE_SPEED),
+                                new ShooterWheelSet(ShooterWheel.IDLE_SPEED),
                                 new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION + 3000.0),
                                 new TurretSetAbs((105.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
@@ -57,13 +58,13 @@ public class StartBWOppTrench extends SequentialCommandGroup {
                 addCommands(new Wait(0.2));
 
                 // use the "one button" firing sequence
-                addCommands(new ShooterFiringSequence(5.0));
+                addCommands(new ShooterFiringSequence(6.0));
 
                 // turn the shooter wheel and intake off now that the shooting is all done
                 addCommands(new ShooterWheelSet(ShooterWheel.IDLE_SPEED));
                 addCommands(new IntakeSetRollers(0.0));
 
                 // turn the wheel off now that the shooting is all done
-                addCommands(new HoodSetAbsWhileHeld(Hood.TARGET_ZONE_POSITION));
+                addCommands(new HoodSetAbsWhileHeld(Hood.STARTING_POSITION));
         }
 }

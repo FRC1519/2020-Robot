@@ -8,6 +8,7 @@
 package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.subsystems.Hood;
+import org.mayheminc.robot2020.subsystems.Intake;
 import org.mayheminc.robot2020.subsystems.ShooterWheel;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -31,7 +32,9 @@ public class ShooterCeaseFire extends SequentialCommandGroup {
     addCommands(new ParallelRaceGroup(new FeederSet(0.0), new ChimneySet(0.0), new RevolverSetTurntable(0.0),
         new ShooterWheelSet(ShooterWheel.IDLE_SPEED), new Wait(0.1)));
 
-    // Lower the hood now that we're done shooting
+    // Lower the hood and intake now that we're done shooting
     addCommands(new HoodSetAbsWhileHeld(Hood.STARTING_POSITION));
+    addCommands(new IntakeSetPosition(Intake.PIVOT_DOWN)); // ensure intake is lowered,);
+    addCommands(new IntakeSetRollers(0.0));
   }
 }

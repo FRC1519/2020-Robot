@@ -8,8 +8,9 @@
 package org.mayheminc.robot2020.autonomousroutines;
 
 import org.mayheminc.robot2020.commands.*;
-import org.mayheminc.robot2020.RobotContainer;
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading.DistanceUnits;
+import org.mayheminc.robot2020.subsystems.Intake;
+
 import edu.wpi.first.wpilibj2.command.*;
 
 public class StartFWDriveOnlyToRP extends SequentialCommandGroup {
@@ -22,7 +23,7 @@ public class StartFWDriveOnlyToRP extends SequentialCommandGroup {
                 addCommands(new DriveZeroGyro(0.0));
 
                 // lower the intake
-                addCommands(new IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
+                addCommands(new IntakeSetPosition(Intake.PIVOT_DOWN));
 
                 // then, drive to the RP
                 addCommands(new DriveStraightOnHeading(-0.3, DistanceUnits.INCHES, 12, 0));

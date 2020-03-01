@@ -33,6 +33,10 @@ public class Targeting extends SubsystemBase {
   // Define the "target location" to be halfway from left to right
   private final double CENTER_OF_TARGET_X = 0.475;
 
+  private final double BEST_Y_CLOSE_THRESHOLD = 0.1;
+  private final double CLOSE_WHEEL_SPEED = 3000.0;
+  private final double CLOSE_HOOD_ANGLE = 30000.0;
+
   // Calculate ticks per degree.
   // encoder ticks * turret pulley teeth / drive pulley teeth / 360 degrees
   private final double TICKS_PER_DEGREE = (4096.0 * 225.0 / 18.0 / 360.0); // was 6300 / 45
@@ -197,7 +201,14 @@ public class Targeting extends SubsystemBase {
    * @return
    */
   private double getHoodFromY() {
-    return 105874 + -407324 * m_bestY + 881911 * m_bestY * m_bestY + -506286 * m_bestY * m_bestY * m_bestY;
+    // below is the "curve fit" for the "long shot"
+
+    if (m_bestY < BEST_Y_CLOSE_THRESHOLD) {
+      // too close for the lob shot, switch to the bullet shot
+      return CLOSE_HOOD_ANGLE;
+    } else {
+      return 105874 + -407324 * m_bestY + 881911 * m_bestY * m_bestY + -506286 * m_bestY * m_bestY * m_bestY;
+    }
   }
 
   /**
@@ -207,6 +218,12 @@ public class Targeting extends SubsystemBase {
    */
   private double getWheelSpeedFromY() {
     double computedWheelSpeed = 2618 + -1939 * m_bestY + 3583 * m_bestY * m_bestY;
+
+    if (m_bestY < BEST_Y_CLOSE_THRESHOLD) {
+      // too close for the lob shot, switch to the bullet shot
+      computedWheelSpeed = CLOSE_WHEEL_SPEED;
+    }
+
     if (computedWheelSpeed < ShooterWheel.IDLE_SPEED) {
       computedWheelSpeed = ShooterWheel.IDLE_SPEED;
     } else if (computedWheelSpeed > ShooterWheel.MAX_SPEED_RPM) {
