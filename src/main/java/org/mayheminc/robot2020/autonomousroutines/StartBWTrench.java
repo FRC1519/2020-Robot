@@ -26,7 +26,7 @@ public class StartBWTrench extends SequentialCommandGroup {
                 addCommands(new StartBWShoot3());
 
                 // then, drive to the trench entrance (jog left a little to get there)
-                addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 46, 140));
+                addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 30, 140));
 
                 // pick up balls while heading down the trench.
                 addCommands(new ParallelCommandGroup(
@@ -35,7 +35,7 @@ public class StartBWTrench extends SequentialCommandGroup {
                                 // ensure the hood is down
                                 new HoodSetAbsWhileHeld(Hood.STARTING_POSITION),
                                 // drive the path under the control panel to the end
-                                new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 140 + extraDistance, 180)));
+                                new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 148 + extraDistance, 180)));
 
                 // now driven to the balls at far end of trench
                 addCommands(new Wait(0.8), // wait for last two balls to get into robot
@@ -44,7 +44,7 @@ public class StartBWTrench extends SequentialCommandGroup {
 
                 // after getting all three balls, go back to shooting position
                 // first, make sure we drive straight out from under the control panel
-                addCommands(new DriveStraightOnHeading(-0.6, DistanceUnits.INCHES, 8 + extraDistance, 180));
+                addCommands(new DriveStraightOnHeading(-0.6, DistanceUnits.INCHES, 16 + extraDistance, 180));
                 addCommands(new IntakeSetRollers(0.0)); // turn off the intake in case it has been stalled for a while
 
                 // drive diagonally over towards the shooting position, while turning on shooter

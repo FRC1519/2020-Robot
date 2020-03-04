@@ -51,8 +51,9 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 	// NavX parameters
 	private double m_desiredHeading = 0.0;
 	private boolean m_useHeadingCorrection = true;
-	private static final double HEADING_PID_P = 0.007; // was 0.030 in 2019 for HIGH_GEAR; was 0.007 in early 2020
-	private static final double HEADING_PID_D = 0.080; // was 0.04 in 2019
+	private static final double HEADING_PID_P = 0.010; // was 0.007 at GSD; was 0.030 in 2019 for HIGH_GEAR
+	private static final double HEADING_PID_I = 0.000; // was 0.000 at GSD; was 0.000 in 2019
+	private static final double HEADING_PID_D = 0.080; // was 0.080 at GSD; was 0.04 in 2019
 	private static final double kToleranceDegreesPIDControl = 0.2;
 
 	// Drive parameters
@@ -97,8 +98,8 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 		m_HeadingError = new PIDHeadingError();
 		m_HeadingError.m_Error = 0.0;
 		m_HeadingCorrection = new PIDHeadingCorrection();
-		m_HeadingPid = new PIDController(HEADING_PID_P, 0.000, HEADING_PID_D, m_HeadingError, m_HeadingCorrection,
-				0.020 /* period in seconds */);
+		m_HeadingPid = new PIDController(HEADING_PID_P, HEADING_PID_I, HEADING_PID_D, m_HeadingError,
+				m_HeadingCorrection, 0.020 /* period in seconds */);
 		m_HeadingPid.setInputRange(-180.0f, 180.0f);
 		m_HeadingPid.setContinuous(true); // treats the input range as "continous" with wrap-around
 		m_HeadingPid.setOutputRange(-.50, .50); // set the maximum power to correct twist
@@ -109,6 +110,26 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 		leftRearTalon.setNeutralMode(NeutralMode.Coast);
 		rightFrontTalon.setNeutralMode(NeutralMode.Coast);
 		rightRearTalon.setNeutralMode(NeutralMode.Coast);
+
+		// configure output voltages
+		leftFrontTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+		leftRearTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+		rightFrontTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+		rightRearTalon.configNominalOutputVoltage(+0.0f, -0.0f);
+		leftFrontTalon.configPeakOutputVoltage(+12.0, -12.0);
+		leftRearTalon.configPeakOutputVoltage(+12.0, -12.0);
+		rightFrontTalon.configPeakOutputVoltage(+12.0, -12.0);
+		rightRearTalon.configPeakOutputVoltage(+12.0, -12.0);
+
+		// configure current limits
+		// enabled = true
+		// 40 = limit (amps)
+		// 60 = trigger_threshold (amps)
+		// 0.5 = threshold time(s)
+		leftFrontTalon.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 60, 0.5));
+		leftRearTalon.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 60, 0.5));
+		rightFrontTalon.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 60, 0.5));
+		rightRearTalon.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 60, 0.5));
 
 		// set rear talons to follow their respective front talons
 		leftRearTalon.follow(leftFrontTalon);
@@ -247,13 +268,6 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 	}
 
 	private void resetAndEnableHeadingPID() {
-		// if (Robot.shifter.getGear() == Shifter.HIGH_GEAR) {
-		m_HeadingPid.setP(HEADING_PID_P);
-		// } else
-		// {
-		// low gear
-		// m_HeadingPid.setP(HEADING_PID_P_FOR_LOW_GEAR);
-		// }
 		m_HeadingPid.reset();
 		m_HeadingPid.enable();
 	}
@@ -606,6 +620,8 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 
 		// check for major heading changes and take action to prevent
 		// integral windup if there is a major heading error
+		// TODO: In 2020, this code was causing "wandering" with non-zero HEADING_PID_I.
+		// Worked around issue by setting HEADING_PID_I = 0
 		if (Math.abs(m_HeadingError.m_Error) > 10.0) {
 			if (!m_HeadingPidPreventWindup) {
 				m_HeadingPid.setI(0.0);
@@ -614,7 +630,7 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 			}
 		} else {
 			m_HeadingPidPreventWindup = false;
-			m_HeadingPid.setI(0.001);
+			m_HeadingPid.setI(HEADING_PID_I);
 		}
 
 		return headingCorrection;
@@ -675,6 +691,11 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 
 		SmartDashboard.putNumber("Left Talon Output Voltage", leftFrontTalon.getMotorOutputVoltage());
 		SmartDashboard.putNumber("Right Talon Output Voltage", rightFrontTalon.getMotorOutputVoltage());
+
+		SmartDashboard.putNumber("LF Falcon Supply Current", leftFrontTalon.getSupplyCurrent());
+		SmartDashboard.putNumber("LR Falcon Supply Current", leftRearTalon.getSupplyCurrent());
+		SmartDashboard.putNumber("RF Falcon Supply Current", rightFrontTalon.getSupplyCurrent());
+		SmartDashboard.putNumber("RR Falcon Supply Current", rightRearTalon.getSupplyCurrent());
 
 		SmartDashboard.putBoolean("Closed Loop Mode", m_closedLoopMode);
 		SmartDashboard.putBoolean("Speed Racer Drive Mode", m_speedRacerDriveMode);
