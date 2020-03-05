@@ -7,10 +7,6 @@
 
 package org.mayheminc.robot2020.autonomousroutines;
 
-import org.mayheminc.robot2020.RobotContainer;
-import org.mayheminc.robot2020.commands.ShooterSetTurretAbs;
-import org.mayheminc.robot2020.commands.Wait;
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -25,37 +21,37 @@ public class TestTurret extends SequentialCommandGroup {
     // super(new FooCommand(), new BarCommand());
     super();
 
-    addRequirements(RobotContainer.shooter);
+    // addRequirements(RobotContainer.shooter);
 
-    addCommands(new ShooterSetTurretAbs(-10));
-    addCommands(new Wait(3));
-    addCommands(new ShooterSetTurretAbs(0));
-    addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(-10));
+    // addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(0));
+    // addCommands(new Wait(3));
 
-    addCommands(new ShooterSetTurretAbs(10));
-    addCommands(new Wait(3));
-    addCommands(new ShooterSetTurretAbs(0));
-    addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(10));
+    // addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(0));
+    // addCommands(new Wait(3));
 
-    addCommands(new ShooterSetTurretAbs(-20));
-    addCommands(new Wait(3));
-    addCommands(new ShooterSetTurretAbs(0));
-    addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(-20));
+    // addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(0));
+    // addCommands(new Wait(3));
 
-    addCommands(new ShooterSetTurretAbs(20));
-    addCommands(new Wait(3));
-    addCommands(new ShooterSetTurretAbs(0));
-    addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(20));
+    // addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(0));
+    // addCommands(new Wait(3));
 
-    addCommands(new ShooterSetTurretAbs(-45));
-    addCommands(new Wait(3));
-    addCommands(new ShooterSetTurretAbs(0));
-    addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(-45));
+    // addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(0));
+    // addCommands(new Wait(3));
 
-    addCommands(new ShooterSetTurretAbs(45));
-    addCommands(new Wait(3));
-    addCommands(new ShooterSetTurretAbs(0));
-    addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(45));
+    // addCommands(new Wait(3));
+    // addCommands(new ShooterSetTurretAbs(0));
+    // addCommands(new Wait(3));
 
   }
 }

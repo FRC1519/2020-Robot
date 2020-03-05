@@ -23,7 +23,7 @@ public class AirCompressor extends SubsystemBase {
     setCompressor(true);
   }
 
-  final double COPRESSOR_PAUSE_TIME = 10.0;
+  final double COMPRESSOR_PAUSE_TIME = 10.0;
 
   public void setCompressor(boolean b) {
     // b = false;
@@ -40,7 +40,7 @@ public class AirCompressor extends SubsystemBase {
     // This method will be called once per scheduler run
 
     // if the timer expires, turn on the compressor.
-    if (m_Timer.hasPeriodPassed(COPRESSOR_PAUSE_TIME)) {
+    if (m_Timer.hasPeriodPassed(COMPRESSOR_PAUSE_TIME)) {
       setCompressor(true);
     }
   }

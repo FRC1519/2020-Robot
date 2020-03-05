@@ -17,39 +17,43 @@ import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
 
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase implements PidTunerObject {
 
   private final int PIVOT_CLOSE_ENOUGH = 50;
-  private final VictorSPX rollerTalon = new VictorSPX(Constants.Talon.INTAKE_ROLLERS);
+  private final VictorSPX rollersTalon = new VictorSPX(Constants.Talon.INTAKE_ROLLERS);
   private final MayhemTalonSRX pivotTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_PIVOT);
-  private final int PIVOT_ZERO_POSITION = 900;
-  public final double PIVOT_UP = 900.0;
-  public final double PIVOT_DOWN = 0.0;
+  private static final int PIVOT_ZERO_POSITION = 950;
+  public static final double PIVOT_UP = PIVOT_ZERO_POSITION;
+  public static final double PIVOT_SHOOTING = 100.0;
+  public static final double PIVOT_DOWN = 0.0;
 
   private static final double HORIZONTAL_HOLD_OUTPUT = 0.00;
+  private static final double MAX_PID_MOVEMENT_TIME_SEC = 10.0;
 
   enum PivotMode {
     MANUAL_MODE, PID_MODE,
   };
 
-  PivotMode mode = PivotMode.MANUAL_MODE;
-  boolean isMoving;
-  double m_targetPosition;
-  double m_feedForward;
+  private PivotMode m_mode = PivotMode.MANUAL_MODE;
+  private boolean m_isMoving;
+  private double m_desiredRollersPower = 0.0;
+  private double m_targetPosition;
+  private double m_feedForward;
+  private Timer m_pidTimer = new Timer();
 
   /**
    * Creates a new Intake.
    */
   public Intake() {
-    rollerTalon.setNeutralMode(NeutralMode.Coast);
-    rollerTalon.configNominalOutputForward(+0.0f);
-    rollerTalon.configNominalOutputReverse(0.0);
-    rollerTalon.configPeakOutputForward(+12.0);
-    rollerTalon.configPeakOutputReverse(-12.0);
+    rollersTalon.setNeutralMode(NeutralMode.Coast);
+    rollersTalon.configNominalOutputForward(+0.0f);
+    rollersTalon.configNominalOutputReverse(0.0);
+    rollersTalon.configPeakOutputForward(+12.0);
+    rollersTalon.configPeakOutputReverse(-12.0);
 
     configPivotMotor(pivotTalon);
   }
@@ -75,7 +79,8 @@ public class Intake extends SubsystemBase implements PidTunerObject {
 
     motor.setNeutralMode(NeutralMode.Coast);
     motor.setInverted(false);
-    // in general, sensor phase inversion needed for gearboxes which reverse sensor direction due to odd number of stages
+    // in general, sensor phase inversion needed for gearboxes which reverse sensor
+    // direction due to odd number of stages
     motor.setSensorPhase(true);
     motor.configNominalOutputVoltage(+0.0f, -0.0f);
     motor.configPeakOutputVoltage(+12.0, -12.0);
@@ -96,40 +101,60 @@ public class Intake extends SubsystemBase implements PidTunerObject {
    * @param power
    */
   public void setRollers(double power) {
-    rollerTalon.set(ControlMode.PercentOutput, power);
+    m_desiredRollersPower = power;
+    // rollersTalon.set(ControlMode.PercentOutput, power);
   }
 
   public void setPivot(Double b) {
     m_targetPosition = b;
+    m_mode = PivotMode.PID_MODE;
+    m_isMoving = true;
 
-    mode = PivotMode.PID_MODE;
-    isMoving = true;
+    m_pidTimer.start();
   }
 
   public boolean isPivotAtPosition() {
-    return !isMoving;
+    return !m_isMoving;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
     updateSmartDashBoard();
     updateSensorPosition();
     updatePivotPower();
+    updateRollersPower();
   }
 
   private void updatePivotPower() {
 
-    if (mode == PivotMode.PID_MODE) {
+    if (m_mode == PivotMode.PID_MODE) {
+      // if the pivot is close enough or it has been on too long, turn the motor on
+      // gently downards
+      if ((Math.abs(pivotTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH)
+          || m_pidTimer.hasPeriodPassed(Intake.MAX_PID_MOVEMENT_TIME_SEC)) {
+        m_isMoving = false;
 
-      // if the pivot is close enough, turn off the motor
-      if (Math.abs(pivotTalon.getPosition() - m_targetPosition) < PIVOT_CLOSE_ENOUGH) {
-        isMoving = false;
-        setPivotVBus(0);
+        // if the current position is closer to PIVOT UP than PIVOT DOWN, apply a little
+        // positive power.
+        if (pivotTalon.getPosition() > (PIVOT_UP / 2.0)) {
+          setPivotVBus(+0.05);
+        } else { // we are close to the PIVOT DOWN, so apply a little negative power.
+          setPivotVBus(-0.05);
+        }
       } else {
         pivotTalon.set(ControlMode.Position, m_targetPosition, DemandType.ArbitraryFeedForward, m_feedForward);
       }
+    }
+  }
+
+  void updateRollersPower() {
+    if (pivotTalon.getPosition() > (PIVOT_UP / 2.0)) {
+      // turn off the rollers automatically if the pivot is too high
+      rollersTalon.set(ControlMode.PercentOutput, 0.0);
+    } else {
+      // set the rollers as requested if the pivot is low enough
+      rollersTalon.set(ControlMode.PercentOutput, m_desiredRollersPower);
     }
   }
 
@@ -159,14 +184,14 @@ public class Intake extends SubsystemBase implements PidTunerObject {
     SmartDashboard.putNumber("Intake Target", m_targetPosition);
     SmartDashboard.putNumber("Intake FeedForward", m_feedForward);
 
-    SmartDashboard.putBoolean("Intake Is Moving", isMoving);
-    SmartDashboard.putBoolean("Intake PID Mode", (mode == PivotMode.PID_MODE));
-    SmartDashboard.putNumber("Intake Rollers", rollerTalon.getMotorOutputPercent());
+    SmartDashboard.putBoolean("Intake Is Moving", m_isMoving);
+    SmartDashboard.putBoolean("Intake PID Mode", (m_mode == PivotMode.PID_MODE));
+    SmartDashboard.putNumber("Intake Rollers", rollersTalon.getMotorOutputPercent());
   }
 
   public void setPivotVBus(double VBus) {
     pivotTalon.set(ControlMode.PercentOutput, VBus);
-    mode = PivotMode.MANUAL_MODE;
+    m_mode = PivotMode.MANUAL_MODE;
   }
 
   @Override

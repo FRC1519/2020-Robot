@@ -11,42 +11,27 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeSetPosition extends CommandBase {
-  double m_position;
-  boolean m_waitForDone;
+public class HoodSetAbs extends CommandBase {
+  double m_set;
 
   /**
-   * Creates a new IntakeSetPosition, with "wait" set to false
+   * Creates a new HoodSetAbs.
    */
-  public IntakeSetPosition(double position) {
-    this (position, false);
-  }
-
-  /**
-   * Creates a new IntakeSetPosition
-   */
-  public IntakeSetPosition(double position, boolean wait) {
+  public HoodSetAbs(double set) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
+    addRequirements(RobotContainer.hood);
 
-    m_position = position;
-    m_waitForDone = wait;
+    m_set = set;
   }
-
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake.setPivot(m_position);
+    RobotContainer.hood.setPosition(m_set);
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_waitForDone) {
-      return RobotContainer.intake.isPivotAtPosition();
-    } else {
-      return true;
-    }
+    return (RobotContainer.hood.isAtPosition());
   }
 }

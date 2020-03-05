@@ -27,24 +27,27 @@ public class Targeting extends SubsystemBase {
   // Diagonal FOV = 78.0
   // Horizontal FOV = 70.42
   // Vertical FOV = 43.3
-  // NOTE:  76.5 horizontal FOV determined empirically by Ken on 2/22/2020
+  // NOTE: 76.5 horizontal FOV determined empirically by Ken on 2/22/2020
   private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 76.5;
 
   // Define the "target location" to be halfway from left to right
-  private final double CENTER_OF_TARGET_X = 0.510;
+  private final double CENTER_OF_TARGET_X = 0.475;
+
+  private final double BEST_Y_CLOSE_THRESHOLD = 0.1;
+  private final double CLOSE_WHEEL_SPEED = 3000.0;
+  private final double CLOSE_HOOD_ANGLE = 30000.0;
 
   // Calculate ticks per degree.
   // encoder ticks * turret pulley teeth / drive pulley teeth / 360 degrees
   private final double TICKS_PER_DEGREE = (4096.0 * 225.0 / 18.0 / 360.0); // was 6300 / 45
-
-  private static final double SPEED_EQ_M = -4.115;
-  private static final double SPEED_EQ_B = 2.244;
 
   // After computing a desired azimuth, add a "fudge" offset to correct
   // empirically measured error. Offset should be in azimuth "ticks."
   private static final double AZIMUTH_CORRECTION_OFFSET = 0.0; // was -2.0 at CMP
 
   private double m_desiredAzimuth;
+  private double m_desiredHood;
+  private double m_desiredWheelSpeed;
   private double[] m_target_array;
   private int m_priorFrameCount;
   private double m_priorFrameTime;
@@ -108,14 +111,14 @@ public class Targeting extends SubsystemBase {
       m_bestY = 0.0;
       m_tilt = 0.0;
       m_area = 0.0;
-      m_desiredAzimuth = RobotContainer.shooter.getAzimuthForCapturedImage();
+      // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else if (m_target_array[0] < 0.0) {
       // this means the array has no valid data. Set m_xError = 0.0
       m_bestX = 0.0;
       m_bestY = 0.0;
       m_tilt = 0.0;
       m_area = 0.0;
-      m_desiredAzimuth = RobotContainer.shooter.getAzimuthForCapturedImage();
+      // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else {
       // We have a valid data array.
       // There are three different situations:
@@ -131,6 +134,8 @@ public class Targeting extends SubsystemBase {
       m_area = m_target_array[3];
 
       m_desiredAzimuth = findDesiredAzimuth(m_bestX, m_bestY, m_tilt, m_area);
+      m_desiredHood = getHoodFromY();
+      m_desiredWheelSpeed = getWheelSpeedFromY();
     }
 
     // at this point in the code, the "selected" target should be in the "best"
@@ -138,33 +143,24 @@ public class Targeting extends SubsystemBase {
     SmartDashboard.putNumber("m_bestY", m_bestY);
     SmartDashboard.putNumber("m_tilt", m_tilt);
     SmartDashboard.putNumber("m_area", m_area);
+
+    SmartDashboard.putNumber("Range per Y", this.getRangeFromY());
+    SmartDashboard.putNumber("Range per Area", this.getRangeFromArea());
+
+    SmartDashboard.putNumber("Wheel Speed From Y", this.getWheelSpeedFromY());
+    SmartDashboard.putNumber("Hood Angle From Y", this.getHoodFromY());
   }
 
   public double getDesiredAzimuth() {
     return m_desiredAzimuth + AZIMUTH_CORRECTION_OFFSET;
   }
 
-  public double getRecommendedSpeed() {
-    // Returns a speed based upon the Y value
-    double speed;
+  public double getDesiredHood() {
+    return m_desiredHood;
+  }
 
-    if (m_bestY < 0.1) {
-      // can't see the target, set speed to something real slow
-      speed = 0.2;
-    } else {
-
-      // use the equation to determine the speed from m_bestY
-      speed = (SPEED_EQ_M * m_bestY) + SPEED_EQ_B;
-
-      // enforce min speed of 0.30 and max speed of 0.90
-      if (speed < 0.30) {
-        speed = 0.30;
-      } else if (speed > 0.90) {
-        speed = 0.90;
-      }
-    }
-
-    return speed;
+  public double getDesiredWheelSpeed() {
+    return m_desiredWheelSpeed;
   }
 
   /**
@@ -192,11 +188,66 @@ public class Targeting extends SubsystemBase {
     ticksError = angleError * TICKS_PER_DEGREE;
 
     // Convert angleError into a desired azimuth, using the azimuth history
-    desiredAzimuth = ticksError + RobotContainer.shooter.getAzimuthForCapturedImage();
+    desiredAzimuth = ticksError + RobotContainer.turret.getAzimuthForCapturedImage();
     // Update SmartDashboard
     SmartDashboard.putNumber("Vision Angle Error", angleError);
     SmartDashboard.putNumber("Vision Desired Azimuth", desiredAzimuth);
     return desiredAzimuth;
+  }
+
+  /**
+   * use m_bestY to get the desired hood setting for the target
+   * 
+   * @return
+   */
+  private double getHoodFromY() {
+    // below is the "curve fit" for the "long shot"
+
+    if (m_bestY < BEST_Y_CLOSE_THRESHOLD) {
+      // too close for the lob shot, switch to the bullet shot
+      return CLOSE_HOOD_ANGLE;
+    } else {
+      return 105874 + -407324 * m_bestY + 881911 * m_bestY * m_bestY + -506286 * m_bestY * m_bestY * m_bestY;
+    }
+  }
+
+  /**
+   * use m_bestY to get the desired wheel speed for the target
+   * 
+   * @return
+   */
+  private double getWheelSpeedFromY() {
+    double computedWheelSpeed = 2618 + -1939 * m_bestY + 3583 * m_bestY * m_bestY;
+
+    if (m_bestY < BEST_Y_CLOSE_THRESHOLD) {
+      // too close for the lob shot, switch to the bullet shot
+      computedWheelSpeed = CLOSE_WHEEL_SPEED;
+    }
+
+    if (computedWheelSpeed < ShooterWheel.IDLE_SPEED) {
+      computedWheelSpeed = ShooterWheel.IDLE_SPEED;
+    } else if (computedWheelSpeed > ShooterWheel.MAX_SPEED_RPM) {
+      computedWheelSpeed = ShooterWheel.MAX_SPEED_RPM;
+    }
+    return computedWheelSpeed;
+  }
+
+  /**
+   * use m_bestY to get the range in feet to the target.
+   * 
+   * @return
+   */
+  private double getRangeFromY() {
+    return 8.11 + -9.17 * m_bestY + 33.9 * m_bestY * m_bestY;
+  }
+
+  /**
+   * Use the area to calculate the range in feet.
+   * 
+   * @return
+   */
+  private double getRangeFromArea() {
+    return 0.912 * Math.pow(m_area, -0.695);
   }
 
 }

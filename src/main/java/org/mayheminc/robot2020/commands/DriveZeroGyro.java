@@ -11,15 +11,19 @@ import org.mayheminc.robot2020.RobotContainer;
  */
 public class DriveZeroGyro extends RobotDisabledCommand {
 
-    public DriveZeroGyro() {
+    private double m_headingOffset = 0.0;
+
+    public DriveZeroGyro(double headingOffset) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         addRequirements(RobotContainer.drive);
+
+        m_headingOffset = headingOffset;
     }
 
     // Called just before this Command runs the first time
     public void initialize() {
-        RobotContainer.drive.zeroHeadingGyro(0.0);
+        RobotContainer.drive.zeroHeadingGyro(m_headingOffset);
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -7,25 +7,22 @@
 
 package org.mayheminc.robot2020.commands;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import org.mayheminc.robot2020.RobotContainer;
 
-public class SystemZeroIncludingGyro extends ParallelCommandGroup {
-  /**
-   * Creates a new SystemZeroIncludingGyro.
-   */
-  public SystemZeroIncludingGyro() {
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+public class HoodZero extends InstantCommand {
+  public HoodZero() {
     // Use addRequirements() here to declare subsystem dependencies.
-
-    addCommands(new IntakeZero());
-    addCommands(new ClimberZero());
-    addCommands(new HoodZero());
-    addCommands(new TurretZero());
-    addCommands(new DriveZeroGyro(0.0));
+    addRequirements(RobotContainer.hood);
   }
 
+  // Called when the command is initially scheduled.
   @Override
-  public boolean runsWhenDisabled() {
-    return true;
+  public void initialize() {
+    RobotContainer.hood.zero();
   }
-
 }

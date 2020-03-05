@@ -9,44 +9,25 @@ package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class IntakeSetPosition extends CommandBase {
-  double m_position;
-  boolean m_waitForDone;
-
+public class ShooterWheelAdjustVBus extends InstantCommand {
+  double m_adjust;
+  
   /**
-   * Creates a new IntakeSetPosition, with "wait" set to false
+   * Creates a new ShooterAdjustWheelVBus.
    */
-  public IntakeSetPosition(double position) {
-    this (position, false);
-  }
-
-  /**
-   * Creates a new IntakeSetPosition
-   */
-  public IntakeSetPosition(double position, boolean wait) {
+  public ShooterWheelAdjustVBus(double adjust) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
-
-    m_position = position;
-    m_waitForDone = wait;
+    addRequirements(RobotContainer.shooterWheel);
+    m_adjust = adjust;
   }
-
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake.setPivot(m_position);
+    double currentSpeed = RobotContainer.shooterWheel.getSpeedVBus();
+    RobotContainer.shooterWheel.setSpeedVBus(currentSpeed + m_adjust);
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    if (m_waitForDone) {
-      return RobotContainer.intake.isPivotAtPosition();
-    } else {
-      return true;
-    }
-  }
 }

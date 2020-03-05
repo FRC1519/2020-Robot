@@ -8,45 +8,44 @@
 package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
-// import org.mayheminc.robot2020.subsystems.Targeting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ShooterFireWhenReady extends CommandBase {
+public class ShooterWheelSet extends CommandBase {
+  double m_rpm;
+  boolean m_waitForDone;
+
+  public ShooterWheelSet(double rpm) {
+    this(rpm, false);
+  }
+
   /**
-   * Creates a new ShooterFireWhenReady.
+   * Creates a new ShooterWheelSet
    */
-  public ShooterFireWhenReady() {
+  public ShooterWheelSet(double rpm, boolean wait) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooterWheel);
-    addRequirements(RobotContainer.feeder);
+
+    m_rpm = rpm;
+    m_waitForDone = wait;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    // boolean wheelsGood =
-    // Math.abs(Targeting.convertRangeToWheelSpeed(RobotContainer.targeting.getRangeToTarget())
-    // - RobotContainer.shooter.getShooterWheelSpeed()) < 100;
-
-    // RobotContainer.shooter.setFeederSpeed((wheelsGood) ? 0.5 : 0.0);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    RobotContainer.feeder.setSpeed(0);
-    RobotContainer.shooterWheel.setSpeed(0);
+    RobotContainer.shooterWheel.setSpeed(m_rpm);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if( m_waitForDone)
+    {
+      return  (Math.abs( m_rpm - RobotContainer.shooterWheel.getSpeed() ) < 100);
+    }
+    else
+    {
+      return true;
+    }
   }
 }

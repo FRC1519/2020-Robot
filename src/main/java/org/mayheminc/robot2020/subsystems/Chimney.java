@@ -12,17 +12,15 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.mayheminc.robot2020.Constants;
-import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.RangeFinder_GP2D120;
 
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Chimney extends SubsystemBase {
-  private final VictorSPX chimneyTalon = new VictorSPX(Constants.Talon.MAGAZINE_CHIMNEY);
-  private final RangeFinder_GP2D120 frontIR = new RangeFinder_GP2D120(2, 0);
-  private final RangeFinder_GP2D120 middleIR = new RangeFinder_GP2D120(3, 0);
+  private final VictorSPX chimneyTalon = new VictorSPX(Constants.Talon.CHIMNEY_ROLLER);
+  private final RangeFinder_GP2D120 frontIR = new RangeFinder_GP2D120(1, 0);
+  private final RangeFinder_GP2D120 middleIR = new RangeFinder_GP2D120(2, 0);
 
   /**
    * Creates a new Chimney.

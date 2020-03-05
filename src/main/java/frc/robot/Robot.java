@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
   @Override
   @SuppressWarnings("deprecation")
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings,
+    // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
@@ -81,6 +81,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // ensure robot "safety" before anything else when entering new mode
+    RobotContainer.safetyInit();
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -98,6 +101,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    // ensure robot "safety" before anything else when entering new mode
+    RobotContainer.safetyInit();
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -106,7 +112,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    // RobotContainer.compressor.start();
+    // for safety reasons, call
   }
 
   /**

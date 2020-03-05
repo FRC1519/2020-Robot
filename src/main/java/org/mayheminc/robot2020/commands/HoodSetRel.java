@@ -9,44 +9,25 @@ package org.mayheminc.robot2020.commands;
 
 import org.mayheminc.robot2020.RobotContainer;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class IntakeSetPosition extends CommandBase {
-  double m_position;
-  boolean m_waitForDone;
-
-  /**
-   * Creates a new IntakeSetPosition, with "wait" set to false
-   */
-  public IntakeSetPosition(double position) {
-    this (position, false);
-  }
+public class HoodSetRel extends InstantCommand {
+  double m_adjust;
 
   /**
-   * Creates a new IntakeSetPosition
+   * Creates a new ShooterSetHood.
    */
-  public IntakeSetPosition(double position, boolean wait) {
+  public HoodSetRel(double adjust) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
+    addRequirements(RobotContainer.hood);
 
-    m_position = position;
-    m_waitForDone = wait;
+    m_adjust = adjust;
   }
-
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake.setPivot(m_position);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    if (m_waitForDone) {
-      return RobotContainer.intake.isPivotAtPosition();
-    } else {
-      return true;
-    }
+    double pos = RobotContainer.hood.getPosition();
+    RobotContainer.hood.setPosition(pos + m_adjust);
   }
 }

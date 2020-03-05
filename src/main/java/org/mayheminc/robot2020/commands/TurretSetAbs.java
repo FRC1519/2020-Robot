@@ -11,40 +11,36 @@ import org.mayheminc.robot2020.RobotContainer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeSetPosition extends CommandBase {
-  double m_position;
+public class TurretSetAbs extends CommandBase {
+  double m_setPoint;
   boolean m_waitForDone;
 
   /**
-   * Creates a new IntakeSetPosition, with "wait" set to false
+   * Creates a new TurretSetAbs.
    */
-  public IntakeSetPosition(double position) {
-    this (position, false);
+  public TurretSetAbs(double setPoint) {
+    this(setPoint, false);
   }
 
-  /**
-   * Creates a new IntakeSetPosition
-   */
-  public IntakeSetPosition(double position, boolean wait) {
+  public TurretSetAbs(double setPoint, boolean wait) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
+    addRequirements(RobotContainer.turret);
 
-    m_position = position;
+    m_setPoint = setPoint;
     m_waitForDone = wait;
   }
-
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake.setPivot(m_position);
+    RobotContainer.turret.setPositionAbs(m_setPoint);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if (m_waitForDone) {
-      return RobotContainer.intake.isPivotAtPosition();
+      return RobotContainer.turret.isAtDesiredPosition();
     } else {
       return true;
     }
