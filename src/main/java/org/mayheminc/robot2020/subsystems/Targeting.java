@@ -51,7 +51,7 @@ public class Targeting extends SubsystemBase {
   private double[] m_target_array;
   private int m_priorFrameCount;
   private double m_priorFrameTime;
-  private double[] ARRAY_OF_NEG_ONE = { -1.0 };
+  private final double[] ARRAY_OF_NEG_ONE = { -1.0 };
 
   private double m_bestY = 0.0;
   private double m_bestX = 0.0;
@@ -65,28 +65,8 @@ public class Targeting extends SubsystemBase {
 
   // TODO: make an updateSmartDashboard() method in Targeting for optimization
   public void update() {
-    // perform periodic update functions for the targeting capability
-    int latestFrameCount = (int) SmartDashboard.getNumber("frameCount", -1.0 /* default to -1 */);
-    if (latestFrameCount < 0) {
-      // an invalid number for latestFrameCount, display warning light
-      SmartDashboard.putBoolean("visionOK", false);
-      SmartDashboard.putString("visionOkDebug", "No Data");
-    } else if (latestFrameCount == m_priorFrameCount) {
-      // have not received a new frame. If more than 1 second has elapsed since
-      // prior new frame, display a warning light on the SmartDashboard
-      if (Timer.getFPGATimestamp() > m_priorFrameTime + 1.0) {
-        SmartDashboard.putBoolean("visionOK", false);
-        SmartDashboard.putString("visionOkDebug", "Stale Data");
-      } else {
-        // else, have an old frame, but it's not too old yet, so do nothing
-      }
-    } else {
-      // have received a new frame, save the time and update m_priorFrameCount
-      m_priorFrameTime = Timer.getFPGATimestamp();
-      m_priorFrameCount = latestFrameCount;
-      SmartDashboard.putBoolean("visionOK", true);
-      SmartDashboard.putString("visionOkDebug", "Good Data");
-    }
+    // get the latest output from the targeting camera
+    m_target_array = SmartDashboard.getNumberArray("target", ARRAY_OF_NEG_ONE);
 
     // Update all of the targeting information, as follows:
     // 1 - Determine if we have any valid data in the array.
@@ -94,18 +74,20 @@ public class Targeting extends SubsystemBase {
     // it is on target.
     // 2 - Use the target to compute the needed information
 
-    // get the latest output from the targeting camera
-    m_target_array = SmartDashboard.getNumberArray("target", ARRAY_OF_NEG_ONE);
-
     if (m_target_array == null || m_target_array.length == 0) {
-      // this means the key is found, but is empty
+      // This means that the key was set, but to an empty array
+      SmartDashboard.putBoolean("visionOK", false);
+      SmartDashboard.putString("visionOkDebug", "Bad Data");
       m_bestX = 0.0;
       m_bestY = 0.0;
       m_tilt = 0.0;
       m_area = 0.0;
       // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else if (m_target_array[0] < 0.0) {
-      // this means the array has no valid data. Set m_xError = 0.0
+      // This means the array was not retrieved (and the default value was returned)
+      // Display warning light
+      SmartDashboard.putBoolean("visionOK", false);
+      SmartDashboard.putString("visionOkDebug", "No Data");
       m_bestX = 0.0;
       m_bestY = 0.0;
       m_tilt = 0.0;
@@ -113,17 +95,30 @@ public class Targeting extends SubsystemBase {
       // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else {
       // We have a valid data array.
-      // There are three different situations:
-      // a - We want the left-most target
-      // b - We want the "centered" target
-      // c - We want the right-most target
-
-      // Handle each of them separately;
-      // we need the results in "bestXError" and "bestY"
-      m_bestX = m_target_array[0]; // get the x-value
-      m_bestY = m_target_array[1]; // get the y-value
-      m_tilt = m_target_array[2];
-      m_area = m_target_array[3];
+      final int latestFrameCount = (int) m_target_array[0];
+      
+      // perform periodic update functions for the targeting capability
+      if (latestFrameCount == m_priorFrameCount) {
+        // have not received a new frame. If more than 1 second has elapsed since
+        // prior new frame, display a warning light on the SmartDashboard
+        if (Timer.getFPGATimestamp() > m_priorFrameTime + 1.0) {
+          SmartDashboard.putBoolean("visionOK", false);
+          SmartDashboard.putString("visionOkDebug", "Stale Data");
+        } else {
+          // else, have an old frame, but it's not too old yet, so do nothing
+        }
+      } else {
+        // have received a new frame, save the time and update m_priorFrameCount
+        m_priorFrameTime = Timer.getFPGATimestamp();
+        m_priorFrameCount = latestFrameCount;
+        SmartDashboard.putBoolean("visionOK", true);
+        SmartDashboard.putString("visionOkDebug", "Good Data");
+      }
+      
+      m_bestX = m_target_array[1]; // get the x-value
+      m_bestY = m_target_array[2]; // get the y-value
+      m_tilt = m_target_array[3];
+      m_area = m_target_array[4];
 
       m_desiredAzimuth = findDesiredAzimuth(m_bestX, m_bestY, m_tilt, m_area);
       m_desiredHood = getHoodFromY();
