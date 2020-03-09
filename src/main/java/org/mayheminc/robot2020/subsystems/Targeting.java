@@ -58,14 +58,6 @@ public class Targeting extends SubsystemBase {
   private double m_tilt = 0.0;
   private double m_area = 0.0;
 
-  public enum TargetPosition {
-    LEFT_MOST, CENTER_MOST, RIGHT_MOST, CENTER_OF_RIGHT_CARGO_SHIP, CENTER_OF_LEFT_CARGO_SHIP
-  };
-
-  public enum TargetHeight {
-    CARGO, HATCH
-  };
-
   @Override
   public void periodic() {
     update();
