@@ -30,11 +30,6 @@ public class History {
         int i = index - 1;
         int count = 0;
 
-        // if (t < 0) {
-        // DriverStation.reportError("Negative time in history", false);
-        // return 0.0; // no negative times.
-        // }
-
         while (i != index) {
             if (i < 0) {
                 i = HISTORY_SIZE - 1;
@@ -42,13 +37,13 @@ public class History {
 
             if (time[i] <= t) {
                 int prev = (i + 1) % HISTORY_SIZE;
-                if (prev != index) {
+                if (prev != index && time[i] >= 0.0) {
                     // Interpolate between the two closest entries
                     assert(time[i] < time[prev]);
                     double factor = (t - time[i]) / (time[prev] - time[i]);
                     az = azimuth[i] + factor * (azimuth[prev] - azimuth[i]);
                 } else {
-                    // Only one entry; no interpolation possible
+                    // Only one (real) entry; no interpolation possible
                     az = azimuth[i];
                 }
                 break;
