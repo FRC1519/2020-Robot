@@ -41,7 +41,16 @@ public class History {
             }
 
             if (time[i] <= t) {
-                az = azimuth[i];
+                int prev = (i + 1) % HISTORY_SIZE;
+                if (prev != index) {
+                    // Interpolate between the two closest entries
+                    assert(time[i] < time[prev]);
+                    double factor = (t - time[i]) / (time[prev] - time[i]);
+                    az = azimuth[i] + factor * (azimuth[prev] - azimuth[i]);
+                } else {
+                    // Only one entry; no interpolation possible
+                    az = azimuth[i];
+                }
                 break;
             }
 
