@@ -15,49 +15,41 @@ public class History {
     }
 
     public void add(double t, double az) {
-
         time[index] = t;
         azimuth[index] = az;
-
         index++;
-        if (index >= HISTORY_SIZE) {
-            index = 0;
-        }
+        index %= HISTORY_SIZE;
+    }
+
+    protected void reportError(String message) {
+        DriverStation.reportError("Looking too far back", false);
     }
 
     public double getAzForTime(double t) {
-        double az = azimuth[index];
-        int i = index - 1;
-        int count = 0;
+        int i = index; // Start just after last entry
 
-        while (i != index) {
-            if (i < 0) {
-                i = HISTORY_SIZE - 1;
-            }
-
+        do {
+            // Move to one entry earlier
+            i = (i + HISTORY_SIZE - 1) % HISTORY_SIZE;
+            
+            // Check if the time entry is old enough
             if (time[i] <= t) {
                 int prev = (i + 1) % HISTORY_SIZE;
                 if (prev != index && time[i] >= 0.0) {
                     // Interpolate between the two closest entries
                     assert(time[i] < time[prev]);
                     double factor = (t - time[i]) / (time[prev] - time[i]);
-                    az = azimuth[i] + factor * (azimuth[prev] - azimuth[i]);
+                    return azimuth[i] + factor * (azimuth[prev] - azimuth[i]);
                 } else {
                     // Only one (real) entry; no interpolation possible
-                    az = azimuth[i];
+                    return azimuth[i];
                 }
-                break;
             }
+        } while (i != index);
 
-            i--;
-            count++;
-            if (count > HISTORY_SIZE) {
-                DriverStation.reportError("Looking too far back", false);
-                az = azimuth[index];
-                break;
-            }
-        }
-
-        return az;
+        // Oldest entry is still newer than the requested timestamp
+        // Return the oldest entry in the history 
+        reportError("Looking too far back");
+        return azimuth[index];
     }
 }
