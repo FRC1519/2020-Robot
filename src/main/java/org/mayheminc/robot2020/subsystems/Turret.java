@@ -71,8 +71,12 @@ public class Turret extends SubsystemBase implements PidTunerObject {
         updateHistory();
     }
 
-    // KBS: tuned below at practice field on 21 Feb 2020 via successive refinement.
-    private static final double CAMERA_LAG = 0.08; // .05 was best so far in 2020; used .150 in 2019
+    // KBS: tuned below at practice field on 21 Feb 2020 via successive refinement
+    // to get 0.08 w/Logitech C920 camera.
+
+    // KBS: tuned below at practice field on 24 Sept 2020 w/Caleb and Amy to be 0.17
+    // w/1CGN camera
+    private static final double CAMERA_LAG = 0.17; // .05 was best so far in 2020; used .150 in 2019
 
     private void updateHistory() {
         double now = Timer.getFPGATimestamp();
