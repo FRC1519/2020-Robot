@@ -28,7 +28,13 @@ public class Targeting extends SubsystemBase {
   // Horizontal FOV = 70.42
   // Vertical FOV = 43.3
   // NOTE: 76.5 horizontal FOV determined empirically by Ken on 2/22/2020
-  private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 76.5;
+  // private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 76.5;
+
+  // oCam 1CGN Field of View Information:
+  // FOV = 65.0
+  // NOTE: 86.5 horizontal FOV determined empirically by Ken, Amy, and Caleb on
+  // 9/24/2020
+  private final static double FOV_HORIZ_CAMERA_IN_DEGREES = 63.0; // was 86.5 on 4 Nov 2020
 
   // Define the "target location" to be halfway from left to right
   private final double CENTER_OF_TARGET_X = 0.475;
@@ -105,20 +111,20 @@ public class Targeting extends SubsystemBase {
     // get the latest output from the targeting camera
     m_target_array = SmartDashboard.getNumberArray("target", ARRAY_OF_NEG_ONE);
 
-    if (m_target_array == null || m_target_array.length == 0) {
+    if (m_target_array == null || m_target_array.length == 0 || m_target_array.length == 1) {
       // this means the key is found, but is empty
       m_bestX = 0.0;
       m_bestY = 0.0;
       m_tilt = 0.0;
       m_area = 0.0;
       // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
-    } else if (m_target_array[0] < 0.0) {
-      // this means the array has no valid data. Set m_xError = 0.0
-      m_bestX = 0.0;
-      m_bestY = 0.0;
-      m_tilt = 0.0;
-      m_area = 0.0;
-      // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
+      // } else if (m_target_array[0] < 0.0) {
+      // // this means the array has no valid data. Set m_xError = 0.0
+      // m_bestX = 0.0;
+      // m_bestY = 0.0;
+      // m_tilt = 0.0;
+      // m_area = 0.0;
+      // // m_desiredAzimuth = RobotContainer.turret.getAzimuthForCapturedImage();
     } else {
       // We have a valid data array.
       // There are three different situations:
@@ -128,10 +134,11 @@ public class Targeting extends SubsystemBase {
 
       // Handle each of them separately;
       // we need the results in "bestXError" and "bestY"
-      m_bestX = m_target_array[0]; // get the x-value
-      m_bestY = m_target_array[1]; // get the y-value
-      m_tilt = m_target_array[2];
-      m_area = m_target_array[3];
+      // NOTEL m_target_array[0] is now the frame count, but we're not using it yet
+      m_bestX = m_target_array[1]; // get the x-value
+      m_bestY = m_target_array[2]; // get the y-value
+      m_tilt = m_target_array[3];
+      m_area = m_target_array[4];
 
       m_desiredAzimuth = findDesiredAzimuth(m_bestX, m_bestY, m_tilt, m_area);
       m_desiredHood = getHoodFromY();
@@ -191,7 +198,7 @@ public class Targeting extends SubsystemBase {
     desiredAzimuth = ticksError + RobotContainer.turret.getAzimuthForCapturedImage();
     // Update SmartDashboard
     SmartDashboard.putNumber("Vision Angle Error", angleError);
-    SmartDashboard.putNumber("Vision Desired Azimuth", desiredAzimuth);
+    SmartDashboard.putNumber("Vision Desired Azimuth", desiredAzimuth + Math.random());
     return desiredAzimuth;
   }
 
