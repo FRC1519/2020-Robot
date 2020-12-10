@@ -42,9 +42,13 @@ public class Turret extends SubsystemBase implements PidTunerObject {
     }
 
     void configureTurretTalon() {
-        turretTalon.config_kP(0, 1.0, 0);
+        // PID tuning notes:
+        // during competition season, used P=1.0; everything else zero
+        // on 3 December tuned with Caleb, Amy, Coach Streeter with P=0.7, D=7.0
+        // Note: had "overshoot" issues when using I. (Tried 0.001 to 0.01)
+        turretTalon.config_kP(0, 0.7, 0);
         turretTalon.config_kI(0, 0.0, 0);
-        turretTalon.config_kD(0, 0.0, 0);
+        turretTalon.config_kD(0, 7.0, 0);
         turretTalon.config_kF(0, 0.0, 0);
         turretTalon.changeControlMode(ControlMode.Position);
         turretTalon.setNeutralMode(NeutralMode.Coast);
@@ -91,6 +95,7 @@ public class Turret extends SubsystemBase implements PidTunerObject {
 
     private void UpdateDashboard() {
         SmartDashboard.putNumber("Shooter turret pos", turretTalon.getPosition());
+        SmartDashboard.putNumber("Shooter turret pos desired", m_desiredPosition);
         SmartDashboard.putNumber("Shooter turret vbus", turretTalon.getMotorOutputVoltage());
         SmartDashboard.putNumber("Shooter turret velocity", turretTalon.getSelectedSensorVelocity(0));
     }
@@ -120,6 +125,13 @@ public class Turret extends SubsystemBase implements PidTunerObject {
      * @param pos number of encoder ticks to adjust.
      */
     public void setPositionRel(double pos) {
+        // Below line sets position relative to most recent "desiredPosition" but may
+        // have BAD side-effect if turret had just been in VBus mode (i.e. may not have
+        // been near prior desiredPosition) Would need to decide a safer way to know
+        // whether to have new relative position be relative to the current
+        // desiredPosition or the current actual position.
+
+        // m_desiredPosition = m_desiredPosition + pos;
         m_desiredPosition = getPosition() + pos;
         setPositionAbs(m_desiredPosition);
     }
