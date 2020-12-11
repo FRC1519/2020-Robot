@@ -43,13 +43,12 @@ public class Targeting extends SubsystemBase {
   private final double CLOSE_WHEEL_SPEED = 3000.0;
   private final double CLOSE_HOOD_ANGLE = 30000.0;
 
-  // Calculate ticks per degree.
-  // encoder ticks * turret pulley teeth / drive pulley teeth / 360 degrees
-  private final double TICKS_PER_DEGREE = (4096.0 * 225.0 / 18.0 / 360.0); // was 6300 / 45
-
   // After computing a desired azimuth, add a "fudge" offset to correct
   // empirically measured error. Offset should be in azimuth "ticks."
   private static final double AZIMUTH_CORRECTION_OFFSET = 0.0; // was -2.0 at CMP
+
+  // TODO, inner port depth in feet
+  private static final double INNER_PORT_DEPTH = 29.5 / 12.0;
 
   private double m_desiredAzimuth;
   private double m_desiredHood;
@@ -140,7 +139,17 @@ public class Targeting extends SubsystemBase {
       m_tilt = m_target_array[3];
       m_area = m_target_array[4];
 
-      m_desiredAzimuth = findDesiredAzimuth(m_bestX, m_bestY, m_tilt, m_area);
+      m_desiredAzimuth = findDesiredAzimuthOuterPort(m_bestX, m_bestY, m_tilt, m_area);
+
+      // TODO: The following code calculates the inner port angle!
+      //
+      // double outerPortTicks = findDesiredAzimuthOuterPort(m_bestX, m_bestY, m_tilt,
+      // m_area);
+      // double outerPortDegrees = outerPortTicks / Turret.TICKS_PER_DEGREE;
+
+      // double innerPortDegrees = getAngleToInnerPort(outerPortDegrees);
+      // m_desiredAzimuth = innerPortDegrees * Turret.TICKS_PER_DEGREE;
+
       m_desiredHood = getHoodFromY();
       m_desiredWheelSpeed = getWheelSpeedFromY();
     }
@@ -180,7 +189,7 @@ public class Targeting extends SubsystemBase {
    * @param area
    * @return
    */
-  public double findDesiredAzimuth(double X, double Y, double tilt, double area) {
+  public double findDesiredAzimuthOuterPort(double X, double Y, double tilt, double area) {
     // Calulate angle error based on an X,Y
     double angleError;
     double ticksError;
@@ -192,7 +201,7 @@ public class Targeting extends SubsystemBase {
     // Find the angle error
     angleError = FOV_HORIZ_CAMERA_IN_DEGREES * xError;
     // convert the angle error into ticks
-    ticksError = angleError * TICKS_PER_DEGREE;
+    ticksError = angleError * Turret.TICKS_PER_DEGREE;
 
     // Convert angleError into a desired azimuth, using the azimuth history
     desiredAzimuth = ticksError + RobotContainer.turret.getAzimuthForCapturedImage();
@@ -200,6 +209,21 @@ public class Targeting extends SubsystemBase {
     SmartDashboard.putNumber("Vision Angle Error", angleError);
     SmartDashboard.putNumber("Vision Desired Azimuth", desiredAzimuth + Math.random());
     return desiredAzimuth;
+  }
+
+  /**
+   * \(owo)/ <- hi! Computes the angle to the inner port!
+   * 
+   * @return
+   */
+  public double getAngleToInnerPort(double angleToOuterPort) {
+    double range = getRangeFromArea();
+    double degreesToRadians = 2 * Math.PI / 360;
+
+    double x = range * Math.sin(angleToOuterPort * degreesToRadians);
+    double y = range * Math.cos(angleToOuterPort * degreesToRadians);
+
+    return Math.atan(x / (y + INNER_PORT_DEPTH)) / degreesToRadians;
   }
 
   /**

@@ -1,6 +1,7 @@
 package org.mayheminc.robot2020.subsystems;
 
 import org.mayheminc.robot2020.Constants;
+import org.mayheminc.robot2020.RobotContainer;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -149,7 +150,7 @@ public class Turret extends SubsystemBase implements PidTunerObject {
     }
 
     /**
-     * Get the current position of the turret.
+     * Get the current position of the turret (in encoder counts).
      * 
      * @return
      */
@@ -164,6 +165,16 @@ public class Turret extends SubsystemBase implements PidTunerObject {
      */
     public double getDesiredPosition() {
         return m_desiredPosition;
+    }
+
+    /**
+     * Gets the turret's absolute position, in degrees, relative to the robot's
+     * heading.
+     * 
+     * @return
+     */
+    public double getGlobalTurretPosition() {
+        return RobotContainer.drive.getHeading() + (this.getPosition() / TICKS_PER_DEGREE);
     }
 
     /**
