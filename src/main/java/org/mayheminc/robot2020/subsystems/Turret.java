@@ -19,6 +19,10 @@ public class Turret extends SubsystemBase implements PidTunerObject {
     private final int MIN_POSITION = -12500; // approx 90 degrees
     private final int MAX_POSITION = +26000; // approx 180 degrees
     private final int DESTINATION_TOLERANCE = 200;
+
+    // if "at destination" want the "I" to get us as close as possible
+    private final int INTEGRAL_ZONE = 100;
+
     // TICKS_PER_DEGREE computed by 4096 ticks per rotation of shaft / 1 rotation of
     // shaft per 18t * 225t / 1 rotation of turret
 
@@ -47,9 +51,13 @@ public class Turret extends SubsystemBase implements PidTunerObject {
         // on 3 December tuned with Caleb, Amy, Coach Streeter with P=0.7, D=7.0
         // Note: had "overshoot" issues when using I. (Tried 0.001 to 0.01)
         turretTalon.config_kP(0, 0.7, 0);
-        turretTalon.config_kI(0, 0.0, 0);
+        turretTalon.config_kI(0, 0.01, 0);
         turretTalon.config_kD(0, 7.0, 0);
         turretTalon.config_kF(0, 0.0, 0);
+
+        // experimented by adding "integral zone" for when turret is close to intended
+        // target
+        turretTalon.config_IntegralZone(0, INTEGRAL_ZONE);
         turretTalon.changeControlMode(ControlMode.Position);
         turretTalon.setNeutralMode(NeutralMode.Coast);
         turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
