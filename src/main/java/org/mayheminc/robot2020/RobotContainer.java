@@ -66,7 +66,7 @@ public class RobotContainer {
         pidtuner = new PidTuner(RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SIX,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SEVEN,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_ELEVEN,
-                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, drive);
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, turret);
 
         cameraLights.set(true);
     }
@@ -102,6 +102,7 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
+        autonomousPrograms.push(/* 13 */ new DriveSlalom());
         autonomousPrograms.push(/* 12 */ new StayStill());
         autonomousPrograms.push(/* 11 */ new StartBWDriveOnlyToRP());
         autonomousPrograms.push(/* 10 */ new StartBWDriveOnlyToWall());
@@ -174,14 +175,14 @@ public class RobotContainer {
         // about -30 degrees
         // DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whileHeld(new
         // ShooterSetTurretVBus(+0.2));// about +30 degrees
-        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION));
-        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new HoodSetAbsWhileHeld(Hood.STARTING_POSITION));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new
+        // HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new
+        // HoodSetAbsWhileHeld(Hood.STARTING_POSITION));
 
-        // DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new
-        // ShooterSetTurretRel(-200.0));
-        // DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whenPressed(new
-        // ShooterSetTurretRel(+200.0));
-        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetTurretAbs(+0.0));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new TurretSetRel(-200.0));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whenPressed(new TurretSetRel(+200.0));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new TurretSetAbs(+0.0));
         // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new
         // ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));
 
@@ -200,14 +201,15 @@ public class RobotContainer {
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whenHeld(new ShooterFiringSequence(60.0));
         DRIVER_PAD.DRIVER_PAD_LEFT_UPPER_TRIGGER_BUTTON.whenReleased(new ShooterCeaseFire());
 
-        DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new ShooterCloseFiringSequence(60.0));
-        DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whenReleased(new ShooterCeaseFire());
+        // DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new
+        // ShooterCloseFiringSequence(60.0));
+        // DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whenReleased(new
+        // ShooterCeaseFire());
 
         DRIVER_PAD.DRIVER_PAD_BACK_BUTTON.whenPressed(new DriveStraightOnHeading(-0.3, DistanceUnits.INCHES, 240, 0));
         DRIVER_PAD.DRIVER_PAD_START_BUTTON.whenPressed(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 240, 0));
 
-        // DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new
-        // FeederSet(1.0));
+        DRIVER_PAD.DRIVER_PAD_LEFT_LOWER_TRIGGER_BUTTON.whileHeld(new FeederSet(1.0));
 
     }
 
