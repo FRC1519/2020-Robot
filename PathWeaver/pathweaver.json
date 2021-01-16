@@ -1,9 +1,9 @@
 {
-  "lengthUnit": "Inch",
+  "lengthUnit": "Meter",
   "exportUnit": "Always Meters",
   "maxVelocity": 5.0,
   "maxAcceleration": 5.0,
   "wheelBase": 5.0,
-  "gameName": "Infinite Recharge",
+  "gameName": "Slalom Path",
   "outputDir": ""
 }
