@@ -42,7 +42,7 @@ public final class Constants {
         public static final int CLIMBER_WALKER_LEFT = 15;
         public static final int CLIMBER_WALKER_RIGHT = 16;
 
-        public static final int CONTROL_PANEL_ROLLER = 18; // WON"T FIT!!!
+        public static final int CONTROL_PANEL_ROLLER = 18; // WON'T FIT!!!
     }
 
     public final class Solenoid {
@@ -59,6 +59,15 @@ public final class Constants {
         public static final int DRIVE_RIGHT_B = 2;
         public static final int DRIVE_LEFT_A = 3;
         public static final int DRIVE_LEFT_B = 4;
+    }
+
+    public final class Drive {
+        public static final int DRIVEBASE_WIDTH = 25;
+
+        /**
+         * A correction applied to the radius of arcing turns (inches)
+         */
+        public static final double TURNING_CORRECTION = 1.84;
     }
 
 }

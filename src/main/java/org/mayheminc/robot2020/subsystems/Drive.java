@@ -387,18 +387,20 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 	 * the right side of the joystick controls the right side of the robot.
 	 */
 	public void tankDrive(double leftSideThrottle, double rightSideThrottle) {
-		if (leftSideThrottle >= 0.0) {
-			leftSideThrottle = (leftSideThrottle * leftSideThrottle); // squaring inputs increases fine control
-		} else {
-			leftSideThrottle = -(leftSideThrottle * leftSideThrottle); // preserves the sign while squaring negative
-																		// values
-		}
+		// if (leftSideThrottle >= 0.0) {
+		// leftSideThrottle = (leftSideThrottle * leftSideThrottle); // squaring inputs
+		// increases fine control
+		// } else {
+		// leftSideThrottle = -(leftSideThrottle * leftSideThrottle); // preserves the
+		// sign while squaring negative
+		// // values
+		// }
 
-		if (rightSideThrottle >= 0.0) {
-			rightSideThrottle = (rightSideThrottle * rightSideThrottle);
-		} else {
-			rightSideThrottle = -(rightSideThrottle * rightSideThrottle);
-		}
+		// if (rightSideThrottle >= 0.0) {
+		// rightSideThrottle = (rightSideThrottle * rightSideThrottle);
+		// } else {
+		// rightSideThrottle = -(rightSideThrottle * rightSideThrottle);
+		// }
 
 		setMotorPower(leftSideThrottle, rightSideThrottle);
 	}

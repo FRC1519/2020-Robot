@@ -37,7 +37,7 @@ public class DriveSlalom extends SequentialCommandGroup {
                 addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 60, 115));
 
                 // lotta driving
-                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 12 * 11.5, 180));
+                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 12 * 12, 180));
                 // turn again again 2 electic boogalo
                 addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 78, 245));
                 addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 36, 180));

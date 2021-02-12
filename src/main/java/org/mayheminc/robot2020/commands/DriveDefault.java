@@ -27,6 +27,8 @@ public class DriveDefault extends CommandBase {
     double steeringX = RobotContainer.DRIVER_PAD.steeringX();
     boolean quickTurn = RobotContainer.DRIVER_PAD.quickTurn();
     RobotContainer.drive.speedRacerDrive(throttle, steeringX, quickTurn);
+    // RobotContainer.drive.speedRacerDrive(0, 0, false);
+
   }
 
   // Returns true when the command should end.

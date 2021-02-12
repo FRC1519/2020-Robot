@@ -12,8 +12,11 @@ import org.mayheminc.util.*;
 // import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj2.command.Command;
 // import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import java.util.LinkedList;
 
@@ -102,6 +105,7 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
+        autonomousPrograms.push(/* 14 */ new DriveTest());
         autonomousPrograms.push(/* 13 */ new DriveSlalom());
         autonomousPrograms.push(/* 12 */ new StayStill());
         autonomousPrograms.push(/* 11 */ new StartBWDriveOnlyToRP());
