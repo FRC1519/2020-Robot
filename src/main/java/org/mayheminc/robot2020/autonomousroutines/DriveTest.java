@@ -9,7 +9,6 @@ package org.mayheminc.robot2020.autonomousroutines;
 
 import org.mayheminc.robot2020.commands.*;
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading.DistanceUnits;
-import org.mayheminc.robot2020.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.*;
 
