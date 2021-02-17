@@ -67,7 +67,7 @@ public final class Constants {
         /**
          * A correction applied to the radius of arcing turns (inches)
          */
-        public static final double TURNING_CORRECTION = 1.84;
+        public static final double TURNING_CORRECTION = 1.00;
     }
 
 }

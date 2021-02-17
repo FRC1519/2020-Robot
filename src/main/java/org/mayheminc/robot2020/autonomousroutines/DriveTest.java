@@ -17,31 +17,36 @@ public class DriveTest extends SequentialCommandGroup {
          * Add your docs here.
          */
         public DriveTest() {
-                // wut
                 addCommands(new DriveZeroGyro(0.0));
 
-                addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 36, 0));
-                // addCommands(new Wait(0.02));
-                // test stuff
-                addCommands(new TurnToHeading(25, 0.4, 70, TurnToHeading.Direction.RIGHT));
-                // turn
-                // addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 36, 90));
-                // // addCommands(new Wait(0.03));
+                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 0));
+                // addCommands(new TurnToHeading(25, 0.25, 45, TurnToHeading.Direction.RIGHT));
 
-                // // test stuff
-                // addCommands(new TurnToHeading(25, 0.4, 160, TurnToHeading.Direction.RIGHT));
-                // // turn
-                // addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 36, 180));
-                // // addCommands(new Wait(0.03));
-                // // test stuff
-                // addCommands(new TurnToHeading(25, 0.4, -110, TurnToHeading.Direction.RIGHT));
-                // // turn
-                // addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 36, -90));
-                // // addCommands(new Wait(0.03));
-                // // test stuff
-                // addCommands(new TurnToHeading(25, 0.4, -20, TurnToHeading.Direction.RIGHT));
-                // // turn
-                // addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 36, 0));
-                // // addCommands(new Wait(0.03));
+                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 45));
+                // addCommands(new TurnToHeading(25, 0.25, 135, TurnToHeading.Direction.RIGHT));
+
+                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 135));
+                // addCommands(new TurnToHeading(25, 0.25, -135,
+                // TurnToHeading.Direction.RIGHT));
+
+                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36,
+                // -135));
+                // addCommands(new TurnToHeading(25, 0.25, -45, TurnToHeading.Direction.RIGHT));
+
+                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, -45));
+
+                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 0));
+                addCommands(new TurnToHeading(25, 0.25, -45, TurnToHeading.Direction.LEFT));
+
+                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, -45));
+                addCommands(new TurnToHeading(25, 0.25, -135, TurnToHeading.Direction.LEFT));
+
+                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, -135));
+                addCommands(new TurnToHeading(25, 0.25, 135, TurnToHeading.Direction.LEFT));
+
+                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 135));
+                addCommands(new TurnToHeading(25, 0.25, 45, TurnToHeading.Direction.LEFT));
+
+                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 45));
         }
 }
