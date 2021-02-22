@@ -44,12 +44,20 @@ public class DriveSlalom extends SequentialCommandGroup {
 
                 addCommands(new TurnToHeading(20, 0.3, -45, TurnToHeading.Direction.LEFT));
                 addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 15, 295));
-                addCommands(new TurnToHeading(20, 0.3, 0, TurnToHeading.Direction.RIGHT));
-                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 120, 0));
-                addCommands(new TurnToHeading(20, 0.3, 45, TurnToHeading.Direction.RIGHT));
-                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 20, 45));
-                addCommands(new WaitCommand(2));
-                addCommands(new TurnToHeading(0, 0.3, -45, TurnToHeading.Direction.LEFT));
-                addCommands(new TurnToHeading(0, 0.3, -135, TurnToHeading.Direction.LEFT));
+                addCommands(new TurnToHeading(20, 0.4, 0, TurnToHeading.Direction.RIGHT));
+                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 66, 0));
+                addCommands(new TurnToHeading(20, 0.3, 50, TurnToHeading.Direction.RIGHT));
+                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 20, 50));
+                // COOL TURN ⬇️
+                addCommands(new TurnToHeading(1, 0.42, -45, TurnToHeading.Direction.LEFT));
+                addCommands(new TurnToHeading(1, 0.42, -135, TurnToHeading.Direction.LEFT));
+                addCommands(new TurnToHeading(1, 0.42, 120, TurnToHeading.Direction.LEFT));
+                // COOL TURN ⬆️
+                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 30, 135));
+                addCommands(new TurnToHeading(1, 0.3, -180, TurnToHeading.Direction.RIGHT));
+                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 115, 180));
+                addCommands(new TurnToHeading(1, 0.3, -135, TurnToHeading.Direction.RIGHT));
+                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 56, -135));
+                addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 15, -180));
         }
 }

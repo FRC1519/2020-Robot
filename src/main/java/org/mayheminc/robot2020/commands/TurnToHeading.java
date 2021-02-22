@@ -20,6 +20,8 @@ public class TurnToHeading extends CommandBase {
   Direction direction;
   int turnPhase;
 
+  double ratio;
+
   public enum Direction {
     LEFT, RIGHT
   }
@@ -43,16 +45,19 @@ public class TurnToHeading extends CommandBase {
   public void initialize() {
     this.initialHeading = RobotContainer.drive.getHeading();
     this.turnPhase = 0;
+
+    this.ratio = getRatio();
+
+    if (direction == Direction.LEFT) {
+      RobotContainer.drive.tankDrive(speed * ratio, speed);
+    } else {
+      RobotContainer.drive.tankDrive(speed, speed * ratio);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (direction == Direction.LEFT) {
-      RobotContainer.drive.tankDrive(speed * getRatio(), speed);
-    } else {
-      RobotContainer.drive.tankDrive(speed, speed * getRatio());
-    }
   }
 
   public double getRatio() {
