@@ -100,7 +100,8 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-        autonomousPrograms.push(/* 14 */ new DriveTest());
+        autonomousPrograms.push(/* 15 */ new DriveTest());
+        autonomousPrograms.push(/* 14 */ new DriveBarrelRacing());
         autonomousPrograms.push(/* 13 */ new DriveSlalom());
         autonomousPrograms.push(/* 12 */ new StayStill());
         autonomousPrograms.push(/* 11 */ new StartBWDriveOnlyToRP());
