@@ -48,9 +48,9 @@ public class TurnToHeading extends CommandBase {
 
     this.ratio = getRatio();
 
-    if (direction == Direction.LEFT) {
+    if ((speed > 0 && direction == Direction.LEFT) || (speed < 0 && direction == Direction.RIGHT)) {
       RobotContainer.drive.tankDrive(speed * ratio, speed);
-    } else {
+    } else if ((speed > 0 && direction == Direction.RIGHT) || (speed < 0 && direction == Direction.LEFT)) {
       RobotContainer.drive.tankDrive(speed, speed * ratio);
     }
   }
