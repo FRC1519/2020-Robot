@@ -50,8 +50,12 @@ public class TurnToHeading extends CommandBase {
 
     if ((speed > 0 && direction == Direction.LEFT) || (speed < 0 && direction == Direction.RIGHT)) {
       RobotContainer.drive.tankDrive(speed * ratio, speed);
+      System.out.println("LEFT: " + speed * ratio);
+      System.out.println("RIGHT: " + speed);
     } else if ((speed > 0 && direction == Direction.RIGHT) || (speed < 0 && direction == Direction.LEFT)) {
       RobotContainer.drive.tankDrive(speed, speed * ratio);
+      System.out.println("LEFT: " + speed);
+      System.out.println("RIGHT: " + speed * ratio);
     }
   }
 

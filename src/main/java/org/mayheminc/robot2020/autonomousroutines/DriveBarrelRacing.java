@@ -6,9 +6,11 @@ package org.mayheminc.robot2020.autonomousroutines;
 
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading;
 import org.mayheminc.robot2020.commands.DriveZeroGyro;
+import org.mayheminc.robot2020.commands.IntakeSetPosition;
 import org.mayheminc.robot2020.commands.TurnToHeading;
 import org.mayheminc.robot2020.commands.DriveStraightOnHeading.DistanceUnits;
 import org.mayheminc.robot2020.commands.TurnToHeading.Direction;
+import org.mayheminc.robot2020.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -23,20 +25,21 @@ public class DriveBarrelRacing extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new DriveZeroGyro(0.0));
+    addCommands(new IntakeSetPosition(Intake.PIVOT_UP));
 
     addCommands(new DriveStraightOnHeading(0.4, 102, 0));
 
-    addCommands(new TurnToHeading(12, 0.4, 180, Direction.RIGHT));
-    addCommands(new TurnToHeading(12, 0.4, -30, Direction.RIGHT));
+    addCommands(new TurnToHeading(1, 0.4, 180, Direction.RIGHT));
+    addCommands(new TurnToHeading(1, 0.4, -30, Direction.RIGHT));
 
     addCommands(new DriveStraightOnHeading(0.4, 94, 0));
 
-    addCommands(new TurnToHeading(12, 0.4, 180, Direction.LEFT));
-    addCommands(new TurnToHeading(12, 0.4, 50, Direction.LEFT));
+    addCommands(new TurnToHeading(1, 0.4, 180, Direction.LEFT));
+    addCommands(new TurnToHeading(1, 0.4, 50, Direction.LEFT));
 
     addCommands(new DriveStraightOnHeading(0.4, 60, 50));
 
-    addCommands(new TurnToHeading(12, 0.4, 180, Direction.LEFT));
+    addCommands(new TurnToHeading(1, 0.4, 180, Direction.LEFT));
     addCommands(new DriveStraightOnHeading(0.4, 20 * 12, 180));
   }
 }
