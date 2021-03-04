@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  public static double autonomousStartTime = -1;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -91,6 +93,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    autonomousStartTime = System.currentTimeMillis();
   }
 
   /**
@@ -134,5 +138,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public static double autonomousTimeElapsed() {
+    return (System.currentTimeMillis() - autonomousStartTime) / 1000;
   }
 }

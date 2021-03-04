@@ -19,34 +19,8 @@ public class DriveTest extends SequentialCommandGroup {
         public DriveTest() {
                 addCommands(new DriveZeroGyro(0.0));
 
-                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 0));
-                // addCommands(new TurnToHeading(25, 0.25, 45, TurnToHeading.Direction.RIGHT));
+                addCommands(new WaitCommand(5));
 
-                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 45));
-                // addCommands(new TurnToHeading(25, 0.25, 135, TurnToHeading.Direction.RIGHT));
-
-                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 135));
-                // addCommands(new TurnToHeading(25, 0.25, -135,
-                // TurnToHeading.Direction.RIGHT));
-
-                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36,
-                // -135));
-                // addCommands(new TurnToHeading(25, 0.25, -45, TurnToHeading.Direction.RIGHT));
-
-                // addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, -45));
-
-                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 0));
-                addCommands(new TurnToHeading(25, 0.25, -45, TurnToHeading.Direction.LEFT));
-
-                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, -45));
-                addCommands(new TurnToHeading(25, 0.25, -135, TurnToHeading.Direction.LEFT));
-
-                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, -135));
-                addCommands(new TurnToHeading(25, 0.25, 135, TurnToHeading.Direction.LEFT));
-
-                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 135));
-                addCommands(new TurnToHeading(25, 0.25, 45, TurnToHeading.Direction.LEFT));
-
-                addCommands(new DriveStraightOnHeading(0.25, DistanceUnits.INCHES, 36, 45));
+                addCommands(new PrintAutonomousTimeElapsed("yay"));
         }
 }

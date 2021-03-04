@@ -9,6 +9,9 @@ package org.mayheminc.robot2020;
 
 import org.mayheminc.util.*;
 
+import edu.wpi.first.hal.HAL;
+import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Command;
