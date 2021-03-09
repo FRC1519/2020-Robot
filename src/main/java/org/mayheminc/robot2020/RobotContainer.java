@@ -9,9 +9,6 @@ package org.mayheminc.robot2020;
 
 import org.mayheminc.util.*;
 
-import edu.wpi.first.hal.HAL;
-import edu.wpi.first.hal.HALUtil;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -67,7 +64,7 @@ public class RobotContainer {
         pidtuner = new PidTuner(RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SIX,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_SEVEN,
                 RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_ELEVEN,
-                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, turret);
+                RobotContainer.DRIVER_STICK.DRIVER_STICK_ENA_BUTTON_TEN, intake);
 
         cameraLights.set(true);
     }
@@ -103,7 +100,10 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-        autonomousPrograms.push(/* 16 */ new DriveTest());
+        autonomousPrograms.push(/* 19 */ new DriveTest());
+        autonomousPrograms.push(/* 18 */ new PathARed());
+        autonomousPrograms.push(/* 17 */ new PathBBlue());
+        autonomousPrograms.push(/* 16 */ new PathABlue());
         autonomousPrograms.push(/* 15 */ new DriveBouncePath());
         autonomousPrograms.push(/* 14 */ new DriveBarrelRacing());
         autonomousPrograms.push(/* 13 */ new DriveSlalom());
