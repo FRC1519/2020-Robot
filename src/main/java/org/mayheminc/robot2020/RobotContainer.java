@@ -100,7 +100,8 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-        autonomousPrograms.push(/* 19 */ new DriveTest());
+        autonomousPrograms.push(/* 20 */ new DriveTest());
+        autonomousPrograms.push(/* 19 */ new PathBRed());
         autonomousPrograms.push(/* 18 */ new PathARed());
         autonomousPrograms.push(/* 17 */ new PathBBlue());
         autonomousPrograms.push(/* 16 */ new PathABlue());
