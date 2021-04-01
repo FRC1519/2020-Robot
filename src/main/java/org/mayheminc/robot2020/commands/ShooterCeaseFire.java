@@ -33,7 +33,7 @@ public class ShooterCeaseFire extends SequentialCommandGroup {
         new ShooterWheelSet(ShooterWheel.IDLE_SPEED), new Wait(0.1)));
 
     // Lower the hood and intake now that we're done shooting
-    addCommands(new HoodSetAbsWhileHeld(Hood.STARTING_POSITION));
+    // addCommands(new HoodSetAbsWhileHeld(Hood.STARTING_POSITION));
     addCommands(new IntakeSetPosition(Intake.PIVOT_DOWN)); // ensure intake is lowered,);
     addCommands(new IntakeSetRollers(0.0));
   }

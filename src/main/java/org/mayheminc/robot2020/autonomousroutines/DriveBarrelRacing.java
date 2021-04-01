@@ -34,15 +34,15 @@ public class DriveBarrelRacing extends SequentialCommandGroup {
     addCommands(new TurnToHeading(1.5, 0.6, 180, Direction.RIGHT));
     addCommands(new TurnToHeading(1.5, 0.6, -55, Direction.RIGHT));
 
-    addCommands(new DriveStraightOnHeading(0.6, 90, -12));
+    addCommands(new DriveStraightOnHeading(0.6, 94, -2));
 
     addCommands(new TurnToHeading(1.5, 0.6, 180, Direction.LEFT));
     addCommands(new TurnToHeading(1.5, 0.6, 80, Direction.LEFT));
 
-    addCommands(new DriveStraightOnHeading(0.6, 70, 60));
+    addCommands(new DriveStraightOnHeading(0.6, 80, 45));
 
     addCommands(new TurnToHeading(1.5, 0.6, -160, Direction.LEFT));
-    addCommands(new DriveStraightOnHeading(0.6, 20 * 12, -178));
+    addCommands(new DriveStraightOnHeading(0.6, 20 * 12, -180));
 
     addCommands(new PrintAutonomousTimeElapsed("BarrelRacing"));
   }

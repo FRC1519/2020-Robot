@@ -11,9 +11,15 @@ import org.mayheminc.util.*;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 import org.mayheminc.robot2020.autonomousroutines.*;
 import org.mayheminc.robot2020.commands.*;
@@ -51,6 +57,10 @@ public class RobotContainer {
     public static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
     public static final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad();
     // private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick();
+
+    private enum GalacticSearchPath {
+        PathARed, PathABlue, PathBRed, PathBBlue
+    }
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -100,7 +110,30 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-        autonomousPrograms.push(/* 20 */ new DriveTest());
+        SelectCommand driveGalacticSearch = new SelectCommand(() -> {
+            String path = SmartDashboard.getString("GalacticSearchPath", "unknown");
+            Command pathCmd = new PrintCommand("NO PATH FOUND :(");
+
+            switch (path) {
+            case "path a red":
+                pathCmd = new PathARed();
+                break;
+            case "path b red":
+                pathCmd = new PathBRed();
+                break;
+            case "path a blue":
+                pathCmd = new PathABlue();
+                break;
+            case "path b blue":
+                pathCmd = new PathBBlue();
+                break;
+            }
+
+            return pathCmd;
+        });
+
+        autonomousPrograms.push(/* 21 */ new DriveTest());
+        autonomousPrograms.push(/* 20 */ driveGalacticSearch);
         autonomousPrograms.push(/* 19 */ new PathBRed());
         autonomousPrograms.push(/* 18 */ new PathARed());
         autonomousPrograms.push(/* 17 */ new PathBBlue());

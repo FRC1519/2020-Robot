@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class PathARed extends SequentialCommandGroup {
   /**
    * Creates a new PathABlue.
+   * 
+   * STARTS IN THE CENTER
    */
   public PathARed() {
     // Add your commands in the super() call, e.g.
@@ -33,7 +35,7 @@ public class PathARed extends SequentialCommandGroup {
     addCommands(new DriveZeroGyro(26.0));
 
     addCommands(new IntakeSetRollers(-1));
-    addCommands(new ParallelCommandGroup(new IntakeSetPosition(Intake.PIVOT_DOWN),
+    addCommands(new ParallelCommandGroup(/* new IntakeSetPosition(Intake.PIVOT_DOWN), */
         new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 8.5 * 12, 26.0)));
 
     addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 8.8 * 12, -95));
