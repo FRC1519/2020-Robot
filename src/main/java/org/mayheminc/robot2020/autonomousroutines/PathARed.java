@@ -26,20 +26,23 @@ public class PathARed extends SequentialCommandGroup {
   /**
    * Creates a new PathABlue.
    * 
-   * STARTS IN THE CENTER
+   * STARTS IN THE CENTER, FACING AHEAD
    */
   public PathARed() {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
 
-    addCommands(new DriveZeroGyro(26.0));
+    addCommands(new DriveZeroGyro(0));
 
     addCommands(new IntakeSetRollers(-1));
-    addCommands(new ParallelCommandGroup(/* new IntakeSetPosition(Intake.PIVOT_DOWN), */
-        new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 8.5 * 12, 26.0)));
+    addCommands(new IntakeSetPosition(Intake.PIVOT_DOWN));
 
-    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 8.8 * 12, -95));
-    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 14 * 12, 0));
+    addCommands(new DriveStraightOnHeading(0.2, DistanceUnits.INCHES, 3 * 12, 0));
+
+    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 4 * 12, 40));
+    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 9 * 12, -80));
+
+    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 13 * 12, 10));
 
     addCommands(new IntakeSetRollers(0));
     addCommands(new PrintAutonomousTimeElapsed("Path A Red"));

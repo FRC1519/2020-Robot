@@ -16,6 +16,7 @@ import org.mayheminc.robot2020.commands.DriveStraightOnHeading.DistanceUnits;
 import org.mayheminc.robot2020.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -24,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class PathABlue extends SequentialCommandGroup {
   /**
    * Creates a new PathABlue.
+   * 
+   * Starts pointing straight from the left of the field
    */
   public PathABlue() {
     // Add your commands in the super() call, e.g.
@@ -36,8 +39,9 @@ public class PathABlue extends SequentialCommandGroup {
     addCommands(new ParallelCommandGroup(new IntakeSetPosition(Intake.PIVOT_DOWN),
         new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 10 * 12, 0)));
 
-    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 7.5 * 12, -85));
-    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 13 * 12, 50));
+    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 9.5 * 12, -85));
+    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 10 * 12, 50));
+    addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 3 * 12, 0));
 
     addCommands(new IntakeSetRollers(0));
     addCommands(new PrintAutonomousTimeElapsed("Path A Blue"));

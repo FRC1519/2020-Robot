@@ -34,6 +34,10 @@ import org.mayheminc.robot2020.subsystems.*;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    public enum GalacticSearchPath {
+        PATH_A_RED, PATH_A_BLUE, PATH_B_RED, PATH_B_BLUE, UNKNOWN
+    }
+
     // The robot's subsystems and commands are defined here...
 
     public static final Climber climber = new Climber();
@@ -57,10 +61,6 @@ public class RobotContainer {
     public static final MayhemDriverPad DRIVER_PAD = new MayhemDriverPad();
     public static final MayhemOperatorPad OPERATOR_PAD = new MayhemOperatorPad();
     // private final MayhemOperatorStick OPERATOR_STICK = new MayhemOperatorStick();
-
-    private enum GalacticSearchPath {
-        PathARed, PathABlue, PathBRed, PathBBlue
-    }
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -110,29 +110,36 @@ public class RobotContainer {
     private void configureAutonomousPrograms() {
         LinkedList<Command> autonomousPrograms = new LinkedList<Command>();
 
-        SelectCommand driveGalacticSearch = new SelectCommand(() -> {
-            String path = SmartDashboard.getString("GalacticSearchPath", "unknown");
-            Command pathCmd = new PrintCommand("NO PATH FOUND :(");
+        SelectCommand driveGalacticSearch = new SelectCommand(
+                Map.ofEntries(Map.entry(GalacticSearchPath.PATH_A_RED, new PathARed()),
+                        Map.entry(GalacticSearchPath.PATH_A_BLUE, new PathABlue()),
+                        Map.entry(GalacticSearchPath.PATH_B_RED, new PathBRed()),
+                        Map.entry(GalacticSearchPath.PATH_B_BLUE, new PathBBlue()),
+                        Map.entry(GalacticSearchPath.UNKNOWN, new PrintCommand("-------- no path found"))),
+                () -> {
+                    String path = SmartDashboard.getString("GalacticSearchPath", "unknown");
+                    GalacticSearchPath pathValue = GalacticSearchPath.UNKNOWN;
 
-            switch (path) {
-            case "path a red":
-                pathCmd = new PathARed();
-                break;
-            case "path b red":
-                pathCmd = new PathBRed();
-                break;
-            case "path a blue":
-                pathCmd = new PathABlue();
-                break;
-            case "path b blue":
-                pathCmd = new PathBBlue();
-                break;
-            }
+                    switch (path) {
+                    case "path a red":
+                        pathValue = GalacticSearchPath.PATH_A_RED;
+                        break;
+                    case "path b red":
+                        pathValue = GalacticSearchPath.PATH_B_RED;
+                        break;
+                    case "path a blue":
+                        pathValue = GalacticSearchPath.PATH_A_BLUE;
+                        break;
+                    case "path b blue":
+                        pathValue = GalacticSearchPath.PATH_B_BLUE;
+                        break;
+                    }
 
-            return pathCmd;
-        });
+                    return pathValue;
+                });
 
-        autonomousPrograms.push(/* 21 */ new DriveTest());
+        autonomousPrograms.push(/* 22 */ new DriveTest());
+        // autonomousPrograms.push(/* 21 */ driveGalacticSearch);
         autonomousPrograms.push(/* 20 */ driveGalacticSearch);
         autonomousPrograms.push(/* 19 */ new PathBRed());
         autonomousPrograms.push(/* 18 */ new PathARed());
@@ -220,13 +227,13 @@ public class RobotContainer {
 
         DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new TurretSetRel(-200.0));
         DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whenPressed(new TurretSetRel(+200.0));
-        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new TurretSetAbs(+0.0));
+        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new TurretSetAbs(+0.0));
         // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new
         // ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));
 
         // Debug Hood
-        // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new ShooterSetHoodRel(+1000));
-        // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new ShooterSetHoodRel(-1000));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new HoodSetRel(+1000));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new HoodSetRel(-1000));
         // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whileHeld(new ShooterSetHoodVBus(+1.0));
         // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whileHeld(new ShooterSetHoodVBus(-1.0));
 
