@@ -38,7 +38,8 @@ public class ShooterFiringSequence extends SequentialCommandGroup {
     // revolver turntable, shoot for specified duration.
     // TODO: should really shoot until no balls detected any more
     addCommands(new ParallelRaceGroup( //
-        new TurretAimToTargetContinuously(), // continue aiming while shooting
+        new ShooterWheelSetToTargetContinuously(), new TurretAimToTargetContinuously(), // continue aiming while
+                                                                                        // shooting
         new FeederSet(1.0), new SequentialCommandGroup(new Wait(0.1), new ChimneySet(1.0)),
         new SequentialCommandGroup(new Wait(0.2), new RevolverSetTurntable(1.0)), new Wait(waitDuration)));
 

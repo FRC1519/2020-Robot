@@ -17,6 +17,7 @@ public class TurretAimToTargetContinuously extends CommandBase {
    */
   public TurretAimToTargetContinuously() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.hood);
     addRequirements(RobotContainer.turret);
   }
 
@@ -34,6 +35,7 @@ public class TurretAimToTargetContinuously extends CommandBase {
     // TODO: if the desired azimuth is "beyond the soft stop" should we turn the
     // robot?
     RobotContainer.turret.setPositionAbs(pos);
+    RobotContainer.hood.setPosition(RobotContainer.targeting.getDesiredHood());
   }
 
   // Called once the command ends or is interrupted.
