@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.*;
 
 public class StartBWTrench extends SequentialCommandGroup {
         /**
-         * Add your docs here.
+         * Start backwards, right bumper on the centerline of the goal.
          */
         public StartBWTrench(double extraDistance) {
                 // Note: extra distance planned to be 40 inches
@@ -26,7 +26,7 @@ public class StartBWTrench extends SequentialCommandGroup {
                 addCommands(new StartBWShoot3());
 
                 // then, drive to the trench entrance (jog left a little to get there)
-                addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 30, 140));
+                addCommands(new DriveStraightOnHeading(0.4, DistanceUnits.INCHES, 35, 125));
 
                 // pick up balls while heading down the trench.
                 addCommands(new ParallelCommandGroup(
@@ -45,14 +45,16 @@ public class StartBWTrench extends SequentialCommandGroup {
                 // after getting all three balls, go back to shooting position
                 // first, make sure we drive straight out from under the control panel
                 addCommands(new DriveStraightOnHeading(-0.6, DistanceUnits.INCHES, 16 + extraDistance, 180));
-                addCommands(new IntakeSetRollers(0.0)); // turn off the intake in case it has been stalled for a while
+                addCommands(new IntakeSetRollers(-0.2)); // turn off the intake in case it has been stalled for a while
 
                 // drive diagonally over towards the shooting position, while turning on shooter
                 // wheels, raising the hood, and re-aiming the turret
-                addCommands(new ParallelCommandGroup(new ShooterWheelSet(ShooterWheel.IDLE_SPEED),
-                                new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION),
-                                new TurretSetAbs((168.0 * Turret.TICKS_PER_DEGREE)),
-                                new DriveStraightOnHeading(-0.5, DistanceUnits.INCHES, 96, 160)));
+                addCommands( //
+                                new ParallelCommandGroup( //
+                                                new ShooterWheelSet(ShooterWheel.IDLE_SPEED), //
+                                                new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION), //
+                                                new TurretSetAbs((168.0 * Turret.TICKS_PER_DEGREE)), //
+                                                new DriveStraightOnHeading(-0.5, DistanceUnits.INCHES, 96, 160))); //
 
                 // straighten out again to enable turret to aim to the target
                 addCommands(new DriveStraightOnHeading(-0.3, DistanceUnits.INCHES, 24, 180));

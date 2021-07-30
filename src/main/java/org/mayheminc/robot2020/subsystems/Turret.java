@@ -74,6 +74,10 @@ public class Turret extends SubsystemBase implements PidTunerObject {
         turretTalon.configReverseSoftLimitThreshold(MIN_POSITION);
         turretTalon.configReverseSoftLimitEnable(true);
 
+        
+        turretTalon.setInverted(false);
+        turretTalon.setSensorPhase(false);
+        
         this.setVBus(0.0);
     }
 

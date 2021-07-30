@@ -18,7 +18,10 @@ public class StartFWShoot3ThenToRP extends SequentialCommandGroup {
         public StartFWShoot3ThenToRP() {
 
                 // start backwards and shoot the first three balls
-                addCommands(new StartFWShoot3());
+                // addCommands(new StartFWShoot3());
+                addCommands(new Wait(2.0));
+
+                addCommands(new ShooterFiringSequence(4.0));
 
                 // then, drive to the rendezvous point
                 addCommands(new DriveStraightOnHeading(-0.3, DistanceUnits.INCHES, 12, 0));

@@ -34,7 +34,7 @@ public class Chimney extends SubsystemBase {
     chimneyTalon.configPeakOutputForward(+12.0);
     chimneyTalon.configPeakOutputReverse(-12.0);
 
-    chimneyTalon.setInverted(true);
+    chimneyTalon.setInverted(false);
   }
 
   @Override

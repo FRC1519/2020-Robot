@@ -20,11 +20,11 @@ public class ShooterWheel extends SubsystemBase implements PidTunerObject {
     private final double SECONDS_PER_MINUTE = 60.0;
     private final double HUNDRED_MS_PER_SECOND = 10.0;
 
-    public static final double IDLE_SPEED = 2200.0;
-    public static final double CLOSE_SHOOTING_SPEED = 3000.0;
-    public static final double INITIATION_LINE_SPEED = 3000.0;
+    public static final double IDLE_SPEED = 1000.0;
+    public static final double CLOSE_SHOOTING_SPEED = 4000.0;
+    public static final double INITIATION_LINE_SPEED = 4500.0;
     public static final double TRENCH_FRONT_SPEED = 3400.0;
-    public static final double MAX_SPEED_RPM = 3600;
+    public static final double MAX_SPEED_RPM = 5000;
 
     double m_targetSpeedRPM;
 

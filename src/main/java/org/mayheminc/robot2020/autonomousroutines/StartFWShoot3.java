@@ -25,13 +25,14 @@ public class StartFWShoot3 extends SequentialCommandGroup {
 
                 // first, lower the intake, start the shooter wheel, and wait until the turret
                 // is turned towards the target
-                addCommands(new ParallelCommandGroup( // run the following commands in parallel:
-                                new IntakeSetPosition(Intake.PIVOT_DOWN),
-                                new ShooterWheelSet(ShooterWheel.INITIATION_LINE_SPEED),
-                                new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION),
-                                new TurretSetAbs((0.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
+                // addCommands(new ParallelCommandGroup( // run the following commands in
+                // parallel:
+                // new IntakeSetPosition(Intake.PIVOT_DOWN),
+                // // new ShooterWheelSet(ShooterWheel.INITIATION_LINE_SPEED, true),
+                // // new HoodSetAbs(Hood.INITIATION_LINE_POSITION),
+                // new TurretSetAbs((0.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
 
-                addCommands(new ShooterReadyAimFire(1.0));
+                addCommands(new ShooterFiringSequence(4.0));
 
                 // turn the shooter wheel and intake off now that the shooting is all done
                 addCommands(new ParallelCommandGroup( // below commands in parallel

@@ -29,21 +29,32 @@ public class ShooterCloseFiringSequence extends SequentialCommandGroup {
 
     // Prepare for shooting.
     addCommands(new IntakeSetPosition(Intake.PIVOT_SHOOTING)); // move intake to "shooting position"
-    addCommands(new ParallelCommandGroup( // prepare for shooting,
+
+    addCommands( //
+        // new ParallelCommandGroup( // prepare for shooting,
         new AirCompressorPause() // turn off compressor while actively shooting,
     // , new ShooterAimToTarget() // and aim at the target (azimuth and elevation).
-    ));
+    // )
+    );
 
     // no aiming when up close; just turn on the shooter wheels and raise the hood
-    addCommands(new ShooterWheelSet(ShooterWheel.CLOSE_SHOOTING_SPEED), // shooter wheel manual speed
-        new HoodSetAbs(Hood.CLOSE_SHOOTING_POSITION));
+    addCommands( //
+        new ParallelCommandGroup( // wait until shooter and hood are good.
+            new ShooterWheelSet(ShooterWheel.CLOSE_SHOOTING_SPEED, true), //
+            new HoodSetAbs(Hood.CLOSE_SHOOTING_POSITION) //
+        ) //
+    );
 
     // turn on the feeder, wait 0.1, turn on the Chimney, wait 0.1, turn on the
     // revolver turntable, shoot for specified duration.
     // TODO: should really shoot until no balls detected any more
-    addCommands(new ParallelRaceGroup( //
-        new FeederSet(1.0), new SequentialCommandGroup(new Wait(0.1), new ChimneySet(1.0)),
-        new SequentialCommandGroup(new Wait(0.2), new RevolverSetTurntable(1.0)), new Wait(waitDuration)));
+    addCommands( //
+        new ParallelRaceGroup( //
+            new FeederSet(1.0), //
+            new SequentialCommandGroup(new Wait(0.1), new ChimneySet(1.0)), //
+            new SequentialCommandGroup(new Wait(0.2), new RevolverSetTurntable(1.0)), //
+            new Wait(waitDuration)) //
+    );
 
     // turn off the feeder, chimney, and revolver, ending after 0.1 seconds
     addCommands(new ShooterCeaseFire());

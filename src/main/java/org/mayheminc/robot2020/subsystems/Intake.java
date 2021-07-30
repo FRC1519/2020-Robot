@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
   private static final int PIVOT_ZERO_POSITION = 950;
   public static final double PIVOT_UP = PIVOT_ZERO_POSITION;
   public static final double PIVOT_SHOOTING = 100.0;
-  public static final double PIVOT_DOWN = -150.0;
+  public static final double PIVOT_DOWN = -350.0;
 
   private static final double HORIZONTAL_HOLD_OUTPUT = 0.00;
   private static final double MAX_PID_MOVEMENT_TIME_SEC = 10.0;
@@ -63,13 +63,13 @@ public class Intake extends SubsystemBase implements PidTunerObject {
     // If we want 50% power when at the full extreme,
     // Full extreme is 900 ticks
     // kP = (0.5 * 1023) / 900 = 0.568
-    motor.config_kP(0, 2.0, 0); // based upon Robert's initial calcs, above
+    motor.config_kP(0, 1.5, 0); // based upon Robert's initial calcs, above
 
     // typical value of about 1/100 of kP for starting tuning
     motor.config_kI(0, 0.0, 0);
 
     // typical value of about 10x to 100x of kP for starting tuning
-    motor.config_kD(0, 100.0, 0);
+    motor.config_kD(0, 50.0, 0);
     // motor.config_kD(0, 0.575, 0);
 
     // practically always set kF to 0 for position control
@@ -140,7 +140,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
         if (pivotTalon.getPosition() > (PIVOT_UP / 2.0)) {
           setPivotVBus(+0.05);
         } else { // we are close to the PIVOT DOWN, so apply a little negative power.
-          setPivotVBus(-0.05);
+          setPivotVBus(-0.05 * 2);
         }
       } else {
         pivotTalon.set(ControlMode.Position, m_targetPosition, DemandType.ArbitraryFeedForward, m_feedForward);

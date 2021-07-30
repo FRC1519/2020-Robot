@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterWheelSetToTargetContinuously extends CommandBase {
     double m_rpm;
-    boolean m_waitForDone;
+    // boolean m_waitForDone;
 
     /**
      * Creates a new ShooterWheelSet

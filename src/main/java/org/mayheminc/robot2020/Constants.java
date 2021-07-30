@@ -25,8 +25,8 @@ public final class Constants {
         public static final int DRIVE_RIGHT_A = 3; // high current
         public static final int DRIVE_RIGHT_B = 4; // high current
 
-        public static final int SHOOTER_WHEEL_LEFT = 5; // high current
-        public static final int SHOOTER_WHEEL_RIGHT = 17; // high current
+        public static final int SHOOTER_WHEEL_LEFT = 17; // high current
+        public static final int SHOOTER_WHEEL_RIGHT = 5; // high current
         public static final int SHOOTER_FEEDER = 6;
         public static final int SHOOTER_TURRET = 7;
         public static final int SHOOTER_HOOD = 8;

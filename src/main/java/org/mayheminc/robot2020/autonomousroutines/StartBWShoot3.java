@@ -26,9 +26,13 @@ public class StartBWShoot3 extends SequentialCommandGroup {
                 // first, lower the intake, start the shooter wheel, and wait until the turret
                 // is turned towards the target
                 addCommands(new ParallelCommandGroup( // run the following commands in parallel:
-                                new IntakeSetPosition(Intake.PIVOT_DOWN), new ShooterWheelSet(ShooterWheel.IDLE_SPEED),
-                                new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION),
-                                new TurretSetAbs((180.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE)));
+                                new IntakeSetPosition(Intake.PIVOT_DOWN), // intake down
+                                new ShooterWheelSet(ShooterWheel.IDLE_SPEED), // spin up the shooter
+                                new HoodSetAbsWhileHeld(Hood.INITIATION_LINE_POSITION), // set the hood to a good
+                                                                                        // starting position
+                                new TurretSetAbs((180.0 * Turret.TICKS_PER_DEGREE), Turret.WAIT_FOR_DONE))); // turn
+                                                                                                             // turret
+                                                                                                             // around
 
                 addCommands(new ShooterFiringSequence(1.5));
 

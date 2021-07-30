@@ -14,6 +14,6 @@ public class StartBWTrench5 extends SequentialCommandGroup {
          * Add your docs here.
          */
         public StartBWTrench5() {
-                addCommands(new StartBWTrench(40)); // use extraDistance of 40 inches for control panel
+                addCommands(new StartBWTrench(50)); // use extraDistance of 40 inches for control panel
         }
 }

@@ -238,7 +238,8 @@ public class Targeting extends SubsystemBase {
       // too close for the lob shot, switch to the bullet shot
       return CLOSE_HOOD_ANGLE;
     } else {
-      return 105874 + -407324 * m_bestY + 881911 * m_bestY * m_bestY + -506286 * m_bestY * m_bestY * m_bestY;
+      //  y(x) = -33,064x^2 + 37,144x^1 + -5,872
+      return  -33064 * m_bestY * m_bestY + 37144*m_bestY - 5872;
     }
   }
 
@@ -248,7 +249,8 @@ public class Targeting extends SubsystemBase {
    * @return
    */
   private double getWheelSpeedFromY() {
-    double computedWheelSpeed = 2618 + -1939 * m_bestY + 3583 * m_bestY * m_bestY;
+    double computedWheelSpeed = -137 + 14201 * m_bestY + -10089 * m_bestY * m_bestY;
+    // -10,089x^2 + 14,201x^1 + -137
 
     if (m_bestY < BEST_Y_CLOSE_THRESHOLD) {
       // too close for the lob shot, switch to the bullet shot

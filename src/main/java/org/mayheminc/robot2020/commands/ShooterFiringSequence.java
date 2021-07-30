@@ -32,16 +32,22 @@ public class ShooterFiringSequence extends SequentialCommandGroup {
         new ShooterAimToTarget())); // and aim at the target (azimuth and elevation).
 
     // prior command established aim; turn on the shooter wheels and maintain turret
-    addCommands(new ParallelRaceGroup(new ShooterWheelSetToTarget(true), new TurretAimToTargetContinuously()));
+    addCommands( //
+        new ParallelRaceGroup( //
+            new ShooterWheelSetToTarget(true), // set the shooter wheel
+            new TurretAimToTargetContinuously() // set the aim hood and turret to target
+        ));
 
     // turn on the feeder, wait 0.1, turn on the Chimney, wait 0.1, turn on the
     // revolver turntable, shoot for specified duration.
     // TODO: should really shoot until no balls detected any more
     addCommands(new ParallelRaceGroup( //
-        new ShooterWheelSetToTargetContinuously(), new TurretAimToTargetContinuously(), // continue aiming while
-                                                                                        // shooting
-        new FeederSet(1.0), new SequentialCommandGroup(new Wait(0.1), new ChimneySet(1.0)),
-        new SequentialCommandGroup(new Wait(0.2), new RevolverSetTurntable(1.0)), new Wait(waitDuration)));
+        new ShooterWheelSetToTargetContinuously(), // spin up the shooter wheel
+        new TurretAimToTargetContinuously(), // continue aiming while shooting
+        new FeederSet(1.0), // turn on the shooter feeder
+        new SequentialCommandGroup(new Wait(0.1), new ChimneySet(1.0)), // wait a bit and then set the chimney
+        new SequentialCommandGroup(new Wait(0.2), new RevolverSetTurntable(1.0)), //
+        new Wait(waitDuration))); // wait a little longer and then turn on the revolver
 
     // turn off the feeder, chimney, and revolver, ending after 0.1 seconds
     addCommands(new ShooterCeaseFire());
