@@ -35,7 +35,7 @@ public class MayhemTalonSRX extends TalonSRX {
 		if (currentLimit == CurrentLimit.HIGH_CURRENT) {
 			this.configPeakCurrentLimit(60);
 			this.configContinuousCurrentLimit(40);
-			this.configPeakCurrentDuration(3000);
+			this.configPeakCurrentDuration(1000);
 		} else if (currentLimit == CurrentLimit.LOW_CURRENT) {
 			this.configContinuousCurrentLimit(30);
 		}
