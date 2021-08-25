@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
+import org.mayheminc.util.MayhemTalonSRX.CurrentLimit;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,8 +22,10 @@ public class Climber extends SubsystemBase {
   private static final int MAX_HEIGHT_SOFT_LIMIT = 640000;
   private static final int MIN_HEIGHT_SOFT_LIMIT = 5000;
 
-  private final MayhemTalonSRX winchLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_LEFT);
-  private final MayhemTalonSRX winchRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_RIGHT);
+  private final MayhemTalonSRX winchLeft = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_LEFT,
+      CurrentLimit.LOW_CURRENT);
+  private final MayhemTalonSRX winchRight = new MayhemTalonSRX(Constants.Talon.CLIMBER_WINCH_RIGHT,
+      CurrentLimit.LOW_CURRENT);
   // private final MayhemTalonSRX walkerLeft = new
   // MayhemTalonSRX(Constants.Talon.CLIMBER_WALKER_LEFT);
   // private final MayhemTalonSRX walkerRight = new

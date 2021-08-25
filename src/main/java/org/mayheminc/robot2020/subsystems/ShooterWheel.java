@@ -10,10 +10,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
+import org.mayheminc.util.MayhemTalonSRX.CurrentLimit;
 
 public class ShooterWheel extends SubsystemBase implements PidTunerObject {
-    private final MayhemTalonSRX shooterWheelLeft = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL_LEFT);
-    private final MayhemTalonSRX shooterWheelRight = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL_RIGHT);
+    private final MayhemTalonSRX shooterWheelLeft = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL_LEFT,
+            CurrentLimit.HIGH_CURRENT);
+    private final MayhemTalonSRX shooterWheelRight = new MayhemTalonSRX(Constants.Talon.SHOOTER_WHEEL_RIGHT,
+            CurrentLimit.HIGH_CURRENT);
 
     // private final double MAX_SPEED_RPM = 5760.0;
     private final double TALON_TICKS_PER_REV = 2048.0;

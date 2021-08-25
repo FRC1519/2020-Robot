@@ -16,9 +16,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
+import org.mayheminc.util.MayhemTalonSRX.CurrentLimit;
 
 public class Revolver extends SubsystemBase {
-  private final MayhemTalonSRX revolverTalon = new MayhemTalonSRX(Constants.Talon.REVOLVER_TURNTABLE);
+  private final MayhemTalonSRX revolverTalon = new MayhemTalonSRX(Constants.Talon.REVOLVER_TURNTABLE,
+      CurrentLimit.LOW_CURRENT);
 
   /**
    * Creates a new Revolver.
@@ -43,7 +45,6 @@ public class Revolver extends SubsystemBase {
   void updateSmartDashboard() {
     SmartDashboard.putNumber("Revolver Speed", revolverTalon.getSpeed());
   }
-
 
   public void setRevolverSpeed(double speed) {
     revolverTalon.set(ControlMode.PercentOutput, speed);

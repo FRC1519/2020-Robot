@@ -8,13 +8,17 @@ import com.ctre.phoenix.motorcontrol.can.*;
 
 public class MayhemTalonSRX extends TalonSRX {
 
+	public enum CurrentLimit {
+		HIGH_CURRENT, LOW_CURRENT
+	}
+
 	ControlMode controlMode;
 	double p;
 	double i;
 	double d;
 	double f;
 
-	public MayhemTalonSRX(int deviceNumber) {
+	public MayhemTalonSRX(int deviceNumber, CurrentLimit currentLimit) {
 		super(deviceNumber);
 
 		this.configFactoryDefault();
@@ -27,6 +31,14 @@ public class MayhemTalonSRX extends TalonSRX {
 		this.enableVoltageCompensation(true); // turn on voltage compensation
 
 		this.setNeutralMode(NeutralMode.Coast);
+
+		if (currentLimit == CurrentLimit.HIGH_CURRENT) {
+			this.configPeakCurrentLimit(60);
+			this.configContinuousCurrentLimit(40);
+			this.configPeakCurrentDuration(3000);
+		} else if (currentLimit == CurrentLimit.LOW_CURRENT) {
+			this.configContinuousCurrentLimit(30);
+		}
 
 		// this.configContinuousCurrentLimit(0, 0);
 		// this.configPeakCurrentLimit(0, 0);

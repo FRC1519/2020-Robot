@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.mayheminc.util.History;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
+import org.mayheminc.util.MayhemTalonSRX.CurrentLimit;
 
 public class Turret extends SubsystemBase implements PidTunerObject {
-    private final MayhemTalonSRX turretTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_TURRET);
+    private final MayhemTalonSRX turretTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_TURRET,
+            CurrentLimit.LOW_CURRENT);
 
     public static final boolean WAIT_FOR_DONE = true;
     private final int MIN_POSITION = -12500; // approx 90 degrees
@@ -74,10 +76,9 @@ public class Turret extends SubsystemBase implements PidTunerObject {
         turretTalon.configReverseSoftLimitThreshold(MIN_POSITION);
         turretTalon.configReverseSoftLimitEnable(true);
 
-        
         turretTalon.setInverted(false);
         turretTalon.setSensorPhase(false);
-        
+
         this.setVBus(0.0);
     }
 

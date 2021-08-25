@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
 import org.mayheminc.util.Utils;
+import org.mayheminc.util.MayhemTalonSRX.CurrentLimit;
 
 // TODO:  Address all deprecated code masked by @SuppressWarnings("removal") annotations (not just in Drive.java) 
 @SuppressWarnings("removal")
@@ -38,10 +39,14 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 	private static final int LOOPS_GYRO_DELAY = 10;
 
 	// Talons
-	private final MayhemTalonSRX leftFrontTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_LEFT_A);
-	private final MayhemTalonSRX leftRearTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_LEFT_B);
-	private final MayhemTalonSRX rightFrontTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_RIGHT_A);
-	private final MayhemTalonSRX rightRearTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_RIGHT_B);
+	private final MayhemTalonSRX leftFrontTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_LEFT_A,
+			CurrentLimit.HIGH_CURRENT);
+	private final MayhemTalonSRX leftRearTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_LEFT_B,
+			CurrentLimit.HIGH_CURRENT);
+	private final MayhemTalonSRX rightFrontTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_RIGHT_A,
+			CurrentLimit.HIGH_CURRENT);
+	private final MayhemTalonSRX rightRearTalon = new MayhemTalonSRX(Constants.Talon.DRIVE_RIGHT_B,
+			CurrentLimit.HIGH_CURRENT);
 
 	// Sensors
 	private AHRS Navx;

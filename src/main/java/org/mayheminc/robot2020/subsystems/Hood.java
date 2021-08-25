@@ -10,9 +10,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.mayheminc.util.MayhemTalonSRX;
 // import org.mayheminc.util.PidTuner;
 import org.mayheminc.util.PidTunerObject;
+import org.mayheminc.util.MayhemTalonSRX.CurrentLimit;
 
 public class Hood extends SubsystemBase implements PidTunerObject {
-    private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD);
+    private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD, CurrentLimit.LOW_CURRENT);
 
     private final static int MIN_POSITION = 0;
     private final static int MAX_POSITION = 8500;

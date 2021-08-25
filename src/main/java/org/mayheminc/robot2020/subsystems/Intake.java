@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import org.mayheminc.robot2020.Constants;
 import org.mayheminc.util.MayhemTalonSRX;
 import org.mayheminc.util.PidTunerObject;
+import org.mayheminc.util.MayhemTalonSRX.CurrentLimit;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +26,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
 
   private final int PIVOT_CLOSE_ENOUGH = 50;
   private final VictorSPX rollersTalon = new VictorSPX(Constants.Talon.INTAKE_ROLLERS);
-  private final MayhemTalonSRX pivotTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_PIVOT);
+  private final MayhemTalonSRX pivotTalon = new MayhemTalonSRX(Constants.Talon.INTAKE_PIVOT, CurrentLimit.LOW_CURRENT);
   private static final int PIVOT_ZERO_POSITION = 950;
   public static final double PIVOT_UP = PIVOT_ZERO_POSITION;
   public static final double PIVOT_SHOOTING = 100.0;
