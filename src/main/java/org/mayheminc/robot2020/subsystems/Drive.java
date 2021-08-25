@@ -8,6 +8,7 @@ import org.mayheminc.util.History;
 import edu.wpi.first.wpilibj.*;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 //import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -101,7 +102,7 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 		m_HeadingPid = new PIDController(HEADING_PID_P, HEADING_PID_I, HEADING_PID_D, m_HeadingError,
 				m_HeadingCorrection, 0.020 /* period in seconds */);
 		m_HeadingPid.setInputRange(-180.0f, 180.0f);
-		m_HeadingPid.setContinuous(true); // treats the input range as "continous" with wrap-around
+		m_HeadingPid.setContinuous(true); // treats the input range as "continuous" with wrap-around
 		m_HeadingPid.setOutputRange(-.50, .50); // set the maximum power to correct twist
 		m_HeadingPid.setAbsoluteTolerance(kToleranceDegreesPIDControl);
 
@@ -110,6 +111,11 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 		leftRearTalon.setNeutralMode(NeutralMode.Coast);
 		rightFrontTalon.setNeutralMode(NeutralMode.Coast);
 		rightRearTalon.setNeutralMode(NeutralMode.Coast);
+
+		this.configTalon(leftFrontTalon);
+		this.configTalon(leftRearTalon);
+		this.configTalon(rightFrontTalon);
+		this.configTalon(rightRearTalon);
 
 		// configure output voltages
 		leftFrontTalon.configNominalOutputVoltage(+0.0f, -0.0f);
@@ -145,6 +151,12 @@ public class Drive extends SubsystemBase implements PidTunerObject {
 		// talon closed loop config
 		configureDriveTalon(leftFrontTalon);
 		configureDriveTalon(rightFrontTalon);
+	}
+
+	private void configTalon(TalonSRX talon) {
+		talon.configPeakCurrentLimit(60);
+		talon.configContinuousCurrentLimit(40);
+		talon.configPeakCurrentDuration(3000);
 	}
 
 	public void init() {
