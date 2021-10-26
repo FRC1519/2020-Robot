@@ -287,8 +287,8 @@ public class RobotContainer {
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_SEVEN.whenPressed(new ShooterAimToTarget());
         OPERATOR_PAD.OPERATOR_PAD_BUTTON_EIGHT.whileHeld(new IntakeSetRollersWhileHeld(1.0));
 
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_NINE.whenPressed(new ClimberSetPistons(true));
-        OPERATOR_PAD.OPERATOR_PAD_BUTTON_TEN.whenPressed(new ClimberSetPistons(false));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_NINE.whenPressed(new ClimberSetPistons(false));
+        OPERATOR_PAD.OPERATOR_PAD_BUTTON_TEN.whenPressed(new ClimberSetPistons(true));
 
         // OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whenPressed(new
         // IntakeSetPosition(RobotContainer.intake.PIVOT_UP));
@@ -296,8 +296,8 @@ public class RobotContainer {
         // IntakeSetPosition(RobotContainer.intake.PIVOT_DOWN));
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_LEFT.whileHeld(new TurretSetVBus(-0.4));
         OPERATOR_PAD.OPERATOR_PAD_D_PAD_RIGHT.whileHeld(new TurretSetVBus(+0.4));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new HoodAdjust(+100.0));
-        OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new HoodAdjust(-100.0));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_UP.whileHeld(new HoodAdjust(+1000.0));
+        OPERATOR_PAD.OPERATOR_PAD_D_PAD_DOWN.whileHeld(new HoodAdjust(-1000.0));
 
         OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_UP.whileHeld(new ClimberSetWinchesPower(1.0));
         OPERATOR_PAD.OPERATOR_PAD_RIGHT_Y_AXIS_DOWN.whileHeld(new ClimberSetWinchesPower(-1.0));

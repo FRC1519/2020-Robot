@@ -19,8 +19,8 @@ public class Turret extends SubsystemBase implements PidTunerObject {
             CurrentLimit.LOW_CURRENT);
 
     public static final boolean WAIT_FOR_DONE = true;
-    private final int MIN_POSITION = -12500; // approx 90 degrees
-    private final int MAX_POSITION = +26000; // approx 180 degrees
+    private final int MIN_POSITION = -38000; // approx -270 degrees
+    private final int MAX_POSITION = +3000; // approx +25 degrees
     private final int DESTINATION_TOLERANCE = 200;
 
     // if "at destination" want the "I" to get us as close as possible

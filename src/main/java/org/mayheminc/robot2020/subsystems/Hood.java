@@ -16,13 +16,13 @@ public class Hood extends SubsystemBase implements PidTunerObject {
     private final MayhemTalonSRX hoodTalon = new MayhemTalonSRX(Constants.Talon.SHOOTER_HOOD, CurrentLimit.LOW_CURRENT);
 
     private final static int MIN_POSITION = 0;
-    private final static int MAX_POSITION = 8500;
-    private final static double POSITION_TOLERANCE = 20.0;
+    private final static int MAX_POSITION = 8000;
+    private final static double POSITION_TOLERANCE = 100.0;
 
     public final static double STARTING_POSITION = 0;
-    public final static double TARGET_ZONE_POSITION = 500;
-    public final static double CLOSE_SHOOTING_POSITION = 100;
-    public final static double INITIATION_LINE_POSITION = 4500;
+    public final static double TARGET_ZONE_POSITION = 5000;
+    public final static double CLOSE_SHOOTING_POSITION = 0;
+    public final static double INITIATION_LINE_POSITION = 5000;
     public final static double TRENCH_MID_POSITION = 8000;
 
     private double m_desiredPosition = 0.0;
@@ -49,7 +49,7 @@ public class Hood extends SubsystemBase implements PidTunerObject {
         hoodTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
         hoodTalon.configNominalOutputVoltage(+0.0f, -0.0f);
-        hoodTalon.configPeakOutputVoltage(+6.0, -6.0);
+        hoodTalon.configPeakOutputVoltage(+12.0, -12.0);
         hoodTalon.setInverted(false);
         hoodTalon.setSensorPhase(false);
 

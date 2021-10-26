@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
   private static final int PIVOT_ZERO_POSITION = 950;
   public static final double PIVOT_UP = PIVOT_ZERO_POSITION;
   public static final double PIVOT_SHOOTING = 100.0;
-  public static final double PIVOT_DOWN = -350.0;
+  public static final double PIVOT_DOWN = -240.0;
 
   private static final double HORIZONTAL_HOLD_OUTPUT = 0.00;
   private static final double MAX_PID_MOVEMENT_TIME_SEC = 10.0;
@@ -141,7 +141,7 @@ public class Intake extends SubsystemBase implements PidTunerObject {
         if (pivotTalon.getPosition() > (PIVOT_UP / 2.0)) {
           setPivotVBus(+0.05);
         } else { // we are close to the PIVOT DOWN, so apply a little negative power.
-          setPivotVBus(-0.05 * 2);
+          setPivotVBus(-0.10);
         }
       } else {
         pivotTalon.set(ControlMode.Position, m_targetPosition, DemandType.ArbitraryFeedForward, m_feedForward);
