@@ -152,19 +152,20 @@ public class RobotContainer {
         // autonomousPrograms.push(/* 15 */ new DriveBouncePath());
         // autonomousPrograms.push(/* 14 */ new DriveBarrelRacing());
         // autonomousPrograms.push(/* 13 */ new DriveSlalom());
-        autonomousPrograms.push(/* 12 */ new StayStill());
+        autonomousPrograms.push(new RiverRageForwardShoot3());
+        // autonomousPrograms.push(/* 12 */ new StayStill());
         // autonomousPrograms.push(/* 11 */ new StartBWDriveOnlyToRP());
         // autonomousPrograms.push(/* 10 */ new StartBWDriveOnlyToWall());
         // autonomousPrograms.push(/* 09 */ new StartFWDriveOnlyToRP());
         // autonomousPrograms.push(/* 08 */ new StartFWDriveOnlyToWall());
         // autonomousPrograms.push(/* 07 */ new StartBWShoot3ThenToRP());
         // autonomousPrograms.push(/* 06 */ new StartBWShoot3ThenToWall());
-        autonomousPrograms.push(/* 05 */ new StartFWShoot3ThenToRP());
+        // autonomousPrograms.push(/* 05 */ new StartFWShoot3ThenToRP());
         // autonomousPrograms.push(/* 04 */ new StartFWShoot3ThenToWall());
         // autonomousPrograms.push(/* 03 */ new StartFWRendezvous());
         // autonomousPrograms.push(/* 02 */ new StartBWOppTrench());
-        autonomousPrograms.push(/* 01 */ new StartBWTrench3());
-        autonomousPrograms.push(/* 00 */ new StartBWTrench5());
+        // autonomousPrograms.push(/* 01 */ new StartBWTrench3());
+        // autonomousPrograms.push(/* 00 */ new StartBWTrench5());
 
         autonomous.setAutonomousPrograms(autonomousPrograms);
 
@@ -229,6 +230,7 @@ public class RobotContainer {
 
         DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new TurretSetRel(-200.0));
         DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whenPressed(new TurretSetRel(+200.0));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new DriveStraightOnHeading(-0.25, 8, 0));
         // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new TurretSetAbs(+0.0));
         // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new
         // ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));

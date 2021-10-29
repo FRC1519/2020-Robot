@@ -60,8 +60,8 @@ public class ShooterWheel extends SubsystemBase implements PidTunerObject {
         configureOneWheelFalcon(shooterWheelRight);
 
         // with the exception of one rotating the opposite direction
-        shooterWheelLeft.setInverted(false);
-        shooterWheelRight.setInverted(true);
+        shooterWheelLeft.setInverted(true);
+        shooterWheelRight.setInverted(false);
     }
 
     private void configureOneWheelFalcon(MayhemTalonSRX shooterWheelFalcon) {
