@@ -115,7 +115,11 @@ public class Intake extends SubsystemBase implements PidTunerObject {
   }
 
   public boolean isPivotAtPosition() {
-    return !m_isMoving;
+    // return !m_isMoving;
+
+    // the intake motor is broken.
+    // the intake is now gravity fed
+    return true;
   }
 
   @Override
@@ -150,13 +154,13 @@ public class Intake extends SubsystemBase implements PidTunerObject {
   }
 
   void updateRollersPower() {
-    if (pivotTalon.getPosition() > (PIVOT_UP / 2.0)) {
-      // turn off the rollers automatically if the pivot is too high
-      rollersTalon.set(ControlMode.PercentOutput, 0.0);
-    } else {
+    // if (pivotTalon.getPosition() > (PIVOT_UP / 2.0)) {
+    //   // turn off the rollers automatically if the pivot is too high
+    //   rollersTalon.set(ControlMode.PercentOutput, 0.0);
+    // } else {
       // set the rollers as requested if the pivot is low enough
       rollersTalon.set(ControlMode.PercentOutput, m_desiredRollersPower);
-    }
+    // }
   }
 
   void updateSensorPosition() {

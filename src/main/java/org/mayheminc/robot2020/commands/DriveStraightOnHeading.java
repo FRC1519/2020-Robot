@@ -22,6 +22,10 @@ public class DriveStraightOnHeading extends CommandBase {
 		ENCODER_TICKS, INCHES
 	};
 
+	public DriveStraightOnHeading(double arg_targetSpeed, double arg_distance) {
+		this(arg_targetSpeed, DistanceUnits.INCHES, arg_distance, RobotContainer.drive.getHeading());
+	}
+
 	public DriveStraightOnHeading(double arg_targetSpeed, double arg_distance, double heading) {
 		this(arg_targetSpeed, DistanceUnits.INCHES, arg_distance, heading);
 	}

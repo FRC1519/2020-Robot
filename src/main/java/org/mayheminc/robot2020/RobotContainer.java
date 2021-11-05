@@ -230,7 +230,7 @@ public class RobotContainer {
 
         DRIVER_PAD.DRIVER_PAD_D_PAD_LEFT.whenPressed(new TurretSetRel(-200.0));
         DRIVER_PAD.DRIVER_PAD_D_PAD_RIGHT.whenPressed(new TurretSetRel(+200.0));
-        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new DriveStraightOnHeading(-0.25, 8, 0));
+        DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new DriveStraightOnHeading(-0.25, 8));
         // DRIVER_PAD.DRIVER_PAD_D_PAD_UP.whenPressed(new TurretSetAbs(+0.0));
         // DRIVER_PAD.DRIVER_PAD_D_PAD_DOWN.whenPressed(new
         // ShooterSetHoodAbs(Shooter.HOOD_TARGET_ZONE_POSITION));
@@ -306,7 +306,7 @@ public class RobotContainer {
 
         // OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_UP.whenPressed(new
         // RevolverSetTurntable());
-        OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_DOWN.whileHeld(new ChimneySet(-1.0));
+        OPERATOR_PAD.OPERATOR_PAD_LEFT_Y_AXIS_DOWN.whileHeld(new ChimneyUnjam());
     }
 
     /**

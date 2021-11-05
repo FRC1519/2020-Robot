@@ -48,11 +48,11 @@ public class DriveSlalom extends SequentialCommandGroup {
                 addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 66, 0));
                 addCommands(new TurnToHeading(20, 0.3, 50, TurnToHeading.Direction.RIGHT));
                 addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 20, 50));
-                // COOL TURN ⬇️
+                // COOL TURN 
                 addCommands(new TurnToHeading(1, 0.42, -45, TurnToHeading.Direction.LEFT));
                 addCommands(new TurnToHeading(1, 0.42, -135, TurnToHeading.Direction.LEFT));
                 addCommands(new TurnToHeading(1, 0.42, 100, TurnToHeading.Direction.LEFT));
-                // COOL TURN ⬆️
+                // COOL TURN 
                 addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 30, 135));
                 addCommands(new TurnToHeading(1, 0.3, -180, TurnToHeading.Direction.RIGHT));
                 addCommands(new DriveStraightOnHeading(0.3, DistanceUnits.INCHES, 88, 180));
